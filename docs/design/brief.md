@@ -101,18 +101,18 @@ Six screens plus two small trust pages. Every screen must work at 360 px wide wi
 
 No jargon anywhere (no "ayanamsa", "Amanta", "udaya"). Progress dots; back always available.
 
-### 3.2 Today (home)
-- **Glance line** (largest text on screen, one line or two at most):
+### 3.2 Today (home): **approved**, see `docs/design/screens.md`
+- Header: time, city (tap to change), "Thu 22 Oct · ગુરુવાર", and a **Help** button (text label, not a bare "?").
+- **Glance card** (largest text on screen): tithi with Gujarati, current Choghadiya with quality, a **"Many avoid now"** box listing every avoid period in effect ("Families often wait to start new or auspicious work."), a calm sentence when a good Choghadiya overlaps one, and **"Next good time"**: the next good Choghadiya that does not overlap Rahu Kaal or Bhadra (at 2:10 PM: Shubh 4:42–6:09 PM). Screen readers get a one-line summary, e.g.:
   **"Aaso Sud 11 · Choghadiya: Amrut until 3:16 PM · Rahu Kaal 1:50–3:16 PM"**
   Gujarati: "આસો સુદ ૧૧ · ચોઘડિયું: અમૃત ૩:૧૬ સુધી · રાહુ કાળ ૧:૫૦–૩:૧૬" *(draft)*
-- City and date header (tap to change city): "Ahmedabad · Thu 22 Oct".
-- **Muhurta timeline:** horizontal (or vertical on narrow screens) day strip from sunrise to sunset showing the 8 Choghadiya blocks, Rahu Kaal, Yamaganda, Gulika, and **Bhadra** when it falls in the day, with a **"now" marker**. In the example, Bhadra runs until 2:47 PM, so at 2:10 PM three things overlap: Amrut (good), Rahu Kaal (bad), Bhadra (bad).
-- **Proportional time axis (all timelines):** the axis is linear in clock time. Periods that don't align with Choghadiya boundaries (Bhadra, tithi and nakshatra changes, Rahu Kaal on days it doesn't match a Choghadiya block) are positioned and sized by their **actual start and end times**, never snapped to Choghadiya tiles. In the example, the tithi change at 2:47 PM and the end of Bhadra at 2:47 PM sit inside the Amrut block (1:50–3:16 PM), not on a tile edge. Overlapping periods stack in separate lanes so none hides another. Each block carries its name and a quality label/icon, not just colour. Night Choghadiya on tap or scroll.
-- **Five elements** with end times: Tithi (Sud 11 until 2:47 PM, then Sud 12), Nakshatra, Yoga, Karana, Weekday.
+- **Muhurta timeline ("Today, hour by hour"):** **vertical**, sunrise at the top to sunset at the bottom, in two columns: the 8 Choghadiya, and a **"Times many avoid"** lane with Rahu Kaal, Yamaganda, Gulika, and **Bhadra** when it falls in the day; a **"Now" line** crosses both columns. Tapping a block opens a detail sheet. In the example, Bhadra runs until 2:47 PM, so at 2:10 PM three things overlap: Amrut (good), Rahu Kaal (bad), Bhadra (bad).
+- **Proportional time axis (all timelines):** the axis is linear in clock time. Periods that don't align with Choghadiya boundaries (Bhadra, tithi and nakshatra changes, Rahu Kaal on days it doesn't match a Choghadiya block) are positioned and sized by their **actual start and end times**, never snapped to Choghadiya tiles. In the example, the tithi change at 2:47 PM and the end of Bhadra at 2:47 PM sit inside the Amrut block (1:50–3:16 PM), not on a tile edge. Overlapping periods stack in separate lanes so none hides another. Each block carries its name and a quality label and shape (good = circle + tick, not good = diamond + bar, neutral = outlined circle), not just colour. Lane labels stop growing at about 115% text size (wrapping only between words); details stay reachable through the sheet and the glance card. Night Choghadiya follows below.
+- **"Today's panchang":** five elements with end times, marked "Changes today" where they change: Tithi (Sud 11 until 2:47 PM, then Sud 12), Nakshatra, Yoga, Karana, Weekday.
 - **Sun and Moon:** sunrise, sunset, moonrise, moonset.
-- **Coming up:** next 1–2 personal events and festivals ("Ba's varsi in 14 days").
+- **Coming up:** next 1–2 family dates and festivals, each with "in N days" (e.g., "Ba's varsi · Kartak Vad 5 · Thu 5 Nov · in 14 days"; "Dhanteras · Fri 6 Nov · in 15 days"; dates illustrative).
 - **Year line:** "Vikram Samvat 2082".
-- Entry points: Month, Events, Settings; "How this is calculated".
+- Section order: header → glance card → Today's panchang → Today, hour by hour → Sun and Moon → Coming up → Vikram Samvat → "How this is calculated" → bottom navigation (Today · Month · Events · Settings).
 
 ### 3.3 Month
 - Gregorian month grid (October 2026), header also shows the lunar months it spans ("Bhadarvo – Aaso").
@@ -212,7 +212,7 @@ Changing a family default shows how many events it affects before applying ("Thi
 - **WCAG 2.2 AA** in every theme and mode: text ≥ 4.5:1; large text and non-text UI (borders of inputs, focus ring, now-marker, icons) ≥ 3:1.
 - **Never colour alone.** Auspicious/inauspicious, festival, personal event, two-day/skipped tithi, today, selected: each has a label or icon too. Assume red–green colour blindness: auspicious vs inauspicious must differ in icon/shape and label, not only hue.
 - Tap targets **≥ 48 × 48 dp**, with ≥ 8 dp between targets.
-- Respects OS font scaling **plus** an in-app text-size multiplier; layout survives 200%.
+- Respects OS font scaling **plus** an in-app text-size multiplier; layout survives 200%. Approved exception: timeline lane labels cap at ~115% because the same information is available at full size in the detail sheet and glance card.
 - Full keyboard navigation on web with a **visible focus ring** (token `--focus-ring`).
 - Screen-reader labels for every icon and marker; times read as times; Gujarati content marked `lang="gu"`.
 - `prefers-reduced-motion`: no slides or parallax; opacity fades ≤ 120 ms only.
@@ -247,7 +247,7 @@ A **theme = palette × mode** (light/dark). Every theme defines the full semanti
 | `--danger` | Destructive actions (delete) |
 | `--warning` / `--warning-subtle` | "Close to a tithi change", notification-health issues |
 | `--auspicious` / `--auspicious-subtle` | Good Choghadiya (Amrut, Shubh, Labh) |
-| `--inauspicious` / `--inauspicious-subtle` | Rahu Kaal, Yamaganda, Gulika, Bhadra, bad Choghadiya (Rog, Udveg, Kaal) |
+| `--inauspicious` / `--inauspicious-subtle` | **Rahu Kaal only** (strong treatment). Yamaganda, Gulika, Bhadra, and not-good Choghadiya (Rog, Udveg, Kaal) use a soft neutral fill plus the "not good" shape and label (approved Today design). |
 | `--festival` / `--festival-subtle` | Festival markers |
 | `--personal-event` / `--personal-event-subtle` | Personal event markers |
 | `--now-marker` | "Now" line on timelines, today indicator |

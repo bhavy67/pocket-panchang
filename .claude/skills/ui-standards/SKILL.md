@@ -5,7 +5,7 @@ description: UX principles, accessibility checklist, and design-token rules for 
 
 # UI standards
 
-Source of truth: `PROJECT_PLAN.md` §9. Locked designs and tokens live in `docs/design/` (Phase 2). Build to those designs. Don't invent new visual patterns without asking.
+Source of truth: `PROJECT_PLAN.md` §9. Approved designs are listed in `docs/design/screens.md` (Today is the visual reference; its "Decisions established" apply to every screen); the brief and tokens are in `docs/design/brief.md` and ADR 0017. Build to those designs. Don't invent new visual patterns without asking.
 
 ## Principles
 

@@ -86,13 +86,13 @@ Part-time at ~10 h/week. The original ~5–6 week target predates the Phase 1 sc
 
 | Phase | Weeks |
 |---|---|
-| 2 Design lock (remaining) | 1–2 |
+| 2 Design lock | done (reduced scope) |
 | 3 Scaffolding | 1 |
 | 4 [OWN] Sunrise + tithi | 2–3 |
 | 5 [OWN] Engine complete | 3–4 |
 | 6 Calendar (13 festivals, policies, `.ics`) | 2–4 |
 | 7 App shell (city search only) | 2 |
-| 8 Core screens (3 palettes) | 2–3 |
+| 8 Design remaining screens + core screens (3 palettes) | 3–5 |
 | 9 Personal events + family preview | 2–3 |
 | 10 PWA, i18n, a11y, perf | 2 |
 | 11 Android | 2–3 |
@@ -225,6 +225,7 @@ type RelativeFestival = FestivalBase & {
 - Rahu Kaal / Yamaganda / Gulika: daylight / 8, weekday-indexed segment tables.
 - Choghadiya: day and night / 8 each, weekday-dependent starting sequence.
 - **Bhadra:** the Vishti karana window(s) of the day, shown as an inauspicious muhurta (ADR 0018).
+- **Next good time:** the next good Choghadiya (Amrut, Shubh, Labh) that does not overlap Rahu Kaal or Bhadra (approved Today design, `docs/design/screens.md`).
 
 ### 4.9 Personal tithi events: occurrence rules
 ```ts
@@ -579,12 +580,12 @@ Each phase ends with a **STOP**: summary, files changed, open questions, suggest
 **Exit criteria:** every §13 item has an ADR; no unresolved domain question blocks the engine.
 
 ### Phase 2: Design lock (no code)
-- Define design tokens (color, type scale incl. Gujarati/Devanagari, spacing, radius, motion).
-- Design the 6 v1 screens (§9) for mobile and desktop, light and dark.
-- Store outputs/specs in `docs/design/`.
-- Optional: show screens to 3–5 target users (family) and record feedback.
+- Define design tokens (color, type scale incl. Gujarati/Devanagari, spacing, radius, motion): ADR 0017, `docs/design/brief.md`.
+- Write the design brief (`docs/design/brief.md`) covering all 6 v1 screens.
+- Design and approve the **Today** screen (Calm, light) as the visual reference; record it in `docs/design/screens.md`.
+- Reduced scope (decided 2026-10-22): the other five screens, dark mode, and the Mandir/Raat palettes are designed in Phase 8.
 
-**Exit criteria:** screens and tokens approved by Bhavy; no code written.
+**Exit criteria:** brief and token ADR complete; Today screen (Calm, light) approved by Bhavy and linked from `docs/design/screens.md`; no code written.
 
 ### Phase 3: Monorepo scaffolding
 - pnpm workspace; `packages/engine`, `packages/calendar`, `packages/i18n`, `apps/app` (Vite + React + TS).
@@ -630,11 +631,12 @@ Each phase ends with a **STOP**: summary, files changed, open questions, suggest
 **Exit criteria:** onboarding completes; settings persist across reloads; the worker computes today offline.
 
 ### Phase 8: Core screens
-- Today, Month, Day detail per the locked designs.
+- **Design first:** design the remaining screens (Onboarding, Month, Day detail, Personal events, Settings), dark mode, and the Mandir/Raat palettes from `docs/design/brief.md`, ADR 0017 tokens, and the approved Today screen; get each approved and recorded in `docs/design/screens.md` before implementing it. (Personal events and Settings designs are implemented in Phase 9.)
+- Today, Month, Day detail per the approved designs.
 - Muhurta timeline with "now"; vriddhi/kshaya and festival markers.
 - Responsive mobile/desktop; light/dark.
 
-**Exit criteria:** screens match the designs; navigation works offline; no main-thread jank on month change.
+**Exit criteria:** all v1 screen designs (both modes, all three palettes) approved in `docs/design/screens.md`; implemented screens match them; navigation works offline; no main-thread jank on month change.
 
 ### Phase 9: Personal events and reminders
 - Events CRUD with policy options; upcoming list.
