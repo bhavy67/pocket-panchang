@@ -25,7 +25,7 @@ Ayanamsa is always **Lahiri**. Astronomy source is **astronomy-engine** only. Ne
 - Civil Hindu day = sunrise(D) → sunrise(D+1) at the selected location.
 - **Udaya tithi** = tithi at sunrise(D); it names the day. Also list every tithi ending inside the day, with end times. Same for nakshatra, yoga, karana.
 - **Vriddhi**: same tithi at two consecutive sunrises. **Kshaya**: tithi starts and ends between sunrises (present at none).
-- Sunrise default proposal: upper limb + standard refraction (confirm via ADR in Phase 1). Polar no-sunrise/no-sunset cases return explicit states and never crash.
+- Sunrise: upper limb + standard refraction, sea level, passed as a `SunriseDefinition` engine parameter (ADR 0012; confirmed by Phase 4 fixtures). Polar no-sunrise/no-sunset cases return explicit states and never crash.
 
 ## Months and years (§4.6)
 
@@ -45,11 +45,12 @@ All end times are roots of `f(t) = normalize(angle(t) − target)`. Bracket with
 ## Festivals and personal events
 
 - Festivals are **data** (`FestivalRule`, §4.7): month (Amanta frame), paksha, tithi, window (sunrise/madhyahna/aparahna/pradosh/nishita), tieBreak, `adhikPolicy: "nija-only"`. A rule ships **only** with `verified` filled.
-- Personal events use `OccurrencePolicy` (§4.9): `adhikMonth: nija|adhik`, `kshayaTithi: previous-day|next-day`. Defaults come from Phase 1 ADRs.
+- Personal events: lunar date stored in Amanta (ADR 0002). `OccurrencePolicy` (§4.9) resolves per field by cascade: event override → household "Family conventions" (per kind) → built-in per kind (ADR 0005). Window, tie-breaks, Pitru Paksha, observance location, adhik/kshaya rules: ADRs 0003–0010. Convention defaults are **provisional** until the §13 "Pending family confirmations" checklist is cleared.
 - Muhurta: Rahu Kaal/Yamaganda/Gulika = daylight ÷ 8 with weekday tables; Choghadiya = day and night ÷ 8 each with weekday starting sequence.
 
 ## Hard rules
 
 - `packages/engine` and `packages/calendar` are pure: UTC instants (JD or epoch ms) + coordinates in, plain data out. No `Date.now()`, DOM, IndexedDB, or tz libraries. Time zones are applied only at the UI edge.
+- **Parse, don't validate** (ADR 0014): engine/calendar APIs accept only branded domain types (e.g., `CivilDate`, `LocationId`) produced by parse functions. Never accept raw strings/numbers for these, and never construct a branded value except in its parse function. Every input boundary (URL, backup import, notification payloads, forms) parses.
 - A wrong tithi or festival date is a critical bug. When a convention is unclear, ask, and don't guess.
 - Use terms exactly as defined in `GLOSSARY.md`; flag any new or conflicting term.

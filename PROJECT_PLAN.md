@@ -135,8 +135,8 @@ f(t) = normalize(angle(t) − target)   // angle = elongation, sidereal moon, (s
   ```
 
 ### 4.4 Sunrise definition
-- Default proposal: upper limb of the Sun touching the horizon, with standard atmospheric refraction.
-- **Must be confirmed** in Phase 1 (ADR) and validated against the reference for each fixture city.
+- **Decided (ADR 0012):** upper limb with standard atmospheric refraction, sea level, matching the reference's stated default. Passed to the engine as a parameter `SunriseDefinition { limb: "upper" | "centre"; refraction: boolean }`; not user-facing in v1.
+- Phase 4 tests both definitions against the reference and confirms which one matches; fixture files record the reference's definition.
 - Polar cases (no sunrise/sunset) must not crash; return explicit states.
 
 ### 4.5 Day assembly
@@ -146,7 +146,7 @@ f(t) = normalize(angle(t) − target)   // angle = elongation, sidereal moon, (s
 - Detect vriddhi and kshaya.
 
 ### 4.6 Months and years
-- Lunar month = new moon → next new moon (Amanta). Purnimanta derived by a half-month shift of naming.
+- Lunar month = new moon → next new moon (Amanta). Purnimanta naming is derived from Amanta, but it is **not** a plain half-month shift in adhik-month years (see ADR 0002).
 - Month name = determined by the sidereal solar rashi (sankranti logic).
 - Adhik: no sankranti between consecutive new moons. Kshaya: two sankrantis (rare; must still be handled).
 - Vikram Samvat (Kartikadi): increments at Kartik Shukla Pratipada. Chaitradi variant supported via settings.
@@ -178,12 +178,26 @@ type FestivalRule = {
 
 ### 4.9 Personal tithi events: occurrence rules
 ```ts
+type EventKind = "birthday" | "shraddh" | "anniversary" | "custom";
+
 type OccurrencePolicy = {
-  adhikMonth: "nija" | "adhik";            // which month counts in an adhik year
-  kshayaTithi: "previous-day" | "next-day"; // where to place an event whose tithi is kshaya
+  adhikMonth: "nija" | "adhik" | "match-origin" | "both"; // which month counts in an adhik year (ADR 0009)
+  kshayaTithi: "same-day" | "following-day"; // sunrise window: where a kshaya tithi's event goes (ADR 0010)
+  vriddhiTithi: "first-day" | "second-day"; // which day when the tithi is at two sunrises (sunrise window)
+  window: "sunrise" | "aparahna";           // which part of the day the tithi must cover (ADR 0003)
+  pitruPaksha: boolean;                     // shraddh only: also observe in Pitru Paksha (ADR 0004)
+  tithiSource: "moment" | "calendar-day";   // date helper only: tithi at the entered time vs. that date's udaya tithi (ADR 0006)
 };
+
+type PolicyOverrides = Partial<OccurrencePolicy>;
+
+// Resolved per field (ADR 0005):
+// effective = event.policyOverrides ?? settings.householdPolicy[kind] ?? BUILTIN_POLICY[kind]
 ```
-- Defaults are decided in Phase 1 (see Open Decisions). Defaults are user-overridable per event.
+- Built-in defaults are one complete policy per event kind. Fields that depend on family convention carry **provisional** defaults until confirmed (see §13 "Pending family confirmations"); confirmation is required before Phase 6 is complete.
+- Household defaults are set in Settings → "Family conventions"; per-event overrides are under "Advanced" in the event form. Events store only overrides.
+- Kshaya masa: an event whose month is kshaya that year occurs in the absorbing month (ADR 0008).
+- `window` built-in: sunrise for birthday/anniversary/custom; shraddh provisional aparahna. Personal-event tie-breaks are defined in ADR 0003, not inherited from festival rules.
 
 ---
 
@@ -218,6 +232,7 @@ type OccurrencePolicy = {
 3. Time zones are applied **only at the UI edge** via `Intl.DateTimeFormat` with the location's IANA zone.
 4. Platform-specific behavior lives behind **ports** (interfaces) with web and Capacitor adapters.
 5. Dependency direction: `app → calendar → engine`. Never the reverse.
+6. **Parse, don't validate** (ADR 0014): domain inputs are branded types (e.g., `CivilDate`, `LocationId`) produced only by parse functions; engine and calendar APIs accept only branded types. Every input boundary (URL, backup import, notification payloads, forms) parses.
 
 ### 5.3 Repository structure
 
@@ -252,7 +267,7 @@ pocket-panchang/
 | Package manager | pnpm workspaces | Monorepo with a real package boundary |
 | UI | React + Vite | Familiar; effort goes into the hard parts |
 | Styling | Tailwind + design tokens (CSS variables) | Consistent scale; dark mode |
-| Routing | TanStack Router or React Router (decide in Phase 1) | Type-safe routes |
+| Routing | TanStack Router, code-based routes (ADR 0014) | Typed, validated search params |
 | Async computed data | TanStack Query over worker calls | Caching, dedupe, prefetch for free |
 | Settings state | Zustand (persisted) | Small, synchronous reads |
 | Persistence | Dexie (IndexedDB) | Versioned schema migrations |
@@ -264,7 +279,7 @@ pocket-panchang/
 | Unit tests | Vitest | Fast, TS-native |
 | Property tests | fast-check | Invariants |
 | E2E | Playwright | Main user flows on web |
-| Lint/format | ESLint + Prettier (or Biome; decide in Phase 3) | Consistency |
+| Lint/format | ESLint (typescript-eslint type-checked) + Prettier (ADR 0015) | Type-aware async rules; enforces purity and dependency direction |
 | CI | GitHub Actions | Typecheck, lint, test, accuracy report, build |
 | Web hosting | Vercel → `panchang.bhavyladani.in` | Existing setup |
 
@@ -280,7 +295,8 @@ interface GeoPort   { currentPosition(): Promise<{ lat: number; lng: number } | 
 interface SharePort { shareFile(name: string, data: Blob): Promise<void>; }
 ```
 - **Android:** Capacitor Local Notifications. Schedule a rolling ~12-month window (alarm count limits). Reschedule on app open and on event changes. Detect exact-alarm permission and battery-optimization problems and guide the user.
-- **Web:** no reliable scheduled notifications → in-app upcoming list + **`.ics` export** (next 10 years of each personal event). `.ics` export is offered on Android too.
+- **Reminder timing:** occurrences are civil dates in the event's observance city; a reminder fires at the chosen device-local time but never later than that wall-clock time in the observance city (ADR 0007).
+- **Web:** no reliable scheduled notifications → in-app upcoming list + **`.ics` export** (next 10 years of each personal event). `.ics` export is offered on Android too. UIDs are stable and brand-neutral: `{eventId}-{year}-{occurrence}@panchang.bhavyladani.in` (ADR 0016).
 
 ---
 
@@ -298,14 +314,23 @@ type Settings = {
   language: Lang;
   theme: "system" | "light" | "dark";
   textScale: number;               // respects OS scale; extra multiplier
+  householdPolicy: Partial<Record<EventKind, PolicyOverrides>>; // "Family conventions" (ADR 0005)
+  observanceLocation: Location;    // household "Observance city"; snapshot, set at onboarding (ADR 0007)
 };
 
 type PersonalEvent = {
   id: string;
   title: string;                   // "Ba's varsi", "Dad's janma tithi"
-  kind: "birthday" | "shraddh" | "anniversary" | "custom";
-  lunarDate: { month: LunarMonth; paksha: "shukla" | "krishna"; tithi: number };
-  policy: OccurrencePolicy;        // §4.9
+  kind: EventKind;
+  lunarDate: { month: LunarMonth; adhik?: boolean; paksha: "shukla" | "krishna"; tithi: number }; // Amanta frame (ADR 0002); adhik = original date in adhik month (ADR 0009)
+  policyOverrides: PolicyOverrides; // sparse; resolved by cascade (§4.9, ADR 0005)
+  pitruPakshaDay?: "same-tithi" | "bhadrapada-purnima" | number; // shraddh only; number = Bhadrapada Krishna tithi 1–15 (ADR 0004)
+  observanceLocation?: Location;   // per-event override; snapshot (ADR 0007)
+  origin?: {                       // display/audit only; never auto-recomputed (ADR 0006)
+    date: string;                  // "YYYY-MM-DD", as entered (local to origin place)
+    time?: string;                 // "HH:mm", as entered; interpreted in the place's historical IANA zone
+    place: Location;               // where the birth/death happened; NOT the observance location
+  };
   remindDaysBefore: number[];      // e.g., [0, 1]
   notes?: string;
   createdAt: number;
@@ -320,8 +345,8 @@ type CachedMonth = {
 ```
 
 ### Persistence (Dexie, versioned)
-- Tables: `settings`, `events`, `monthCache`.
-- Every schema change = a new Dexie version with a migration. Never mutate a schema in place.
+- Database name `panchang` (brand-neutral, ADR 0016). Tables: `settings`, `events`, `monthCache`.
+- Every schema change = a new Dexie version with a migration. Never mutate a schema in place. From the first family preview (after Phase 9) onward, wiping the database is never acceptable (ADR 0013).
 - Backup format: versioned JSON `{ schemaVersion, exportedAt, settings, events }`. The cache is never exported.
 
 ---
@@ -345,6 +370,7 @@ type CachedMonth = {
 - Source: GeoNames cities subset (**CC-BY 4.0: attribution required** in the About screen).
 - Scope v1: Indian cities + major diaspora cities (US, UK, Canada, Australia, UAE, etc.).
 - Each entry: id, name, lat, lng, IANA tz, country. Compressed JSON, lazy-loaded, searched locally.
+- **Location model (ADR 0011):** city search, plus optional GPS (read once, on-device). GPS snaps to the nearest city within ~25 km; otherwise it creates a **custom location** (coordinates rounded to 0.1°, user-named, device time zone with nearest-city fallback, manual tz override).
 
 ---
 
@@ -354,6 +380,7 @@ type CachedMonth = {
    *"Kartik Sud 2 · Choghadiya: Amrut until 10:42 · Rahu Kaal 1:30–3:00"*
 2. **Elderly-friendly by default:** large base type, respects OS font scaling, ≥ 48 dp tap targets, WCAG AA contrast, no meaning conveyed by color alone.
 3. **Onboarding in 3 steps:** city → tradition ("Gujarati family? choose this") → language. No jargon like "ayanamsa" in onboarding.
+   **Plain labels everywhere:** forms and settings use plain-language labels (e.g., "Follow printed calendar day" / "Traditional shraddh timing (afternoon)"); technical terms appear only in help text.
 4. **Responsive:** single column on mobile; month grid + day detail side by side on desktop.
 5. **Trust surfaces:** a "How this is calculated" page; a "Report a mismatch" button that opens a pre-filled email/GitHub issue with date, city, settings, and engine version.
 6. **Durability nudges:** prompt for a backup after 3+ personal events; one-tap export/import.
@@ -375,7 +402,7 @@ type CachedMonth = {
 1. **Golden fixtures:** reference values per city per year in `fixtures/` (tithi/nakshatra/yoga/karana end times, sunrise/sunset, festival dates).
    - Cities: Ahmedabad, Delhi, Chennai, New York, London.
    - Years: at least 2 full years in v1.
-   - Each fixture file records its source and retrieval date.
+   - Each fixture file records its source, retrieval date, and the reference's sunrise definition (ADR 0012).
 2. **Invariant/property tests (fast-check):**
    - Exactly 30 tithis per lunation
    - Elongation monotonic between new moons
@@ -413,14 +440,39 @@ type CachedMonth = {
 
 ## 13. Open Decisions (resolve in Phase 1 → ADRs)
 
-1. **Personal events in adhik-month years:** default `nija` or `adhik`? (Proposal: `nija`; confirm with family convention.)
-2. **Kshaya-tithi placement default** for personal events: previous day or next day?
-3. **Location model:** city picker only, or GPS that snaps to the nearest city? (Proposal: both; GPS optional, snapped.)
-4. **v1 platform priority:** develop web-first, release web + Android together? (Proposal: yes.)
-5. **Sunrise definition:** upper limb + refraction? Validate against the reference.
-6. **Router:** TanStack Router vs React Router.
-7. **Lint/format:** ESLint + Prettier vs Biome.
-8. **App name check:** confirm "Pocket Panchang" is free on the Play Store; package id proposal `in.bhavyladani.pocketpanchang`.
+1. **Personal events in adhik-month years:** default `nija` or `adhik`? (Proposal: `nija`; confirm with family convention.) → **Decided: ADR 0009** (default provisional).
+2. **Kshaya-tithi placement default** for personal events: previous day or next day? → **Decided: ADR 0010** (`same-day | following-day`; default provisional).
+3. **Location model:** city picker only, or GPS that snaps to the nearest city? (Proposal: both; GPS optional, snapped.) → **Decided: ADR 0011.**
+4. **v1 platform priority:** develop web-first, release web + Android together? (Proposal: yes.) → **Decided: ADR 0013** (plus a private family web preview after Phase 9).
+5. **Sunrise definition:** upper limb + refraction? Validate against the reference. → **Decided: ADR 0012** (confirm in Phase 4).
+6. **Router:** TanStack Router vs React Router. → **Decided: ADR 0014** (TanStack Router, code-based routes).
+7. **Lint/format:** ESLint + Prettier vs Biome. → **Decided: ADR 0015** (ESLint type-checked + Prettier; lint enforces purity and dependency direction).
+8. **App name check:** confirm "Pocket Panchang" is free on the Play Store; package id proposal `in.bhavyladani.pocketpanchang`. → **Decided: ADR 0016.** The name is taken; "Pocket Panchang" stays the working name, package id `in.bhavyladani.panchang`, public name chosen before Phase 11. All persisted identifiers are brand-neutral.
+
+### Pending before Phase 11
+
+- [ ] **Public app name** (ADR 0016): distinct from "Pocket Panchang"; checked on Play and App Store, basic trademark search, reads well in Gujarati.
+
+### Pending family confirmations
+
+Convention defaults that ship as **provisional** until Bhavy confirms with family. Phase 1 may close with these open; Phase 6 may not.
+
+- [ ] **Shraddh window** (provisional: afternoon/aparahna). Ask: "For Ba's varsi, do we go by the tithi at sunrise (printed calendar day) or the one prevailing in the afternoon?" ([ADR 0003](docs/adr/0003-personal-event-observance-window.md))
+- [ ] **Vriddhi tithi day** (provisional: first day). Ask: "When the calendar shows a birthday tithi on two days, which day do we celebrate?" ([ADR 0003](docs/adr/0003-personal-event-observance-window.md))
+- [ ] **Kshaya tithi day** (provisional: same day). Ask: "If the tithi is skipped in the calendar that year, do we observe it on the day it falls in the calendar, or on the next day?" ([ADR 0010](docs/adr/0010-kshaya-tithi-placement.md))
+- [ ] **Aparahna "neither day" rule** (provisional: earlier day). Ask: "If the varsi tithi doesn't touch the afternoon on either day, which day do we do it?" ([ADR 0003](docs/adr/0003-personal-event-observance-window.md))
+- [ ] **Pitru Paksha toggle** (provisional: on). Ask: "Do we do Ba's shraddh on her own tithi in Pitru Paksha, or only on Sarva Pitru Amavasya?" ([ADR 0004](docs/adr/0004-pitru-paksha-occurrence.md))
+- [ ] **Purnima / Chaturdashi handling** (provisional: Purnima → Bhadrapada Purnima; Chaturdashi → same tithi; override available). Ask: "For someone who passed on Purnima or Chaturdashi, which Pitru Paksha day do we use?" ([ADR 0004](docs/adr/0004-pitru-paksha-occurrence.md))
+- [ ] **Death-tithi source** (provisional: moment of death when a time is known). Ask: "For Ba's varsi, did we take the tithi from the time she passed, or from the calendar for that date?" ([ADR 0006](docs/adr/0006-entering-events-from-gregorian-date.md))
+- [ ] **Adhik-month year** (provisional: `nija`). Ask: "In a year with an extra (adhik) month, do we do the varsi/birthday in the first month, the second, or both? Does it matter if the person was born or passed away in an adhik month?" ([ADR 0009](docs/adr/0009-adhik-month-policy.md))
+
+### Pending source verifications
+
+Rules that need a cited classical or reference source before being marked verified (§0 rule 7).
+
+- [ ] Purnimanta naming around an adhik month (Nija X Krishna → Adhik X → Nija X Shukla): check against the reference's Purnimanta view ([ADR 0002](docs/adr/0002-personal-event-dates-stored-in-amanta.md))
+- [ ] Aparahna "neither day" tie-break: classical source ([ADR 0003](docs/adr/0003-personal-event-observance-window.md))
+- [ ] Kshaya masa absorption and the 1982–83 adhik months: classical source and reference ([ADR 0008](docs/adr/0008-kshaya-masa-occurrence.md))
 
 ---
 
@@ -481,7 +533,7 @@ Each phase ends with a **STOP**: summary, files changed, open questions, suggest
 
 ### Phase 3: Monorepo scaffolding
 - pnpm workspace; `packages/engine`, `packages/calendar`, `packages/i18n`, `apps/app` (Vite + React + TS).
-- Strict tsconfig base; lint/format; Vitest in all packages; path aliases.
+- Strict tsconfig base; lint/format per ADR 0015 (purity and dependency-direction rules, type-aware async rules, jsx-a11y, react-hooks); Vitest in all packages; path aliases.
 - GitHub Actions: install, typecheck, lint, test, build.
 - Empty app renders "Pocket Panchang" in light/dark.
 
@@ -509,8 +561,9 @@ Each phase ends with a **STOP**: summary, files changed, open questions, suggest
 - Festival rule schema + resolver (§4.7); ~25 festivals with `verified` filled.
 - Personal event occurrence computation with policies (§4.9) for the next N years.
 - `.ics` generation.
+- Family history check script: prints computed occurrences for family-provided past events (last 2–3 years) next to the dates actually observed; used to settle §13 "Pending family confirmations". Input lives in a gitignored path (ADR 0013).
 
-**Exit criteria:** festival dates match the reference for all fixture cities/years; occurrence tests cover adhik and kshaya cases.
+**Exit criteria:** festival dates match the reference for all fixture cities/years; occurrence tests cover adhik and kshaya cases; every item in §13 "Pending family confirmations" is confirmed (provisional defaults kept or changed, ADRs updated) and every "Pending source verification" is cited.
 
 ### Phase 7: App shell
 - Worker + Comlink API; TanStack Query integration; Dexie schema v1; Zustand settings.
@@ -532,7 +585,9 @@ Each phase ends with a **STOP**: summary, files changed, open questions, suggest
 - `.ics` export; JSON backup export/import with schema versioning.
 - Backup nudges.
 
-**Exit criteria:** create → see upcoming occurrences → export `.ics` → import into Google Calendar works; backup round-trip is lossless.
+- Private family preview (ADR 0013): unlisted Vercel URL, `X-Robots-Tag: noindex`, "Report a mismatch" enabled, banner prompting export before switching to the public domain.
+
+**Exit criteria:** create → see upcoming occurrences → export `.ics` → import into Google Calendar works; backup round-trip is lossless; family preview is live.
 
 ### Phase 10: PWA, i18n, accessibility, performance
 - vite-plugin-pwa; full offline; install prompt.
@@ -544,7 +599,7 @@ Each phase ends with a **STOP**: summary, files changed, open questions, suggest
 **Exit criteria:** Lighthouse PWA installable; budgets met or documented; E2E green.
 
 ### Phase 11: Android (Capacitor)
-- Capacitor setup; package id; icons/splash.
+- Capacitor setup; package id `in.bhavyladani.panchang` (ADR 0016); public name from §13 "Pending before Phase 11"; icons/splash.
 - Capacitor adapters for ReminderPort/GeoPort/SharePort.
 - Rolling notification scheduling; notifications health screen.
 - Test on Bhavy's Samsung S24 Ultra and at least one budget device/emulator.

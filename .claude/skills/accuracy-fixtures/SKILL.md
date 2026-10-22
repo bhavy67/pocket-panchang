@@ -16,7 +16,7 @@ Source of truth: `PROJECT_PLAN.md` §10 (testing strategy) and §4.2 (error budg
 ## Adding a fixture city/year
 
 1. Location: name, lat, lng, IANA tz. Use the same values the reference used (wrong coordinates show up as fake sunrise error).
-2. Reference: Drik Panchang (§17). Every fixture file **must record its source, URL/settings used (tradition, ayanamsa), and retrieval date**.
+2. Reference: Drik Panchang (§17). Every fixture file **must record its source, URL/settings used (tradition, ayanamsa), sunrise definition (ADR 0012), and retrieval date**.
 3. Store as JSON in `fixtures/`, with one file per city per year (exact naming and schema are set in Phase 4; follow what exists).
 4. Store times as UTC instants (ISO 8601 `Z` or epoch ms) and keep the reference's local string alongside for audit. The engine never takes local time.
 5. Never hand-edit a reference value to match engine output. If the reference looks wrong, flag it to Bhavy with evidence.

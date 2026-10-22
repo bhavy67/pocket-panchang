@@ -66,5 +66,8 @@ Desktop.ini
 # Claude Code (personal, not shared)
 .claude/settings.local.json
 
+# Personal family data (ADR 0013)
+fixtures/private/
+
 # Local scratch
 .scratch/
