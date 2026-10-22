@@ -14,7 +14,7 @@ Router validation only protects the URL boundary. Inputs also arrive from JSON b
 - Domain inputs are **branded types** (e.g., `CivilDate`, `LocationId`) that can be produced **only by parse functions** (`parseCivilDate(input): CivilDate | ParseError`, etc.). There is no other way to construct them.
 - **Engine and calendar APIs accept only branded types**, never raw strings or numbers for these concepts.
 - Every input boundary (router search params, backup import, notification payloads, forms) calls the parse function; downstream code never re-validates.
-- `LocationId` parsing covers both bundled-city ids and custom-location ids (`custom:<lat>,<lng>`, ADR 0011).
+- `LocationId` parsing covers bundled-city ids in v1, and custom-location ids (`custom:<lat>,<lng>`, ADR 0011) when they ship in v2.
 
 Further branded types (e.g., for UTC instants or Julian Days in the engine) are proposed and confirmed when the engine API is designed in Phase 4, not added silently.
 

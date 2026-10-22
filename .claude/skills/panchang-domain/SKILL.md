@@ -29,7 +29,7 @@ Ayanamsa is always **Lahiri**. Astronomy source is **astronomy-engine** only. Ne
 
 ## Months and years (§4.6)
 
-- Amanta month = new moon → new moon (internal frame). Purnimanta = half-month naming shift.
+- Amanta month = new moon → new moon (internal frame; v1 is Amanta-only). Purnimanta (v2) is **not** a plain half-month shift in adhik years (ADR 0002).
 - Month name from the sidereal solar rashi (sankranti). No sankranti → **adhik** (named after the next month; followed by **nija**). Two sankrantis → **kshaya masa** (rare, must still work).
 - Vikram Samvat Kartikadi increments at Kartik Shukla Pratipada (default); Chaitradi via settings. Shaka increments at Chaitra Shukla Pratipada.
 

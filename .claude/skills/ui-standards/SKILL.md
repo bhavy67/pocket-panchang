@@ -11,7 +11,7 @@ Source of truth: `PROJECT_PLAN.md` §9. Locked designs and tokens live in `docs/
 
 1. **Glanceable home**: one line answers why the user opened the app, e.g. *"Kartik Sud 2 · Choghadiya: Amrut until 10:42 · Rahu Kaal 1:30–3:00"*. Details on tap.
 2. **Elderly-friendly by default**: primary users include older people on budget Android phones.
-3. **Onboarding in 3 steps**: city → tradition ("Gujarati family? choose this") → language. No jargon (no "ayanamsa").
+3. **Onboarding in 2 steps (v1)**: city → language (tradition step returns in v2 with Purnimanta). No jargon (no "ayanamsa").
    **Plain labels everywhere** (forms, settings, policies): e.g. "Follow printed calendar day" / "Traditional shraddh timing (afternoon)". Technical terms (udaya, aparahna, vriddhi, kshaya, adhik) go only in help text.
 4. **Responsive**: single column on mobile; month grid + day detail side by side on desktop.
 5. **Trust surfaces**: "How this is calculated" page; "Report a mismatch" pre-fills date, city, settings, engine version.
@@ -32,7 +32,7 @@ Source of truth: `PROJECT_PLAN.md` §9. Locked designs and tokens live in `docs/
 ## Design tokens
 
 - Use tokens (CSS variables consumed via Tailwind) for color, type scale, spacing, radius, and motion. **No raw hex, px font sizes, or ad-hoc durations in components.**
-- Theme switching = swapping token values (`system | light | dark`), never per-component overrides.
+- Three token layers (primitive → semantic → component); components use semantic/component tokens only (ADR 0017). Theme = `palette` (calm | mandir | raat) × mode (system | light | dark); switching swaps token values, never per-component overrides. Values and contrast pairs: `docs/design/brief.md` §8.
 - Need a value that isn't a token? Ask; don't add one silently.
 
 ## Data and time display

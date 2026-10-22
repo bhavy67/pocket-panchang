@@ -19,4 +19,4 @@ When a personal event's month is a **kshaya masa** that year (one lunar month co
 - **Required fixture tests in the 1982–83 cycle**, not just "no crash". Kshaya years typically sit alongside adhik months in the same cycle (commonly cited for 1982–83: an adhik month before and after the kshaya month; confirm the exact months from the reference when building the fixture). The tests must cover, in that same cycle:
   - kshaya absorption for events of both the absorbed and absorbing month names;
   - the `adhikMonth` policy (ADR 0005) for events in that cycle's adhik months;
-  - Amanta↔Purnimanta conversion (ADR 0002) for every paksha around the kshaya and adhik months.
+  - Amanta↔Purnimanta conversion (ADR 0002) for every paksha around the kshaya and adhik months (**v2**, when Purnimanta ships).

@@ -19,8 +19,8 @@ _Avoid_: Lunar date, tithi number (when the named tithi is meant)
 The tithi prevailing at local sunrise; it names the civil day.
 
 **Vriddhi tithi**:
-A tithi prevailing at two consecutive sunrises, so it names two civil days.
-_Avoid_: Adhik tithi, repeated tithi
+A tithi prevailing at two consecutive sunrises, so it names two civil days. Unrelated to the yoga named Vriddhi.
+_Avoid_: Vriddhi (alone), adhik tithi, repeated tithi
 
 **Kshaya tithi**:
 A tithi that begins and ends between two sunrises, so it names no civil day.
@@ -34,7 +34,7 @@ _Avoid_: Bright half, dark half
 One of 27 lunar mansions, each 13°20′ of the sidereal zodiac, occupied by the Moon.
 
 **Yoga**:
-One of 27 divisions defined by the combined sidereal longitudes of the Sun and Moon.
+One of 27 divisions defined by the combined sidereal longitudes of the Sun and Moon. One of them is named **Vriddhi**; always say "Vriddhi yoga" for it, never bare "Vriddhi".
 
 **Karana**:
 A half-tithi; 60 per lunation, drawn from 11 names (7 movable, 4 fixed).
@@ -111,7 +111,14 @@ One of eight equal periods of daytime or nighttime, each named Amrut, Shubh, Lab
 ## Festivals
 
 **Festival**:
-A named observance defined by lunar month, paksha, tithi, and an observance window.
+A named public observance, fixed by a tithi (with an observance window), a sankranti, or an offset from another festival.
+
+**Bhadra**:
+The period of the Vishti karana, considered inauspicious for starting some observances (e.g., tying rakhi, Holika Dahan).
+_Avoid_: Vishti (except as the karana's name)
+
+**Festival span**:
+A festival lasting several consecutive civil days, from a start tithi to an end tithi (e.g., Navratri); its length in days varies by year.
 
 **Observance window**:
 The part of the day a festival's tithi must cover: sunrise, madhyahna (midday), aparahna (afternoon), pradosh (dusk), or nishita (midnight).

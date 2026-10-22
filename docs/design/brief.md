@@ -25,6 +25,8 @@
 5. **Private by design:** no account, no server, no analytics, no ads. Nothing to sign in to.
 6. **Measured accuracy:** the app publishes how accurate it is.
 
+**v1 scope notes:** Gujarati-style months only (month ends on Amas; the North Indian "ends on Punam" style comes in v2). Location by city search only (no GPS in v1). 13 festivals (§2).
+
 **Not in scope (never design for these):** horoscopes, kundali, predictions, astrology readings, accounts, ads, social features.
 
 ---
@@ -46,6 +48,7 @@ Use this real day for mockups. Source: Drik Panchang, Ahmedabad, retrieved 2026-
 | Nakshatra | Shatabhisha until 8:49 PM, then Purva Bhadrapada |
 | Yoga | Vriddhi until 11:40 PM *(a yoga name; unrelated to a "two-day tithi")* |
 | Karana | Vishti until 2:47 PM, then next karana *(placeholder)* |
+| Bhadra | Until 2:47 PM (Vishti karana; start time *placeholder*) |
 | Rahu Kaal | 1:50 PM – 3:16 PM |
 | Yamaganda, Gulika | *(placeholder times; the app computes them)* |
 
@@ -72,7 +75,15 @@ Use this real day for mockups. Source: Drik Panchang, Ahmedabad, retrieved 2026-
 - "Mummy-Pappa's anniversary": Maha Sud 5 · *(sample date)*
 - An NRI case: "Nana's varsi" observed by Ahmedabad's date while the phone is in New Jersey → label "Nana's varsi · Thu 5 Nov (Ahmedabad)"
 
-**Festivals:** show festival markers in mockups with **illustrative** names (e.g., Diwali, Bestu Varas). Do not treat any festival date in mockups as verified.
+**Festivals (v1, 13):** Dhanteras, Kali Chaudas, Diwali, Bestu Varas (Gujarati New Year), Bhai Bij, Navratri, Dussehra, Janmashtami, Raksha Bandhan, Holika Dahan, Dhuleti, Maha Shivaratri, Uttarayan. Dates in mockups are **illustrative**; do not treat any festival date in mockups as verified.
+
+Festival display cases the design must handle:
+- **Diwali sequence:** five festivals on five consecutive days; the month grid must show five markers in a row legibly.
+- **Navratri is a span** of 8, 9, or 10 days (varies by year): show it as a band across the grid cells, not a marker on one day. Day 1 and the last day are labelled.
+- **Holika Dahan** (evening) followed by **Dhuleti** (next day): two adjacent markers; Holika Dahan shows its evening time.
+- **Raksha Bandhan** shows a timing line, e.g. "Rakhi: after 1:42 PM (after Bhadra)" *(illustrative time)*.
+- **Janmashtami** usually shows once. When the two traditions differ, two adjacent days each carry a labelled marker: "Janmashtami (Smarta)" and "Janmashtami (Vaishnava)". No setting to choose.
+- **Uttarayan** (14 January in Gujarat): display rule pending verification; design a single marker.
 
 Gujarati UI copy in this brief is a **draft** and needs review by a native Gujarati reader.
 
@@ -82,12 +93,11 @@ Gujarati UI copy in this brief is a **draft** and needs review by a native Gujar
 
 Six screens plus two small trust pages. Every screen must work at 360 px wide with 200% text.
 
-### 3.1 Onboarding (3 steps, skippable to defaults)
-1. **City:** search field ("Search your city"), results like "Ahmedabad, Gujarat, India". Optional button "Use my location" (asks permission only when tapped; explains it stays on the phone).
-2. **Tradition:** two large choices in plain words:
-   - "Month ends on Amas: Gujarati, Maharashtrian, South Indian families" *(recommended badge for Gujarati)*
-   - "Month ends on Punam: North Indian families"
-3. **Language:** ગુજરાતી / English (each written in its own script).
+### 3.1 Onboarding (2 steps, skippable to defaults)
+1. **City:** search field ("Search your city"), results like "Ahmedabad, Gujarat, India". Search must handle small towns well (e.g., "Nadiad", "Unjha"). No GPS button in v1.
+2. **Language:** ગુજરાતી / English (each written in its own script).
+
+*(v2 adds a tradition step: "Month ends on Amas" vs "Month ends on Punam".)*
 
 No jargon anywhere (no "ayanamsa", "Amanta", "udaya"). Progress dots; back always available.
 
@@ -96,7 +106,8 @@ No jargon anywhere (no "ayanamsa", "Amanta", "udaya"). Progress dots; back alway
   **"Aaso Sud 11 · Choghadiya: Amrut until 3:16 PM · Rahu Kaal 1:50–3:16 PM"**
   Gujarati: "આસો સુદ ૧૧ · ચોઘડિયું: અમૃત ૩:૧૬ સુધી · રાહુ કાળ ૧:૫૦–૩:૧૬" *(draft)*
 - City and date header (tap to change city): "Ahmedabad · Thu 22 Oct".
-- **Muhurta timeline:** horizontal (or vertical on narrow screens) day strip from sunrise to sunset showing the 8 Choghadiya blocks, Rahu Kaal, Yamaganda, Gulika, with a **"now" marker**. Each block carries its name and a quality label/icon, not just colour. Night Choghadiya on tap or scroll.
+- **Muhurta timeline:** horizontal (or vertical on narrow screens) day strip from sunrise to sunset showing the 8 Choghadiya blocks, Rahu Kaal, Yamaganda, Gulika, and **Bhadra** when it falls in the day, with a **"now" marker**. In the example, Bhadra runs until 2:47 PM, so at 2:10 PM three things overlap: Amrut (good), Rahu Kaal (bad), Bhadra (bad).
+- **Proportional time axis (all timelines):** the axis is linear in clock time. Periods that don't align with Choghadiya boundaries (Bhadra, tithi and nakshatra changes, Rahu Kaal on days it doesn't match a Choghadiya block) are positioned and sized by their **actual start and end times**, never snapped to Choghadiya tiles. In the example, the tithi change at 2:47 PM and the end of Bhadra at 2:47 PM sit inside the Amrut block (1:50–3:16 PM), not on a tile edge. Overlapping periods stack in separate lanes so none hides another. Each block carries its name and a quality label/icon, not just colour. Night Choghadiya on tap or scroll.
 - **Five elements** with end times: Tithi (Sud 11 until 2:47 PM, then Sud 12), Nakshatra, Yoga, Karana, Weekday.
 - **Sun and Moon:** sunrise, sunset, moonrise, moonset.
 - **Coming up:** next 1–2 personal events and festivals ("Ba's varsi in 14 days").
@@ -106,7 +117,7 @@ No jargon anywhere (no "ayanamsa", "Amanta", "udaya"). Progress dots; back alway
 ### 3.3 Month
 - Gregorian month grid (October 2026), header also shows the lunar months it spans ("Bhadarvo – Aaso").
 - Each day cell: Gregorian date (large), **tithi** short label ("Sud 11" / "સુદ ૧૧"), and markers:
-  - festival (icon + short name on wider screens)
+  - festival (icon + short name on wider screens); multi-day festivals as a band (Navratri)
   - personal event (distinct icon)
   - **two-day tithi** (same tithi on two days) and **skipped tithi** (a tithi with no day of its own): icon plus text in day detail, never colour only
   - **today** highlighted; selected day clearly indicated
@@ -132,7 +143,8 @@ On desktop this sits beside the month grid (see §5).
   - **Advanced** (collapsed by default; see §4)
 
 ### 3.6 Settings
-- **City** (viewing city), **Tradition**, **Year style** (Vikram Samvat Gujarati / Chaitra-start / Shaka), **Language**, **Appearance** (palette, Light/Dark/System), **Text size**
+- **City** (viewing city), **Year style** (Vikram Samvat Gujarati / Chaitra-start / Shaka), **Language**, **Text size**
+- **Appearance:** palette (Calm · Mandir · Raat, each shown as a small live preview) and, separately, mode (System · Light · Dark)
 - **Family conventions** (see §4)
 - **Backup:** export / import, last backup date
 - **Notifications health** (Android): permission and battery-optimisation status with fix-it steps
@@ -235,7 +247,7 @@ A **theme = palette × mode** (light/dark). Every theme defines the full semanti
 | `--danger` | Destructive actions (delete) |
 | `--warning` / `--warning-subtle` | "Close to a tithi change", notification-health issues |
 | `--auspicious` / `--auspicious-subtle` | Good Choghadiya (Amrut, Shubh, Labh) |
-| `--inauspicious` / `--inauspicious-subtle` | Rahu Kaal, Yamaganda, Gulika, bad Choghadiya (Rog, Udveg, Kaal) |
+| `--inauspicious` / `--inauspicious-subtle` | Rahu Kaal, Yamaganda, Gulika, Bhadra, bad Choghadiya (Rog, Udveg, Kaal) |
 | `--festival` / `--festival-subtle` | Festival markers |
 | `--personal-event` / `--personal-event-subtle` | Personal event markers |
 | `--now-marker` | "Now" line on timelines, today indicator |
@@ -324,4 +336,4 @@ Motion uses: month change (slide in the direction of travel), sheet open/close, 
 3. **Tone of voice:** warm, respectful, plain, like a helpful family member. No exclamation marks or hype; no fear language around inauspicious times ("Rahu Kaal: many families avoid starting new work now", not "Danger!"). Gujarati copy written natively, not machine-translated.
 4. **Numerals in Gujarati mode:** Gujarati digits (૧૧, ૩:૧૬) or Latin digits (11, 3:16)? Older readers may prefer either; worth asking family testers.
 5. **Clock format:** 12-hour (with AM/PM or સવાર/બપોર/સાંજ/રાત words) vs 24-hour.
-6. **Palette names and count:** keep Calm / Mandir / Raat, or ship only Calm in v1 (architecture supports adding the others later)?
+6. **Palette names:** v1 ships all three (Calm, Mandir, Raat). Are the names right in Gujarati and English? ("Mandir" may read as religious-specific; "Raat" is plain Gujarati/Hindi for night.)

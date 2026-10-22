@@ -1,5 +1,5 @@
 ---
-status: accepted (architecture); palette set and palette setting pending approval
+status: accepted
 date: 2026-10-22
 ---
 
@@ -30,5 +30,6 @@ Themes are planned from the start because retrofitting a second theme onto compo
 ## Consequences
 
 - Phase 3 adds an automated contrast check over every theme × mode (fails CI below AA), and a lint or grep check forbidding raw colour literals in `apps/app` components.
-- Offering palette choice to users requires a new `Settings` field (proposed: `palette`). Per §0 rule 5 it is **not added** until approved; until then the architecture supports multiple palettes but v1 can ship one.
+- v1 ships all three palettes (Calm, Mandir, Raat), each light and dark. `Settings.palette` (`"calm" | "mandir" | "raat"`, approved 2026-10-22) is separate from `Settings.theme` (mode: system/light/dark).
+- The Phase 2 contrast prototype lives in `docs/design/contrast/` (`contrast.py`, `themes.json`); Phase 3 ports it to a Node CI script.
 - The v1 palette proposals, the semantic token list, and measured contrast are in `docs/design/brief.md`.

@@ -56,24 +56,48 @@ A beautiful, private, offline Hindu panchang that's Gujarati-first and diaspora-
 
 ## 2. Scope by Version
 
-### v1 (target: ~5–6 weeks part-time)
+### v1 (estimate: ~20–28 weeks part-time; see "Timeline estimate" below)
+- **Amanta tradition only** (Gujarati-first). Purnimanta moves to v2.
+- City search only (dense India/Gujarat city dataset). GPS and custom locations move to v2.
 - Daily panchang for a chosen city: tithi, nakshatra, yoga, karana, vara, with end times; sunrise, sunset, moonrise, moonset.
 - Lunar month, paksha, Vikram Samvat (Kartikadi) and Shaka year; adhik month display.
-- Muhurta: Rahu Kaal, Yamaganda, Gulika, day and night Choghadiya, with a "now" indicator.
+- Muhurta: Rahu Kaal, Yamaganda, Gulika, Bhadra, day and night Choghadiya, with a "now" indicator.
 - Month calendar grid showing the tithi per day, including vriddhi/kshaya markers.
-- ~25 **verified** major festivals.
+- **13 verified festivals** (ADR 0018): Dhanteras, Kali Chaudas, Diwali, Bestu Varas, Bhai Bij, Navratri (span), Dussehra, Janmashtami (Smarta and Vaishnava shown labelled when they differ), Raksha Bandhan (with "after Bhadra" timing), Holika Dahan, Dhuleti, Maha Shivaratri, Uttarayan (sankranti rule).
+- Muhurta includes Bhadra (Vishti karana) windows.
 - Personal tithi events: create, edit, delete; upcoming occurrences list.
 - Reminders: Android local notifications; `.ics` calendar export (web and Android).
 - Languages: Gujarati and English.
 - PWA (offline web) and Android app (Capacitor).
 - JSON backup export/import.
+- Three palettes (Calm, Mandir, Raat), each light and dark (ADR 0017).
 
 ### v2
 - Sky dial visualization (Sun/Moon/elongation/phase).
 - More festivals including Ekadashi (complex rules) and Sankranti list.
 - Hindi language.
 - Android home-screen widget (native Kotlin).
-- Purnimanta-region festival naming polish; more regional calendars.
+- **Purnimanta tradition**: display, entry, and Amanta↔Purnimanta conversion including the adhik-month split (ADR 0002); Purnimanta-region festival naming; more regional calendars.
+- **GPS location and custom locations** (ADR 0011).
+
+### Timeline estimate (re-estimated 2026-10-22, after Phase 1)
+
+Part-time at ~10 h/week. The original ~5–6 week target predates the Phase 1 scope (policy cascade, Pitru Paksha, date helper with historical time zones, observance location, family preview).
+
+| Phase | Weeks |
+|---|---|
+| 2 Design lock (remaining) | 1–2 |
+| 3 Scaffolding | 1 |
+| 4 [OWN] Sunrise + tithi | 2–3 |
+| 5 [OWN] Engine complete | 3–4 |
+| 6 Calendar (13 festivals, policies, `.ics`) | 2–4 |
+| 7 App shell (city search only) | 2 |
+| 8 Core screens (3 palettes) | 2–3 |
+| 9 Personal events + family preview | 2–3 |
+| 10 PWA, i18n, a11y, perf | 2 |
+| 11 Android | 2–3 |
+| 12 Release | 1 |
+| **Total** | **~20–28** |
 
 ---
 
@@ -146,7 +170,7 @@ f(t) = normalize(angle(t) − target)   // angle = elongation, sidereal moon, (s
 - Detect vriddhi and kshaya.
 
 ### 4.6 Months and years
-- Lunar month = new moon → next new moon (Amanta). Purnimanta naming is derived from Amanta, but it is **not** a plain half-month shift in adhik-month years (see ADR 0002).
+- Lunar month = new moon → next new moon (Amanta). Purnimanta naming (v2) is derived from Amanta, but it is **not** a plain half-month shift in adhik-month years (see ADR 0002).
 - Month name = determined by the sidereal solar rashi (sankranti logic).
 - Adhik: no sankranti between consecutive new moons. Kshaya: two sankrantis (rare; must still be handled).
 - Vikram Samvat (Kartikadi): increments at Kartik Shukla Pratipada. Chaitradi variant supported via settings.
@@ -156,25 +180,51 @@ f(t) = normalize(angle(t) − target)   // angle = elongation, sidereal moon, (s
 Festivals are **data**, not code:
 
 ```ts
-type FestivalRule = {
-  id: string;                         // "janmashtami"
+type FestivalRule = TithiFestival | SankrantiFestival | RelativeFestival; // ADR 0018
+
+type FestivalBase = {
+  id: string;                         // "holika-dahan"
   names: Record<Lang, string>;
+  variant?: { group: string; label: Record<Lang, string> }; // e.g. group "janmashtami", label "Smarta" per language; label shown only when variants differ (ADR 0018)
+  verified: { against: string; years: number[] };  // must be filled before shipping
+};
+
+type TithiFestival = FestivalBase & {
+  kind: "tithi";
   month: LunarMonth;                  // in the Amanta frame internally
   paksha: "shukla" | "krishna";
   tithi: number;
   window: "sunrise" | "madhyahna" | "aparahna" | "pradosh" | "nishita";
   tieBreak: "purva-vyapini" | "para-vyapini" | "max-coverage";
   extra?: { nakshatra?: Nakshatra };  // e.g., Rohini for Janmashtami
+  avoidBhadra?: boolean;              // date resolution skips Bhadra (Vishti karana); Holika Dahan
+  span?: { end: { paksha: "shukla" | "krishna"; tithi: number } }; // multi-day, e.g. Navratri Sud 1 → Sud 9
+  bhadraTiming?: "show-after";        // display "after Bhadra" timing (Raksha Bandhan); date resolution unchanged
   adhikPolicy: "nija-only";           // festivals not observed in adhik month by default
-  verified: { against: string; years: number[] };  // must be filled before shipping
+};
+
+type SankrantiFestival = FestivalBase & {
+  kind: "sankranti";
+  rashi: Rashi;                       // sidereal sign entered, e.g. "makara" for Uttarayan
+  afterSunset: "next-day" | "same-day"; // where it falls when the sankranti instant is after local sunset
+};
+
+type RelativeFestival = FestivalBase & {
+  kind: "relative";
+  of: string;                         // another festival's id, e.g. "holika-dahan"
+  offsetDays: number;                 // civil days after it, e.g. 1 for Dhuleti
 };
 ```
-- Resolver: for each candidate day, compute the tithi coverage of the window → apply the tie-break.
+- Resolver (tithi kind): for each candidate day, compute the tithi coverage of the window → apply the tie-break; with `avoidBhadra`, coverage that falls inside Bhadra does not count. A `span` ends on the day the end tithi resolves to under the same window and tie-break, so its length in civil days (e.g., 8–10 for Navratri) comes from the engine. (Same-window end rule is provisional; see §13.)
+- Sankranti kind: the civil day containing the sankranti instant, moved per `afterSunset`.
+- Relative kind: resolved after its base festival; `of` must reference an existing rule (no cycles).
+- Variants (`variant.group`): if all variants in a group resolve to the same day, show **one** marker with the festival name; show **two (or more) labelled markers** (`variant.label`) only when the dates differ.
 - A festival ships only when `verified` is filled with reference years.
 
 ### 4.8 Muhurta
 - Rahu Kaal / Yamaganda / Gulika: daylight / 8, weekday-indexed segment tables.
 - Choghadiya: day and night / 8 each, weekday-dependent starting sequence.
+- **Bhadra:** the Vishti karana window(s) of the day, shown as an inauspicious muhurta (ADR 0018).
 
 ### 4.9 Personal tithi events: occurrence rules
 ```ts
@@ -309,10 +359,11 @@ type Location = { id: string; name: string; lat: number; lng: number; tz: string
 
 type Settings = {
   location: Location;
-  tradition: "amanta" | "purnimanta";
+  tradition: "amanta" | "purnimanta"; // v1: always "amanta"; kept so v2 needs no migration
   samvat: "vikram-kartikadi" | "vikram-chaitradi" | "shaka";
   language: Lang;
-  theme: "system" | "light" | "dark";
+  palette: "calm" | "mandir" | "raat"; // colour palette (ADR 0017)
+  theme: "system" | "light" | "dark";  // mode, independent of palette
   textScale: number;               // respects OS scale; extra multiplier
   householdPolicy: Partial<Record<EventKind, PolicyOverrides>>; // "Family conventions" (ADR 0005)
   observanceLocation: Location;    // household "Observance city"; snapshot, set at onboarding (ADR 0007)
@@ -370,7 +421,7 @@ type CachedMonth = {
 - Source: GeoNames cities subset (**CC-BY 4.0: attribution required** in the About screen).
 - Scope v1: Indian cities + major diaspora cities (US, UK, Canada, Australia, UAE, etc.).
 - Each entry: id, name, lat, lng, IANA tz, country. Compressed JSON, lazy-loaded, searched locally.
-- **Location model (ADR 0011):** city search, plus optional GPS (read once, on-device). GPS snaps to the nearest city within ~25 km; otherwise it creates a **custom location** (coordinates rounded to 0.1°, user-named, device time zone with nearest-city fallback, manual tz override).
+- **Location model (ADR 0011):** v1 is **city search only**, using a dense India/Gujarat dataset (GeoNames `cities1000` or `cities5000`; final choice in Phase 7). **v2** adds optional GPS (read once, on-device) that snaps to the nearest city within ~25 km or otherwise creates a **custom location** (coordinates rounded to 0.1°, user-named, device time zone with nearest-city fallback, manual tz override).
 
 ---
 
@@ -379,7 +430,7 @@ type CachedMonth = {
 1. **Glanceable home:** one line answers why the user opened the app:
    *"Kartik Sud 2 · Choghadiya: Amrut until 10:42 · Rahu Kaal 1:30–3:00"*
 2. **Elderly-friendly by default:** large base type, respects OS font scaling, ≥ 48 dp tap targets, WCAG AA contrast, no meaning conveyed by color alone.
-3. **Onboarding in 3 steps:** city → tradition ("Gujarati family? choose this") → language. No jargon like "ayanamsa" in onboarding.
+3. **Onboarding in 2 steps (v1):** city → language. (v2 adds a tradition step when Purnimanta ships.) No jargon like "ayanamsa" in onboarding.
    **Plain labels everywhere:** forms and settings use plain-language labels (e.g., "Follow printed calendar day" / "Traditional shraddh timing (afternoon)"); technical terms appear only in help text.
 4. **Responsive:** single column on mobile; month grid + day detail side by side on desktop.
 5. **Trust surfaces:** a "How this is calculated" page; a "Report a mismatch" button that opens a pre-filled email/GitHub issue with date, city, settings, and engine version.
@@ -388,12 +439,12 @@ type CachedMonth = {
 8. **Dark mode** that is genuinely designed, not inverted.
 
 ### v1 screens
-1. Onboarding (3 steps)
+1. Onboarding (2 steps in v1)
 2. Today (glance line, panchang elements with end times, muhurta timeline with "now")
 3. Month (grid with tithi per day, festival markers, vriddhi/kshaya markers)
 4. Day detail (full panchang for a selected date)
 5. Personal events (list, upcoming, create/edit with policy options)
-6. Settings (location, tradition, samvat, language, theme, text size, backup, notifications health, about/attribution)
+6. Settings (location, samvat, language, palette, theme mode, text size, family conventions, backup, notifications health, about/attribution)
 
 ---
 
@@ -430,7 +481,7 @@ type CachedMonth = {
 | Risk | Mitigation |
 |---|---|
 | Wrong festival date → trust loss | Verified-only festival rules; fixtures; "report mismatch"; clear stated conventions |
-| Users compare with the family pandit's printed panchang | Let users choose tradition; "How this is calculated" page |
+| Users compare with the family pandit's printed panchang | "How this is calculated" page; tradition choice (v2) |
 | Android notification reliability (Samsung/Xiaomi battery optimization) | Notifications health screen; `.ics` export as fallback |
 | Scope creep toward a Drik clone | Non-goals in §1.5; v1/v2 split |
 | Losing data on phone loss | Backup nudges; Android Auto Backup; export/import |
@@ -470,9 +521,13 @@ Convention defaults that ship as **provisional** until Bhavy confirms with famil
 
 Rules that need a cited classical or reference source before being marked verified (§0 rule 7).
 
-- [ ] Purnimanta naming around an adhik month (Nija X Krishna → Adhik X → Nija X Shukla): check against the reference's Purnimanta view ([ADR 0002](docs/adr/0002-personal-event-dates-stored-in-amanta.md))
+- [ ] *(v2, not required for Phase 6)* Purnimanta naming around an adhik month (Nija X Krishna → Adhik X → Nija X Shukla): check against the reference's Purnimanta view ([ADR 0002](docs/adr/0002-personal-event-dates-stored-in-amanta.md))
 - [ ] Aparahna "neither day" tie-break: classical source ([ADR 0003](docs/adr/0003-personal-event-observance-window.md))
 - [ ] Kshaya masa absorption and the 1982–83 adhik months: classical source and reference ([ADR 0008](docs/adr/0008-kshaya-masa-occurrence.md))
+- [ ] Uttarayan: Gujarat's civic date (14 Jan) vs the astronomical Makar Sankranti date with the after-sunset rule; check 2025–2027 against references before deciding what to display ([ADR 0018](docs/adr/0018-festival-rules.md))
+- [ ] Janmashtami: the Smarta and Vaishnava resolution rules, cited, and checked against references for the fixture years ([ADR 0018](docs/adr/0018-festival-rules.md))
+- [ ] Navratri end-day rule: confirm the last day resolves under the same window and tie-break as the first (provisional), against a classical source and references ([ADR 0018](docs/adr/0018-festival-rules.md))
+- [ ] Holika Dahan Bhadra-avoidance rule (incl. when Bhadra covers all of pradosh): classical source and reference ([ADR 0018](docs/adr/0018-festival-rules.md))
 
 ---
 
@@ -535,6 +590,7 @@ Each phase ends with a **STOP**: summary, files changed, open questions, suggest
 - pnpm workspace; `packages/engine`, `packages/calendar`, `packages/i18n`, `apps/app` (Vite + React + TS).
 - Strict tsconfig base; lint/format per ADR 0015 (purity and dependency-direction rules, type-aware async rules, jsx-a11y, react-hooks); Vitest in all packages; path aliases.
 - GitHub Actions: install, typecheck, lint, test, build.
+- Contrast check as a CI step: port `docs/design/contrast/contrast.py` (Phase 2 prototype) into `scripts/` as a Node script over every palette × mode; fails below WCAG AA (ADR 0017).
 - Empty app renders "Pocket Panchang" in light/dark.
 
 **Exit criteria:** `pnpm install && pnpm typecheck && pnpm lint && pnpm test && pnpm build` all pass locally and in CI.
@@ -550,7 +606,7 @@ Each phase ends with a **STOP**: summary, files changed, open questions, suggest
 ### Phase 5 [OWN]: Engine complete
 - Lahiri ayanamsa; nakshatra, yoga, karana, vara.
 - Vriddhi/kshaya detection; full day assembly (§4.5).
-- New moons, sankrantis, lunar month naming, adhik/kshaya masa, Amanta/Purnimanta.
+- New moons, sankrantis, lunar month naming, adhik/kshaya masa (Amanta; Purnimanta is v2).
 - Vikram Samvat (Kartikadi/Chaitradi) and Shaka.
 - Fixtures: all 5 cities, 2 years. Property tests. grahan cross-check. Accuracy report script.
 
@@ -558,17 +614,17 @@ Each phase ends with a **STOP**: summary, files changed, open questions, suggest
 
 ### Phase 6: Calendar package: muhurta, festivals, personal events
 - Rahu Kaal, Yamaganda, Gulika, Choghadiya.
-- Festival rule schema + resolver (§4.7); ~25 festivals with `verified` filled.
+- Festival rule schema + resolver (§4.7, ADR 0018); the 13 v1 festivals (§2) with `verified` filled; Bhadra muhurta.
 - Personal event occurrence computation with policies (§4.9) for the next N years.
 - `.ics` generation.
 - Family history check script: prints computed occurrences for family-provided past events (last 2–3 years) next to the dates actually observed; used to settle §13 "Pending family confirmations". Input lives in a gitignored path (ADR 0013).
 
-**Exit criteria:** festival dates match the reference for all fixture cities/years; occurrence tests cover adhik and kshaya cases; every item in §13 "Pending family confirmations" is confirmed (provisional defaults kept or changed, ADRs updated) and every "Pending source verification" is cited.
+**Exit criteria:** festival dates match the reference for all fixture cities/years; occurrence tests cover adhik and kshaya cases; every item in §13 "Pending family confirmations" is confirmed (provisional defaults kept or changed, ADRs updated) and every v1 "Pending source verification" is cited.
 
 ### Phase 7: App shell
 - Worker + Comlink API; TanStack Query integration; Dexie schema v1; Zustand settings.
 - Platform ports with web adapters.
-- Onboarding flow (3 steps); offline city search (GeoNames subset with attribution).
+- Onboarding flow (2 steps); offline city search (GeoNames `cities1000` or `cities5000` subset, decided here, with attribution).
 - Cold-start strategy (§7).
 
 **Exit criteria:** onboarding completes; settings persist across reloads; the worker computes today offline.
