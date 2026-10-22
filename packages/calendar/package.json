@@ -1,0 +1,16 @@
+{
+  "name": "@panchang/calendar",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@panchang/engine": "workspace:*",
+    "@panchang/i18n": "workspace:*"
+  }
+}

@@ -282,7 +282,7 @@ type PolicyOverrides = Partial<OccurrencePolicy>;
 2. All heavy computation runs in a **Web Worker**. The main thread never calls the engine directly.
 3. Time zones are applied **only at the UI edge** via `Intl.DateTimeFormat` with the location's IANA zone.
 4. Platform-specific behavior lives behind **ports** (interfaces) with web and Capacitor adapters.
-5. Dependency direction: `app → calendar → engine`. Never the reverse.
+5. Dependency direction: `app → calendar → engine`. Never the reverse. `i18n` may import `engine` types only; `calendar` may import `i18n` (ADR 0015, enforced by lint).
 6. **Parse, don't validate** (ADR 0014): domain inputs are branded types (e.g., `CivilDate`, `LocationId`) produced only by parse functions; engine and calendar APIs accept only branded types. Every input boundary (URL, backup import, notification payloads, forms) parses.
 
 ### 5.3 Repository structure
@@ -330,7 +330,7 @@ pocket-panchang/
 | Unit tests | Vitest | Fast, TS-native |
 | Property tests | fast-check | Invariants |
 | E2E | Playwright | Main user flows on web |
-| Lint/format | ESLint (typescript-eslint type-checked) + Prettier (ADR 0015) | Type-aware async rules; enforces purity and dependency direction |
+| Lint/format | ESLint 9 (typescript-eslint type-checked) + Prettier (ADR 0015; TypeScript 6 and ESLint 9 are capped, see ADR) | Type-aware async rules; enforces purity and dependency direction |
 | CI | GitHub Actions | Typecheck, lint, test, accuracy report, build |
 | Web hosting | Vercel → `panchang.bhavyladani.in` | Existing setup |
 
@@ -591,7 +591,7 @@ Each phase ends with a **STOP**: summary, files changed, open questions, suggest
 - pnpm workspace; `packages/engine`, `packages/calendar`, `packages/i18n`, `apps/app` (Vite + React + TS).
 - Strict tsconfig base; lint/format per ADR 0015 (purity and dependency-direction rules, type-aware async rules, jsx-a11y, react-hooks); Vitest in all packages; path aliases.
 - GitHub Actions: install, typecheck, lint, test, build.
-- Contrast check as a CI step: port `docs/design/contrast/contrast.py` (Phase 2 prototype) into `scripts/` as a Node script over every palette × mode; fails below WCAG AA (ADR 0017).
+- Token check as a Vitest test (`apps/app/src/styles/tokens.test.ts`, runs in CI via `pnpm test`): completeness, layer rule, WCAG AA over every palette × mode, no raw colours outside `tokens.css`. `tokens.css` becomes the single source of truth; the Phase 2 prototype in `docs/design/contrast/` is superseded (ADR 0017).
 - Empty app renders "Pocket Panchang" in light/dark.
 
 **Exit criteria:** `pnpm install && pnpm typecheck && pnpm lint && pnpm test && pnpm build` all pass locally and in CI.

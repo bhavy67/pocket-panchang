@@ -1,0 +1,92 @@
+@import "tailwindcss";
+@import "./tokens.css";
+
+/* Tailwind maps only to semantic tokens (ADR 0017): default scales are reset so
+ * utilities like bg-red-500 do not exist. Colour values live in tokens.css. */
+@theme inline {
+  --color-*: initial;
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-sunken: var(--surface-sunken);
+  --color-text: var(--text);
+  --color-text-muted: var(--text-muted);
+  --color-text-on-accent: var(--text-on-accent);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-focus-ring: var(--focus-ring);
+  --color-accent: var(--accent);
+  --color-accent-subtle: var(--accent-subtle);
+  --color-danger: var(--danger);
+  --color-warning: var(--warning);
+  --color-warning-subtle: var(--warning-subtle);
+  --color-auspicious: var(--auspicious);
+  --color-auspicious-subtle: var(--auspicious-subtle);
+  --color-inauspicious: var(--inauspicious);
+  --color-inauspicious-subtle: var(--inauspicious-subtle);
+  --color-festival: var(--festival);
+  --color-festival-subtle: var(--festival-subtle);
+  --color-personal-event: var(--personal-event);
+  --color-personal-event-subtle: var(--personal-event-subtle);
+  --color-now-marker: var(--now-marker);
+}
+
+/* Non-colour scales (docs/design/brief.md §8.4–8.5). Mode-independent. */
+@theme {
+  --font-*: initial;
+  --font-ui: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-gu: "Noto Sans Gujarati", system-ui, sans-serif;
+
+  --text-*: initial;
+  --text-caption: 0.9375rem;
+  --text-sm: 1rem;
+  --text-body: 1.125rem;
+  --text-lg: 1.25rem;
+  --text-title: 1.5rem;
+  --text-headline: 1.875rem;
+  --text-display: 2.25rem;
+
+  --spacing: 0.25rem; /* rem: layout scales with text size (ADR 0017) */
+
+  --radius-*: initial;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+
+  --ease-*: initial;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-exit: cubic-bezier(0.3, 0, 1, 1);
+}
+
+:root {
+  --leading-body: 1.45;
+  --leading-heading: 1.2;
+  --script-scale: 1;
+  --tap-min: 48px;
+  --dur-fast: 120ms;
+  --dur-base: 200ms;
+  --dur-slow: 320ms;
+}
+
+:lang(gu) {
+  --leading-body: 1.65;
+  --leading-heading: 1.35;
+  --script-scale: 1.05; /* provisional (brief §8.4) */
+  font-family: var(--font-gu);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-base: 0ms;
+    --dur-slow: 0ms;
+  }
+}
+
+html {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-ui);
+  font-size: 100%;
+  line-height: var(--leading-body);
+}

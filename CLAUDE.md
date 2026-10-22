@@ -29,14 +29,15 @@ A beautiful, private, offline Hindu panchang that's Gujarati-first and diaspora-
 
 ## Key commands
 
-Placeholder. The monorepo is scaffolded in Phase 3. Expected:
+Node 24, pnpm 11 (pnpm workspace: `packages/*`, `apps/*`).
 
 ```sh
 pnpm install
-pnpm typecheck
-pnpm lint
-pnpm test
-pnpm build
+pnpm typecheck        # tsc --noEmit in every package
+pnpm lint             # ESLint incl. architecture rules (ADR 0015)
+pnpm test             # Vitest in every package (incl. token contrast check)
+pnpm build            # Vite build of apps/app
+pnpm --filter @panchang/app dev   # dev server
 ```
 
 ## Layout pointers

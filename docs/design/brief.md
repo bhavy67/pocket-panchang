@@ -316,7 +316,7 @@ Neutral Choghadiya (Char) uses `--text-muted` with a neutral icon.
 
 ### 8.5 Spacing, radius, elevation, motion
 
-| Spacing | `--space-1` 4 · `--space-2` 8 · `--space-3` 12 · `--space-4` 16 · `--space-5` 20 · `--space-6` 24 · `--space-8` 32 · `--space-10` 40 · `--space-12` 48 · `--space-16` 64 (px) |
+| Spacing (rem, so layout scales with text size) | `--space-1` 0.25 · `--space-2` 0.5 · `--space-3` 0.75 · `--space-4` 1 · `--space-5` 1.25 · `--space-6` 1.5 · `--space-8` 2 · `--space-10` 2.5 · `--space-12` 3 · `--space-16` 4 (rem; = 4…64 px at 100% text) |
 |---|---|
 | Tap target | `--tap-min` 48 px |
 | Radius | `--radius-sm` 6 · `--radius-md` 10 · `--radius-lg` 16 · `--radius-full` 9999 |
