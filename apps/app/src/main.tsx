@@ -6,6 +6,8 @@ import { registerSW } from "virtual:pwa-register";
 import { deviceLang, lang, loadLanguage } from "@/i18n";
 import { yearMonthOf } from "@/lib/year-month";
 import { pruneMonthCache, queryClient, seedMonth } from "@/queries";
+import { isNative } from "@/ports";
+import { rescheduleReminders } from "@/reschedule";
 import { router, todayIn } from "@/router";
 import {
   installCardState,
@@ -15,6 +17,15 @@ import {
 } from "@/pwa";
 import { hydrateSettings, persistSettings, useSettings } from "@/settings";
 import "@/styles/app.css";
+
+// Android: the WebView's own text zoom is off (MainActivity), so the system font size is
+// applied here as rem, keeping px caps intact. The web gets it from the browser already.
+const osFontScale = isNative()
+  ? await import("@/native/android")
+      .then((n) => n.DeviceHealth.fontScale())
+      .then((r) => r.scale)
+      .catch(() => 1)
+  : 1;
 
 // Theme = palette × mode (ADR 0017), both from settings; "system" follows the OS.
 const html = document.documentElement;
@@ -33,7 +44,7 @@ const applyTheme = () => {
   // The page language is the loaded UI language; mixed-script fragments carry their own lang.
   html.lang = lang();
   // In-app text size on top of the OS/browser setting: rem-based layout scales with it.
-  html.style.fontSize = `${(s?.textScale ?? 1) * 100}%`;
+  html.style.fontSize = `${(s?.textScale ?? 1) * osFontScale * 100}%`;
   // Browser chrome follows the palette's surface token.
   document
     .querySelector('meta[name="theme-color"]')
@@ -70,13 +81,45 @@ createRoot(rootElement).render(
   </StrictMode>,
 );
 
-// Service worker (vite-plugin-pwa): a new version waits until the user taps "Update now".
-listenForInstall();
-const updateSW = registerSW({
-  onNeedRefresh: () => usePwa.setState({ update: () => updateSW(true) }),
-});
-const visits = installCardState();
-saveInstallCardState({ ...visits, visits: visits.visits + 1 });
+if (isNative()) {
+  // Android: Capacitor serves the bundled assets from the APK, so no service worker (it would
+  // only cache the same files twice). Reminders are scheduled natively instead.
+  void import("@/native/android").then(({ setupLifecycle }) =>
+    setupLifecycle({
+      canGoBack: () => router.history.canGoBack(),
+      goBack: () => router.history.back(),
+      goHome: () => void router.navigate({ to: "/" }),
+      isHome: () =>
+        ["/", "/onboarding"].includes(router.state.location.pathname),
+      onResume: () => void rescheduleReminders(),
+      openEvent: (id) =>
+        void router.navigate({ to: "/events/$id", params: { id } }),
+    }),
+  );
+  // Off the cold-start path: the worker serves the first screen first (§7).
+  setTimeout(() => void rescheduleReminders(), 3000);
+  // Anything that moves a family date or its text: rebuild the reminder window.
+  useSettings.subscribe(({ settings: s }, { settings: prev }) => {
+    if (
+      s &&
+      prev &&
+      (s.householdPolicy !== prev.householdPolicy ||
+        s.observanceLocation !== prev.observanceLocation ||
+        s.location !== prev.location ||
+        s.reminderTime !== prev.reminderTime ||
+        s.language !== prev.language)
+    )
+      void rescheduleReminders();
+  });
+} else {
+  // Service worker (vite-plugin-pwa): a new version waits until the user taps "Update now".
+  listenForInstall();
+  const updateSW = registerSW({
+    onNeedRefresh: () => usePwa.setState({ update: () => updateSW(true) }),
+  });
+  const visits = installCardState();
+  saveInstallCardState({ ...visits, visits: visits.visits + 1 });
+}
 
 // After first render: housekeeping off the cold-start path.
 pruneMonthCache().catch((e: unknown) =>

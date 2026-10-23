@@ -95,6 +95,12 @@ const settingsRoute = createRoute({
   component: lazyRouteComponent(() => import("@/routes"), "SettingsRoute"),
 });
 
+const notificationsRoute = createRoute({
+  getParentRoute: () => appRoute,
+  path: "/settings/notifications",
+  component: lazyRouteComponent(() => import("@/routes"), "NotificationsRoute"),
+});
+
 const onboardingRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/onboarding",
@@ -110,6 +116,7 @@ export const routeTree = rootRoute.addChildren([
     eventsRoute,
     eventRoute,
     settingsRoute,
+    notificationsRoute,
   ]),
   onboardingRoute,
 ]);

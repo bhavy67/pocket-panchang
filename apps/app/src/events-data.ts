@@ -4,6 +4,7 @@ import { addDays, ENGINE_VERSION, type CivilDate } from "@panchang/engine";
 import { queryOptions, useQuery } from "@tanstack/react-query";
 import { db, type StoredEvent } from "@/db";
 import { queryClient } from "@/queries";
+import { rescheduleReminders } from "@/reschedule";
 import type { Settings } from "@/settings";
 import { worker } from "@/worker/client";
 
@@ -18,6 +19,7 @@ const changed = () =>
   Promise.all([
     queryClient.invalidateQueries({ queryKey: ["events"] }),
     queryClient.invalidateQueries({ queryKey: ["occurrences"] }),
+    rescheduleReminders(),
   ]);
 
 export async function saveEvent(e: StoredEvent) {

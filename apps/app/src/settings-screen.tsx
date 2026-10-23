@@ -14,7 +14,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useId, useState, type ReactNode } from "react";
 import { backupErrorKey, parseBackup } from "@/backup";
 import { loadLanguage, t } from "@/i18n";
-import { CityPicker } from "@/city-picker";
+import { Link } from "@tanstack/react-router";
+import { CityPicker, inputClass } from "@/city-picker";
 import type { StoredEvent } from "@/db";
 import { btnPrimary } from "@/events";
 import {
@@ -227,6 +228,15 @@ export function SettingsScreen() {
         </div>
       </Section>
 
+      <Section title={t("reminders")}>
+        <div className={`flex flex-col gap-3 p-5 ${card}`}>
+          <ReminderTime s={s} />
+          <Link to="/settings/notifications" className={btnOutline}>
+            {t("healthLink")}
+          </Link>
+        </div>
+      </Section>
+
       <Section title={t("backup")} sub={t("backupSub")}>
         <div id="backup" className={`flex flex-col gap-3 p-5 ${card}`}>
           <p className="text-body">
@@ -345,6 +355,28 @@ async function applyHouseholdChange(
     )
   )
     saveSettings(next);
+}
+
+function ReminderTime({ s }: { s: Settings }) {
+  const id = useId();
+  return (
+    <div className="flex flex-col gap-1">
+      <label htmlFor={id} className="text-body font-semibold">
+        {t("reminderTime")}
+      </label>
+      <input
+        id={id}
+        type="time"
+        value={s.reminderTime}
+        onChange={(e) => {
+          if (/^\d{2}:\d{2}$/.test(e.target.value))
+            saveSettings({ ...s, reminderTime: e.target.value });
+        }}
+        className={`${inputClass} max-w-48`}
+      />
+      <span className="text-sm text-text-muted">{t("reminderTimeHelp")}</span>
+    </div>
+  );
 }
 
 function ObservanceCity({

@@ -45,7 +45,8 @@ async function seed(page: Page, palette: string) {
             store.put({ ...row, value: { ...row.value, palette } });
           };
           tx.oncomplete = () => resolve();
-          tx.onerror = () => reject(tx.error ?? new Error("IndexedDB seed failed"));
+          tx.onerror = () =>
+            reject(tx.error ?? new Error("IndexedDB seed failed"));
         };
       }),
     palette,

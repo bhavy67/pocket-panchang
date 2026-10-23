@@ -21,6 +21,8 @@ export type Settings = {
   readonly textScale: number;
   readonly householdPolicy: Partial<Record<EventKind, PolicyOverrides>>;
   readonly observanceLocation: Location;
+  /** Device-local "HH:mm" when reminders fire (ADR 0007). Added in Phase 11; older rows default. */
+  readonly reminderTime: string;
 };
 
 /** GeoNames 1279233; the onboarding "Skip" city. */
@@ -44,6 +46,7 @@ export function defaultSettings(location: Location, language: Lang): Settings {
     textScale: 1,
     householdPolicy: {},
     observanceLocation: location, // ADR 0007: set at onboarding
+    reminderTime: "08:00",
   };
 }
 
@@ -125,6 +128,12 @@ export function parseSettings(v: unknown): Settings | ParseError {
   const observanceLocation = parseLocation(v.observanceLocation);
   if (isParseError(observanceLocation)) return observanceLocation;
   const { tradition, samvat, language, palette, theme, textScale } = v;
+  const reminderTime = v.reminderTime ?? "08:00";
+  if (
+    typeof reminderTime !== "string" ||
+    !/^([01]\d|2[0-3]):[0-5]\d$/.test(reminderTime)
+  )
+    return fail("Bad reminder time");
   if (!oneOf(tradition, ["amanta", "purnimanta"] as const))
     return fail(`Bad tradition: ${String(tradition)}`);
   if (
@@ -157,6 +166,7 @@ export function parseSettings(v: unknown): Settings | ParseError {
     textScale,
     householdPolicy: policy,
     observanceLocation,
+    reminderTime,
   };
 }
 

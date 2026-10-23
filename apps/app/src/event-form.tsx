@@ -21,6 +21,8 @@ import { deleteEvent, saveEvent, useEvents } from "@/events-data";
 import { btnPrimary } from "@/events";
 import { lang, t } from "@/i18n";
 import { dateShort } from "@/lib/format";
+import { isNative } from "@/ports";
+import { rescheduleReminders } from "@/reschedule";
 import {
   FIELDS,
   inherited,
@@ -123,6 +125,14 @@ function EventForm({ existing }: { existing: StoredEvent | undefined }) {
       createdAt: existing?.createdAt ?? now,
       updatedAt: now,
     });
+    // Android: ask for notifications when they first matter (a date with reminders exists).
+    if (isNative() && remind.length > 0) {
+      const n = await import("@/native/android");
+      if ((await n.health()).notifications === "prompt") {
+        await n.requestNotificationPermission();
+        await rescheduleReminders();
+      }
+    }
     void navigate({ to: "/events" });
   };
 

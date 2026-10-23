@@ -13,6 +13,7 @@ const eventApi = getRouteApi("/app/events/$id");
 
 export { Events as EventsRoute } from "@/events";
 export { SettingsScreen as SettingsRoute } from "@/settings-screen";
+export { NotificationsHealth as NotificationsRoute } from "@/notifications-health";
 
 export function EventRoute() {
   const { id } = eventApi.useParams();

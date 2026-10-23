@@ -1,11 +1,19 @@
-// Platform ports (§5.5) with their web adapters. Capacitor adapters arrive in Phase 11.
-// GeoPort is not defined: GPS is v2 (ADR 0011).
-import type { Occurrence } from "@panchang/calendar";
+// Platform ports (§5.5): web adapters here; Android adapters in native/android.ts, loaded only
+// inside the Capacitor app so the web bundle carries none of them. GeoPort is v2 (ADR 0011).
+import { Capacitor } from "@capacitor/core";
+import type { Reminder } from "@/lib/reminders";
+
+/** A reminder with its notification text, in the UI language. */
+export type ReminderNotice = Reminder & {
+  readonly title: string;
+  readonly body: string;
+};
 
 export interface ReminderPort {
-  schedule(items: readonly Occurrence[]): Promise<void>;
+  /** Replaces every scheduled reminder with `items`. */
+  schedule(items: readonly ReminderNotice[]): Promise<void>;
   cancelAll(): Promise<void>;
-  capability(): "exact" | "unreliable" | "none";
+  capability(): Promise<"exact" | "unreliable" | "none">;
 }
 
 export interface SharePort {
@@ -16,7 +24,7 @@ export interface SharePort {
 export const webReminders: ReminderPort = {
   schedule: () => Promise.resolve(),
   cancelAll: () => Promise.resolve(),
-  capability: () => "none",
+  capability: () => Promise.resolve("none"),
 };
 
 export const webShare: SharePort = {
@@ -35,3 +43,15 @@ export const webShare: SharePort = {
     setTimeout(() => URL.revokeObjectURL(url), 0);
   },
 };
+
+export const isNative = () => Capacitor.isNativePlatform();
+
+let ports: Promise<{ reminders: ReminderPort; share: SharePort }> | undefined;
+/** The ports for this platform. */
+export const platformPorts = () =>
+  (ports ??= isNative()
+    ? import("@/native/android").then((m) => ({
+        reminders: m.androidReminders,
+        share: m.androidShare,
+      }))
+    : Promise.resolve({ reminders: webReminders, share: webShare }));

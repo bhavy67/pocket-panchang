@@ -12,7 +12,7 @@
 - [ ] **Month-grid markers:** "૨×" (two-day tithi) and "છૂટી" (skipped tithi).
 - [ ] **Event kinds:** વરસી / શ્રાદ્ધ, લગ્નતિથિ, જન્મદિવસ (તિથિ મુજબ).
 
-### UI strings (303)
+### UI strings (339)
 
 | OK | Key | English | ગુજરાતી (draft) |
 |---|---|---|---|
@@ -319,6 +319,42 @@
 | [ ] | `updateReady` | A new version is ready. | નવું સંસ્કરણ તૈયાર છે. |
 | [ ] | `updateReload` | Update now | હમણાં અપડેટ કરો |
 | [ ] | `offlineReady` | Ready to work without internet. | ઇન્ટરનેટ વગર ચાલવા તૈયાર. |
+| [ ] | `channelName` | Family date reminders | પરિવારની તારીખોની યાદ |
+| [ ] | `channelDescription` | Reminders for birthdays by tithi, varsi and other family dates. | તિથિ મુજબ જન્મદિવસ, વરસી અને પરિવારની બીજી તારીખોની યાદ. |
+| [ ] | `remindToday` | Today | આજે |
+| [ ] | `remindTomorrow` | Tomorrow | કાલે |
+| [ ] | `remindInDays` | In {n} days | {n} દિવસમાં |
+| [ ] | `testTitle` | Test reminder | ચકાસણી માટેની યાદ |
+| [ ] | `testBody` | Reminders work on this phone. | આ ફોન પર યાદ બરાબર આવે છે. |
+| [ ] | `reminderTime` | Remind me at | યાદ આ સમયે અપાવો |
+| [ ] | `reminderTimeHelp` | Phone time. If a family date follows another city, the reminder comes no later than this time there. | ફોનનો સમય. જો તારીખ બીજા શહેર મુજબ હોય, તો યાદ ત્યાંના આ સમયથી મોડી નહીં આવે. |
+| [ ] | `reminders` | Reminders | યાદ |
+| [ ] | `healthLink` | Check that reminders can arrive | યાદ આવી શકે છે કે નહીં તે તપાસો |
+| [ ] | `backToSettings` | ‹ Settings | ‹ સેટિંગ્સ |
+| [ ] | `healthTitle` | Reminders on this phone | આ ફોન પર યાદ |
+| [ ] | `healthWeb` | On the web, the app cannot send reminders. Save the calendar file from Family dates and your calendar app will remind you. | વેબ પર ઍપ યાદ મોકલી શકતી નથી. પરિવારની તારીખોમાંથી કેલેન્ડર ફાઇલ સાચવો, તમારી કેલેન્ડર ઍપ યાદ અપાવશે. |
+| [ ] | `healthIntro` | Phones can block reminders to save battery. Each check below should be green. | બૅટરી બચાવવા ફોન યાદ રોકી શકે છે. નીચેની દરેક તપાસ લીલી હોવી જોઈએ. |
+| [ ] | `healthPermission` | Notifications | સૂચનાઓ |
+| [ ] | `healthPermissionOk` | Allowed. | મંજૂર છે. |
+| [ ] | `healthPermissionBad` | Not allowed, so reminders cannot appear. | મંજૂર નથી, તેથી યાદ દેખાઈ શકશે નહીં. |
+| [ ] | `healthAllow` | Allow notifications | સૂચનાઓ મંજૂર કરો |
+| [ ] | `healthOpenSettings` | Open phone settings | ફોનનાં સેટિંગ્સ ખોલો |
+| [ ] | `healthExact` | On-time reminders | સમયસર યાદ |
+| [ ] | `healthExactOk` | Reminders arrive at the time you chose. | તમે પસંદ કરેલા સમયે જ યાદ આવે છે. |
+| [ ] | `healthExactBad` | Off, so reminders may come late. Turn on “Alarms & reminders” for this app. | બંધ છે, તેથી યાદ મોડી આવી શકે. આ ઍપ માટે “Alarms & reminders” ચાલુ કરો. |
+| [ ] | `healthBattery` | Battery | બૅટરી |
+| [ ] | `healthBatteryOk` | Unrestricted: the phone will not stop reminders. | કોઈ રોક નથી: ફોન યાદ નહીં રોકે. |
+| [ ] | `healthBatteryBad` | Battery saving may delay or stop reminders. Choose “Unrestricted” (or “Don’t optimise”) for this app. | બૅટરી બચત યાદ મોડી કે બંધ કરી શકે. આ ઍપ માટે “Unrestricted” (અથવા “Don’t optimise”) પસંદ કરો. |
+| [ ] | `healthOk` | OK | બરાબર |
+| [ ] | `healthNeedsAttention` | Needs attention | ધ્યાન આપો |
+| [ ] | `healthSamsungTitle` | On Samsung phones | સેમસંગ ફોન પર |
+| [ ] | `healthSamsung` | Open Settings → Apps → Pocket Panchang → Battery, and choose “Unrestricted”. Open Settings → Battery → Background usage limits → Never sleeping apps, and add Pocket Panchang. If “Put unused apps to sleep” is on, make sure Pocket Panchang is not in “Sleeping apps”. | સેટિંગ્સ → Apps → Pocket Panchang → Battery ખોલો અને “Unrestricted” પસંદ કરો. સેટિંગ્સ → Battery → Background usage limits → Never sleeping apps ખોલો અને Pocket Panchang ઉમેરો. “Put unused apps to sleep” ચાલુ હોય તો Pocket Panchang “Sleeping apps”માં ન હોય તે જુઓ. |
+| [ ] | `healthXiaomiTitle` | On Xiaomi, Redmi and POCO phones | શાઓમી, રેડમી અને પોકો ફોન પર |
+| [ ] | `healthXiaomi` | Open Settings → Apps → Manage apps → Pocket Panchang. Turn on “Autostart”. Open “Battery saver” and choose “No restrictions”. In the recent-apps screen, press and hold Pocket Panchang and tap the lock icon. | સેટિંગ્સ → Apps → Manage apps → Pocket Panchang ખોલો. “Autostart” ચાલુ કરો. “Battery saver” ખોલો અને “No restrictions” પસંદ કરો. તાજેતરની ઍપની સ્ક્રીનમાં Pocket Panchang દબાવી રાખો અને તાળાનું ચિહ્ન દબાવો. |
+| [ ] | `healthTestTitle` | Test it | ચકાસો |
+| [ ] | `healthTestBody` | Tap the button, lock the phone, and wait one minute. A test reminder should appear. | બટન દબાવો, ફોન લૉક કરો અને એક મિનિટ રાહ જુઓ. ચકાસણીની યાદ દેખાવી જોઈએ. |
+| [ ] | `healthTestButton` | Send a test reminder in 1 minute | ૧ મિનિટમાં ચકાસણીની યાદ મોકલો |
+| [ ] | `healthTestSent` | Test reminder set for one minute from now. | હવેથી એક મિનિટ પછી ચકાસણીની યાદ ગોઠવી. |
 
 ### Months (Gujarati year order) (12)
 

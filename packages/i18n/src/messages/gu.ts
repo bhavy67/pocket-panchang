@@ -344,4 +344,50 @@ export const gu: Messages = {
   updateReady: "નવું સંસ્કરણ તૈયાર છે.",
   updateReload: "હમણાં અપડેટ કરો",
   offlineReady: "ઇન્ટરનેટ વગર ચાલવા તૈયાર.",
+  // Reminders (Android)
+  channelName: "પરિવારની તારીખોની યાદ",
+  channelDescription:
+    "તિથિ મુજબ જન્મદિવસ, વરસી અને પરિવારની બીજી તારીખોની યાદ.",
+  remindToday: "આજે",
+  remindTomorrow: "કાલે",
+  remindInDays: "{n} દિવસમાં",
+  testTitle: "ચકાસણી માટેની યાદ",
+  testBody: "આ ફોન પર યાદ બરાબર આવે છે.",
+  reminderTime: "યાદ આ સમયે અપાવો",
+  reminderTimeHelp:
+    "ફોનનો સમય. જો તારીખ બીજા શહેર મુજબ હોય, તો યાદ ત્યાંના આ સમયથી મોડી નહીં આવે.",
+  reminders: "યાદ",
+  healthLink: "યાદ આવી શકે છે કે નહીં તે તપાસો",
+  backToSettings: "‹ સેટિંગ્સ",
+  healthTitle: "આ ફોન પર યાદ",
+  healthWeb:
+    "વેબ પર ઍપ યાદ મોકલી શકતી નથી. પરિવારની તારીખોમાંથી કેલેન્ડર ફાઇલ સાચવો, તમારી કેલેન્ડર ઍપ યાદ અપાવશે.",
+  healthIntro:
+    "બૅટરી બચાવવા ફોન યાદ રોકી શકે છે. નીચેની દરેક તપાસ લીલી હોવી જોઈએ.",
+  healthPermission: "સૂચનાઓ",
+  healthPermissionOk: "મંજૂર છે.",
+  healthPermissionBad: "મંજૂર નથી, તેથી યાદ દેખાઈ શકશે નહીં.",
+  healthAllow: "સૂચનાઓ મંજૂર કરો",
+  healthOpenSettings: "ફોનનાં સેટિંગ્સ ખોલો",
+  healthExact: "સમયસર યાદ",
+  healthExactOk: "તમે પસંદ કરેલા સમયે જ યાદ આવે છે.",
+  healthExactBad:
+    "બંધ છે, તેથી યાદ મોડી આવી શકે. આ ઍપ માટે “Alarms & reminders” ચાલુ કરો.",
+  healthBattery: "બૅટરી",
+  healthBatteryOk: "કોઈ રોક નથી: ફોન યાદ નહીં રોકે.",
+  healthBatteryBad:
+    "બૅટરી બચત યાદ મોડી કે બંધ કરી શકે. આ ઍપ માટે “Unrestricted” (અથવા “Don’t optimise”) પસંદ કરો.",
+  healthOk: "બરાબર",
+  healthNeedsAttention: "ધ્યાન આપો",
+  healthSamsungTitle: "સેમસંગ ફોન પર",
+  healthSamsung:
+    "સેટિંગ્સ → Apps → Pocket Panchang → Battery ખોલો અને “Unrestricted” પસંદ કરો.\nસેટિંગ્સ → Battery → Background usage limits → Never sleeping apps ખોલો અને Pocket Panchang ઉમેરો.\n“Put unused apps to sleep” ચાલુ હોય તો Pocket Panchang “Sleeping apps”માં ન હોય તે જુઓ.",
+  healthXiaomiTitle: "શાઓમી, રેડમી અને પોકો ફોન પર",
+  healthXiaomi:
+    "સેટિંગ્સ → Apps → Manage apps → Pocket Panchang ખોલો.\n“Autostart” ચાલુ કરો.\n“Battery saver” ખોલો અને “No restrictions” પસંદ કરો.\nતાજેતરની ઍપની સ્ક્રીનમાં Pocket Panchang દબાવી રાખો અને તાળાનું ચિહ્ન દબાવો.",
+  healthTestTitle: "ચકાસો",
+  healthTestBody:
+    "બટન દબાવો, ફોન લૉક કરો અને એક મિનિટ રાહ જુઓ. ચકાસણીની યાદ દેખાવી જોઈએ.",
+  healthTestButton: "૧ મિનિટમાં ચકાસણીની યાદ મોકલો",
+  healthTestSent: "હવેથી એક મિનિટ પછી ચકાસણીની યાદ ગોઠવી.",
 };

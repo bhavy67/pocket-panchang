@@ -10,3 +10,4 @@ apps/app/public/data/
 dist-e2e/
 test-results/
 playwright-report/
+**/android/

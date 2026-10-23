@@ -63,6 +63,7 @@ export default tseslint.config(
     ignores: [
       "**/dist/**",
       "**/dist-e2e/**",
+      "**/android/**",
       "**/test-results/**",
       "**/playwright-report/**",
       "**/coverage/**",

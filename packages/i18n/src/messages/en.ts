@@ -347,6 +347,52 @@ export const en = {
   updateReady: "A new version is ready.",
   updateReload: "Update now",
   offlineReady: "Ready to work without internet.",
+  // Reminders (Android)
+  channelName: "Family date reminders",
+  channelDescription:
+    "Reminders for birthdays by tithi, varsi and other family dates.",
+  remindToday: "Today",
+  remindTomorrow: "Tomorrow",
+  remindInDays: "In {n} days",
+  testTitle: "Test reminder",
+  testBody: "Reminders work on this phone.",
+  reminderTime: "Remind me at",
+  reminderTimeHelp:
+    "Phone time. If a family date follows another city, the reminder comes no later than this time there.",
+  reminders: "Reminders",
+  healthLink: "Check that reminders can arrive",
+  backToSettings: "‹ Settings",
+  healthTitle: "Reminders on this phone",
+  healthWeb:
+    "On the web, the app cannot send reminders. Save the calendar file from Family dates and your calendar app will remind you.",
+  healthIntro:
+    "Phones can block reminders to save battery. Each check below should be green.",
+  healthPermission: "Notifications",
+  healthPermissionOk: "Allowed.",
+  healthPermissionBad: "Not allowed, so reminders cannot appear.",
+  healthAllow: "Allow notifications",
+  healthOpenSettings: "Open phone settings",
+  healthExact: "On-time reminders",
+  healthExactOk: "Reminders arrive at the time you chose.",
+  healthExactBad:
+    "Off, so reminders may come late. Turn on “Alarms & reminders” for this app.",
+  healthBattery: "Battery",
+  healthBatteryOk: "Unrestricted: the phone will not stop reminders.",
+  healthBatteryBad:
+    "Battery saving may delay or stop reminders. Choose “Unrestricted” (or “Don’t optimise”) for this app.",
+  healthOk: "OK",
+  healthNeedsAttention: "Needs attention",
+  healthSamsungTitle: "On Samsung phones",
+  healthSamsung:
+    "Open Settings → Apps → Pocket Panchang → Battery, and choose “Unrestricted”.\nOpen Settings → Battery → Background usage limits → Never sleeping apps, and add Pocket Panchang.\nIf “Put unused apps to sleep” is on, make sure Pocket Panchang is not in “Sleeping apps”.",
+  healthXiaomiTitle: "On Xiaomi, Redmi and POCO phones",
+  healthXiaomi:
+    "Open Settings → Apps → Manage apps → Pocket Panchang.\nTurn on “Autostart”.\nOpen “Battery saver” and choose “No restrictions”.\nIn the recent-apps screen, press and hold Pocket Panchang and tap the lock icon.",
+  healthTestTitle: "Test it",
+  healthTestBody:
+    "Tap the button, lock the phone, and wait one minute. A test reminder should appear.",
+  healthTestButton: "Send a test reminder in 1 minute",
+  healthTestSent: "Test reminder set for one minute from now.",
   // @@KEYS@@
 } as const;
 
