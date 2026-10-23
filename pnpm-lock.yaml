@@ -47,6 +47,9 @@ importers:
       '@panchang/engine':
         specifier: workspace:*
         version: link:../../packages/engine
+      '@panchang/i18n':
+        specifier: workspace:*
+        version: link:../../packages/i18n
       '@tanstack/react-query':
         specifier: 5.104.5
         version: 5.104.5(@types/react@19.3.0)(react@19.3.1)

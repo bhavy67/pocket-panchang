@@ -11,10 +11,15 @@ import "@/styles/app.css";
 // Theme = palette × mode (ADR 0017), both from settings; "system" follows the OS.
 const html = document.documentElement;
 const prefersDark = window.matchMedia("(prefers-color-scheme: dark)");
+// Dev only: ?palette=mandir&mode=dark previews a theme without touching saved settings, until
+// the Settings screen (Phase 9) offers the real switch.
+const preview = import.meta.env.DEV
+  ? new URLSearchParams(location.search)
+  : new URLSearchParams();
 const applyTheme = () => {
   const s = useSettings.getState().settings;
-  const theme = s?.theme ?? "system";
-  html.dataset.palette = s?.palette ?? "calm";
+  const theme = preview.get("mode") ?? s?.theme ?? "system";
+  html.dataset.palette = preview.get("palette") ?? s?.palette ?? "calm";
   html.dataset.mode =
     theme === "system" ? (prefersDark.matches ? "dark" : "light") : theme;
   html.lang = s?.language ?? "en";

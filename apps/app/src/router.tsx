@@ -1,4 +1,3 @@
-import { useQuery } from "@tanstack/react-query";
 import {
   createRootRoute,
   createRoute,
@@ -8,23 +7,74 @@ import {
   redirect,
   type RouterHistory,
 } from "@tanstack/react-router";
-import type { Instant } from "@panchang/engine";
+import {
+  isParseError,
+  parseCivilDate,
+  type CivilDate,
+  type Instant,
+  type ParseError,
+} from "@panchang/engine";
 import { clockFor } from "@/lib/clock";
-import { yearMonthOf } from "@/lib/year-month";
-import { monthQuery } from "@/queries";
+import { parseYearMonth, type YearMonth } from "@/lib/year-month";
 import { useSettings, type Settings } from "@/settings";
+import { Today } from "@/today";
+import { Shell } from "@/ui";
 
-// Code-based routes, no codegen (ADR 0014).
+// Code-based routes, no codegen (ADR 0014). Search params are parsed at the route: a malformed
+// ?date= or ?m= is dropped before any component sees it. Every route except Today is lazy (§7).
+
+/** Today's civil date in the settings city. */
+export const todayIn = (s: Settings) =>
+  clockFor(s.location.tz).localDate(Date.now() as Instant);
+
+const parsed = <T,>(
+  v: unknown,
+  parse: (s: string) => T | ParseError,
+): T | undefined => {
+  if (typeof v !== "string") return undefined;
+  const r = parse(v);
+  return isParseError(r) ? undefined : r;
+};
+
 const rootRoute = createRootRoute({ component: Outlet });
 
-const indexRoute = createRoute({
+const appRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: "/",
+  id: "app",
   beforeLoad: () => {
     // eslint-disable-next-line @typescript-eslint/only-throw-error -- TanStack Router's redirect idiom
     if (!useSettings.getState().settings) throw redirect({ to: "/onboarding" });
   },
-  component: Home,
+  component: Shell,
+});
+
+const indexRoute = createRoute({
+  getParentRoute: () => appRoute,
+  path: "/",
+  component: Today,
+});
+
+const monthRoute = createRoute({
+  getParentRoute: () => appRoute,
+  path: "/month",
+  validateSearch: (
+    q: Record<string, unknown>,
+  ): { m?: YearMonth; date?: CivilDate } => {
+    const m = parsed(q.m, parseYearMonth);
+    const date = parsed(q.date, parseCivilDate);
+    return { ...(m && { m }), ...(date && { date }) };
+  },
+  component: lazyRouteComponent(() => import("@/routes"), "MonthRoute"),
+});
+
+const dayRoute = createRoute({
+  getParentRoute: () => appRoute,
+  path: "/day",
+  validateSearch: (q: Record<string, unknown>): { date?: CivilDate } => {
+    const date = parsed(q.date, parseCivilDate);
+    return date ? { date } : {};
+  },
+  component: lazyRouteComponent(() => import("@/routes"), "DayRoute"),
 });
 
 const onboardingRoute = createRoute({
@@ -34,37 +84,13 @@ const onboardingRoute = createRoute({
   component: lazyRouteComponent(() => import("@/onboarding"), "Onboarding"),
 });
 
-export const routeTree = rootRoute.addChildren([indexRoute, onboardingRoute]);
+export const routeTree = rootRoute.addChildren([
+  appRoute.addChildren([indexRoute, monthRoute, dayRoute]),
+  onboardingRoute,
+]);
 
 export const createAppRouter = (history?: RouterHistory) =>
   createRouter({ routeTree, ...(history && { history }) });
-
-/** Today's civil date in the settings city. */
-export const todayIn = (s: Settings) =>
-  clockFor(s.location.tz).localDate(Date.now() as Instant);
-
-// ponytail: placeholder until the Phase 8 Today screen; proves the worker computes today.
-// Shows the calendar date's panchang, not yet the sunrise-to-sunrise "current" day.
-function Home() {
-  const settings = useSettings((s) => s.settings)!;
-  const today = todayIn(settings);
-  const { data } = useQuery(monthQuery(settings, yearMonthOf(today)));
-  const day = data?.find((d) => d.date === today)?.day;
-
-  return (
-    <main className="min-h-dvh bg-bg p-6 text-text">
-      <h1 className="text-title font-semibold">Pocket Panchang</h1>
-      <p>
-        {settings.location.name} · {today}
-      </p>
-      {day?.kind === "day" && (
-        <p data-testid="today-tithi">
-          Tithi {day.tithi.atSunrise} ({day.paksha}) · {day.month.name}
-        </p>
-      )}
-    </main>
-  );
-}
 
 export const router = createAppRouter();
 

@@ -58,7 +58,7 @@ describe("onboarding", () => {
     expect(settings?.language).toBe("gu");
 
     renderApp();
-    expect(await screen.findByTestId("today-tithi")).toBeTruthy();
+    expect(await screen.findByRole("heading", { level: 1 })).toBeTruthy();
   });
 
   it("redirects to onboarding when settings are unreadable", async () => {

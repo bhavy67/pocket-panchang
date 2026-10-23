@@ -47,6 +47,13 @@ export const pruneMonthCache = () =>
     .filter((row) => !row.key.startsWith(`${ENGINE_VERSION}|`))
     .delete();
 
+/** Festivals of a Gregorian year at the settings city (memory only: cheap, and rules may change). */
+export const festivalsQuery = (s: Settings, year: number) =>
+  queryOptions({
+    queryKey: ["festivals", ENGINE_VERSION, s.location.id, year],
+    queryFn: () => worker.festivals(s.location, year),
+  });
+
 export const citySearchQuery = (q: string) =>
   queryOptions({
     queryKey: ["cities", q.trim().toLowerCase()],

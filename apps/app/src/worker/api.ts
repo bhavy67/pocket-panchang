@@ -1,7 +1,13 @@
 // Everything the main thread asks the worker for (§5.2 rule 2). Plain functions so tests can
 // call them without a Worker; worker.ts exposes this object through Comlink.
-import type { Location } from "@panchang/calendar";
-import { addDays, assembleDay } from "@panchang/engine";
+import {
+  collapseVariants,
+  FESTIVALS,
+  resolveFestivals,
+  type FestivalOccurrence,
+  type Location,
+} from "@panchang/calendar";
+import { addDays, assembleDay, type CivilDate } from "@panchang/engine";
 import type { MonthDay } from "@/db";
 import { clockFor } from "@/lib/clock";
 import type { YearMonth } from "@/lib/year-month";
@@ -39,9 +45,34 @@ export const api = {
     return days;
   },
 
+  /**
+   * Festivals dated in a Gregorian year. A rule ships only once verified (§0 rule 7): production
+   * builds drop unverified rules; dev builds keep them, flagged, so screens can be built.
+   */
+  festivals(location: Location, year: number): Festival[] {
+    const unverified = new Set(
+      FESTIVALS.filter((r) => r.verified.years.length === 0).map((r) => r.id),
+    );
+    const rules = import.meta.env.DEV
+      ? FESTIVALS
+      : FESTIVALS.filter((r) => !unverified.has(r.id));
+    const place = {
+      coordinates: { latitude: location.lat, longitude: location.lng },
+      clock: clockFor(location.tz),
+    };
+    return collapseVariants(
+      resolveFestivals(
+        rules,
+        `${year}-01-01` as CivilDate,
+        `${year}-12-31` as CivilDate,
+        place,
+      ),
+    ).map((o) => ({ ...o, unverified: unverified.has(o.id) }));
+  },
   async searchCities(query: string): Promise<City[]> {
     return searchCities(await loadCities(), query);
   },
 };
 
+export type Festival = FestivalOccurrence & { readonly unverified: boolean };
 export type Api = typeof api;

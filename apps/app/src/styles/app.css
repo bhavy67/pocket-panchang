@@ -89,4 +89,67 @@ html {
   font-family: var(--font-ui);
   font-size: 100%;
   line-height: var(--leading-body);
+  /* Large text: break a word only when it can't fit a line on its own (brief §5). */
+  overflow-wrap: break-word;
+}
+
+/* Component tokens (ADR 0017 layer 3): aliases of semantic tokens only. Shadows mix the text
+ * colour so no raw colour appears here; dark modes lean on surfaces + borders instead (brief §8.5). */
+:root {
+  --timeline-now: var(--now-marker);
+  --chip-auspicious-bg: var(--auspicious-subtle);
+  --chip-inauspicious-bg: var(--inauspicious-subtle);
+  --elevation-1:
+    0 1px 2px color-mix(in srgb, var(--text) 6%, transparent),
+    0 2px 8px color-mix(in srgb, var(--text) 5%, transparent);
+  --elevation-3: 0 -8px 32px color-mix(in srgb, var(--text) 18%, transparent);
+  --scrim: color-mix(in srgb, var(--text) 40%, transparent);
+}
+[data-mode="dark"] {
+  --elevation-1: 0 0 0 1px var(--border);
+  --elevation-3: 0 0 0 1px var(--border);
+  --scrim: color-mix(in srgb, var(--bg) 70%, transparent);
+}
+
+@utility focus-ring {
+  &:focus-visible {
+    outline: 3px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+}
+
+/* Detail sheet: native <dialog> pinned to the bottom, sliding up (fade only with reduced motion). */
+.sheet {
+  max-height: 85dvh;
+}
+.sheet::backdrop {
+  background: var(--scrim);
+}
+.sheet[open] {
+  animation: sheet-in var(--dur-slow) var(--ease-standard);
+}
+@keyframes sheet-in {
+  from {
+    transform: translateY(100%);
+  }
+}
+
+/* Month change slides in the direction of travel (brief §8.5). */
+.slide-next {
+  animation: slide-next var(--dur-base) var(--ease-standard);
+}
+.slide-prev {
+  animation: slide-prev var(--dur-base) var(--ease-standard);
+}
+@keyframes slide-next {
+  from {
+    transform: translateX(2rem);
+    opacity: 0;
+  }
+}
+@keyframes slide-prev {
+  from {
+    transform: translateX(-2rem);
+    opacity: 0;
+  }
 }

@@ -429,6 +429,7 @@ type CachedMonth = {
   - Month computation: < 300 ms in the worker
 - **Lazy-load:** city database, non-active locales, the worker bundle, the onboarding route; in Phase 8+, every route except Today.
 - **Measured at end of Phase 7 (2026-10-23, `pnpm --filter @panchang/app analyze`):** initial JS 140.8 KB gzip, of which React + react-dom ≈ 64 KB, Dexie ≈ 27 KB, TanStack Router ≈ 30 KB, TanStack Query ≈ 12 KB, comlink + zustand ≈ 2 KB, app code ≈ 5 KB. The §5.4 stack alone is a ~135 KB floor, so 150 KB would leave ~10 KB for the Today screen, its i18n strings and formatting. **Decision:** budget 170 KB for initial JS (stack + Today ≤ ~35 KB); all other screens lazy per route. Rejected: swapping React for Preact/compat (saves ~50 KB, but TanStack Router/Query compatibility risk) and raw IndexedDB instead of Dexie (saves ~27 KB, but loses versioned migrations, which §6 requires). City data (788 KB gzip incl. Indian alternate names) is fetched only by city search.
+- **Measured during Phase 8 (2026-10-23):** initial JS 153.4 KB gzip (Today screen +12.6 KB); worker 30.1 KB gzip (festival resolver added); Month and Day detail are one lazy chunk (4.2 KB gzip).
 - **Fonts:** self-host Noto Sans Gujarati / Devanagari, subset to used glyphs.
 
 ---
@@ -660,6 +661,7 @@ Each phase ends with a **STOP**: summary, files changed, open questions, suggest
 **Exit criteria:** onboarding completes; settings persist across reloads; the worker computes today offline.
 
 ### Phase 8: Core screens
+> **2026-10-23:** no separate design tool. Screens are designed in code from the brief, ADR 0017 tokens, and the approved Today screen, and approved from the dev build (`docs/design/screens.md`). Today, Month, and Day detail come first; Onboarding, Personal events, and Settings designs follow.
 - **Design first:** design the remaining screens (Onboarding, Month, Day detail, Personal events, Settings), dark mode, and the Mandir/Raat palettes from `docs/design/brief.md`, ADR 0017 tokens, and the approved Today screen; get each approved and recorded in `docs/design/screens.md` before implementing it. (Personal events and Settings designs are implemented in Phase 9.)
 - Today, Month, Day detail per the approved designs.
 - Muhurta timeline with "now"; vriddhi/kshaya and festival markers.
