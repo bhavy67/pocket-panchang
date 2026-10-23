@@ -45,7 +45,7 @@ describe("onboarding", () => {
     await user.click(
       await screen.findByRole("button", { name: "Nadiad, Gujarat, India" }),
     );
-    await user.click(screen.getByRole("button", { name: "ગુજરાતી" }));
+    await user.click(screen.getByRole("button", { name: /^ગુજરાતી/ }));
     await vi.waitFor(() => expect(router.state.location.pathname).toBe("/"));
     await vi.waitFor(async () => expect(await db.settings.count()).toBe(1));
     stop();

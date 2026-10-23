@@ -8,7 +8,8 @@
     "analyze": "ANALYZE=1 vite build",
     "preview": "vite preview",
     "typecheck": "tsc -b",
-    "test": "vitest run"
+    "test": "vitest run",
+    "build:preview": "VITE_FAMILY_PREVIEW=1 vite build && cp vercel.preview.json dist/vercel.json"
   },
   "dependencies": {
     "@panchang/calendar": "workspace:*",

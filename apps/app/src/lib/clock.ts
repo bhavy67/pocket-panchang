@@ -33,6 +33,20 @@ function offsetMinutes(ms: number, tz: string): number {
   return m ? (m[1] === "-" ? -1 : 1) * (Number(m[2]) * 60 + Number(m[3])) : 0; // "GMT" = UTC
 }
 
+/**
+ * UTC instant of local wall time `hh:mm` on `date` in `tz`, using the zone's history (e.g.
+ * Asia/Kolkata at +06:30 in 1943, ADR 0006). A time inside a DST gap resolves just after it.
+ */
+export function localInstant(
+  date: CivilDate,
+  time: string,
+  tz: string,
+): Instant {
+  const utc = Date.parse(`${date}T${time}:00Z`);
+  const guess = utc - offsetMinutes(utc, tz) * 60_000;
+  return (utc - offsetMinutes(guess, tz) * 60_000) as Instant;
+}
+
 export function clockFor(tz: string): CivilClock {
   const dateFormat = cached(
     dateFormats,

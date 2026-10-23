@@ -41,6 +41,12 @@ export type FestivalOccurrence = {
     readonly group: string;
     readonly label: Record<Lang, string>;
   };
+  /**
+   * Holika Dahan (rules with `avoidBhadra`): the evening time to light it, i.e. the longest
+   * stretch of the day's pradosh window inside the tithi and outside Bhadra. Absent when no
+   * such stretch exists (the date is then a fallback).
+   */
+  readonly evening?: Interval;
   /** Raksha Bandhan: Bhadra ends at this instant on the day ("after Bhadra"). */
   readonly afterBhadra?: Instant;
   /** No candidate day covered the window; the day with most of the tithi was used (provisional). */
@@ -134,16 +140,39 @@ function resolveTithi(
     bhadra.end < day.sunset
       ? bhadra.end
       : undefined;
+  const evening = rule.avoidBhadra
+    ? longest(
+        clip(
+          windowInterval(rule.window, day),
+          subtract(interval, bhadra ? [bhadra] : []),
+        ),
+      )
+    : undefined;
   return {
     id: rule.id,
     names: rule.names,
     date: day.date,
+    ...(evening === undefined ? {} : { evening }),
     ...(endDate === undefined ? {} : { endDate }),
     ...(rule.variant ? { variant: rule.variant } : {}),
     ...(afterBhadra === undefined ? {} : { afterBhadra }),
     ...(fallback ? { fallback } : {}),
   };
 }
+
+/** Pieces of `spans` inside `window`. */
+const clip = (window: Interval, spans: readonly Interval[]): Interval[] =>
+  spans.flatMap((s) => {
+    const start = Math.max(s.start, window.start) as Instant;
+    const end = Math.min(s.end, window.end) as Instant;
+    return start < end ? [{ start, end }] : [];
+  });
+
+const longest = (spans: readonly Interval[]): Interval | undefined =>
+  spans.reduce<Interval | undefined>(
+    (best, s) => (!best || s.end - s.start > best.end - best.start ? s : best),
+    undefined,
+  );
 
 function resolveSankranti(
   rule: SankrantiFestival,

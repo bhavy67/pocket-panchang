@@ -10,6 +10,8 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import type { MonthDay } from "@/db";
 import { DayDetail } from "@/day-detail";
+import { PersonalIcon } from "@/event-row";
+import { useOccurrenceRows, type UpcomingRow } from "@/events-data";
 import { useFestivals, useNow } from "@/day-data";
 import { clockFor } from "@/lib/clock";
 import { dateLong, monthTitle } from "@/lib/format";
@@ -44,6 +46,7 @@ export function Month({ month, date }: { month: YearMonth; date?: CivilDate }) {
   const today = clockFor(s.location.tz).localDate(useNow());
   const { data: days } = useQuery(monthQuery(s, month));
   const festivals = useFestivals(s, [Number(month.slice(0, 4))]);
+  const family = useOccurrenceRows(s, firstDay(month), 30) ?? [];
   const qc = useQueryClient();
   const [dir, setDir] = useState<"next" | "prev" | null>(null);
   const swipeX = useRef<number | null>(null);
@@ -118,6 +121,7 @@ export function Month({ month, date }: { month: YearMonth; date?: CivilDate }) {
               month={month}
               days={days}
               festivals={festivals}
+              family={family}
               today={today}
               {...(selected ? { selected } : {})}
               link={(d) =>
@@ -195,6 +199,7 @@ function Grid({
   month,
   days,
   festivals,
+  family,
   today,
   selected,
   link,
@@ -202,6 +207,7 @@ function Grid({
   month: YearMonth;
   days: readonly MonthDay[];
   festivals: readonly Festival[];
+  family: readonly UpcomingRow[];
   today: CivilDate;
   selected?: CivilDate;
   link: (d: CivilDate) => LinkTarget;
@@ -234,6 +240,7 @@ function Grid({
                   c={c}
                   prev={days.find((d) => d.date === addDays(c.date, -1))}
                   festivals={single.filter((f) => f.date === c.date)}
+                  family={family.filter((r) => r.date === c.date)}
                   inSpan={spans.filter(
                     (f) => c.date >= f.date && c.date <= f.endDate!,
                   )}
@@ -271,6 +278,7 @@ function Grid({
 }
 
 function Cell({
+  family,
   c,
   prev,
   festivals,
@@ -282,6 +290,7 @@ function Cell({
   c: MonthDay;
   prev: MonthDay | undefined;
   festivals: readonly Festival[];
+  family: readonly UpcomingRow[];
   inSpan: readonly Festival[];
   today: boolean;
   selected: boolean;
@@ -301,6 +310,7 @@ function Cell({
     selected && "selected",
     twoDay && "two-day tithi",
     ...skipped.map((k) => `${tithiLabel(k, "en")} skipped`),
+    ...family.map((r) => `${r.event.title} (family date)`),
     ...[...festivals, ...inSpan].map(
       (f) => f.names.en + (f.unverified ? " (not yet verified)" : ""),
     ),
@@ -346,6 +356,20 @@ function Cell({
           </span>
         )}
       </span>
+      {family.map((r) => (
+        <span
+          key={r.event.id}
+          aria-hidden="true"
+          className="flex max-w-full min-w-0 items-start gap-1 text-[length:min(var(--text-caption),16px)] leading-tight font-semibold text-personal-event"
+        >
+          <span className="mt-0.5">
+            <PersonalIcon small />
+          </span>
+          <span className="hidden [overflow-wrap:anywhere] sm:inline">
+            {r.event.title}
+          </span>
+        </span>
+      ))}
       {festivals.map((f) => (
         <span
           key={f.id}
@@ -380,6 +404,10 @@ function Legend() {
       <li className={item}>
         <span className="block size-2.5 rotate-45 bg-festival" />
         Festival
+      </li>
+      <li className={item}>
+        <PersonalIcon small />
+        Family date
       </li>
       <li className={item}>
         <span className="rounded-sm border border-border-strong px-0.5 text-caption font-semibold">

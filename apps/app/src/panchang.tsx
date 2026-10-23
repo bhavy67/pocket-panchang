@@ -15,7 +15,9 @@ import {
   yogaName,
 } from "@panchang/i18n";
 import type { DayView } from "@/day-data";
+import { useQuery } from "@tanstack/react-query";
 import { dateLong, timeOn } from "@/lib/format";
+import { moonQuery } from "@/queries";
 import type { Settings } from "@/settings";
 import { card, type SheetContent } from "@/ui";
 
@@ -146,11 +148,25 @@ function TithiMarkers({ el }: { el: ElementDay }) {
   );
 }
 
-export function SunCard({ view, tz }: { view: DayView; tz: string }) {
+export function SunMoonCard({ view, s }: { view: DayView; s: Settings }) {
+  const tz = s.location.tz;
+  const { data: moon } = useQuery(moonQuery(s, view.date));
   const sunset = view.day.sunset.kind === "event" ? view.day.sunset.at : null;
   const cells = [
     ["Sunrise", timeOn(view.day.sunrise, tz, view.date)],
     ["Sunset", sunset === null ? "—" : timeOn(sunset, tz, view.date)],
+    [
+      "Moonrise",
+      moon
+        ? moon.rise
+          ? timeOn(moon.rise, tz, view.date)
+          : "None today"
+        : "…",
+    ],
+    [
+      "Moonset",
+      moon ? (moon.set ? timeOn(moon.set, tz, view.date) : "None today") : "…",
+    ],
   ];
   return (
     <div className="grid grid-cols-[repeat(auto-fit,minmax(min(10rem,100%),1fr))] gap-px overflow-hidden rounded-lg bg-border shadow-(--elevation-1)">

@@ -137,6 +137,7 @@ Part-time at ~10 h/week. The original ~5–6 week target predates the Phase 1 sc
 - **astronomy-engine** (MIT, pure JS, ~±1 arcminute vs NOVAS, <120 KB minified).
 - **Do not use Swiss Ephemeris** (AGPL or paid license; not needed at our precision).
 - **grahan** (MIT TypeScript panchang library) is used **only as an independent cross-check in tests**, never as a runtime dependency.
+- **Moonrise / moonset** (display only): topocentric Moon centre at 0° altitude, per sunrise-to-sunrise day ([ADR 0022](docs/adr/0022-moonrise-convention.md)).
 
 ### 4.2 Error budget (be able to explain this)
 - The Moon gains ~12°/day on the Sun (varies ~10.8–14.5°/day; measured hourly over 2020–2040 with astronomy-engine: 10.75–14.39°/day).
@@ -412,7 +413,7 @@ type CachedMonth = {
 ### Persistence (Dexie, versioned)
 - Database name `panchang` (brand-neutral, ADR 0016). Tables: `settings`, `events`, `monthCache`.
 - Every schema change = a new Dexie version with a migration. Never mutate a schema in place. From the first family preview (after Phase 9) onward, wiping the database is never acceptable (ADR 0013).
-- Backup format: versioned JSON `{ schemaVersion, exportedAt, settings, events }`. The cache is never exported.
+- Backup format: versioned JSON `{ schemaVersion, exportedAt, settings, events }`. The cache is never exported. **v1 = `schemaVersion: 1`** (Phase 9): import parses every field (ADR 0014), refuses newer versions with a plain message, and replaces settings and events after a confirmation. The settings table also holds a `meta` row `{ lastBackupAt }` for the backup nudge (no schema change).
 
 ---
 
@@ -430,6 +431,7 @@ type CachedMonth = {
 - **Lazy-load:** city database, non-active locales, the worker bundle, the onboarding route; in Phase 8+, every route except Today.
 - **Measured at end of Phase 7 (2026-10-23, `pnpm --filter @panchang/app analyze`):** initial JS 140.8 KB gzip, of which React + react-dom ≈ 64 KB, Dexie ≈ 27 KB, TanStack Router ≈ 30 KB, TanStack Query ≈ 12 KB, comlink + zustand ≈ 2 KB, app code ≈ 5 KB. The §5.4 stack alone is a ~135 KB floor, so 150 KB would leave ~10 KB for the Today screen, its i18n strings and formatting. **Decision:** budget 170 KB for initial JS (stack + Today ≤ ~35 KB); all other screens lazy per route. Rejected: swapping React for Preact/compat (saves ~50 KB, but TanStack Router/Query compatibility risk) and raw IndexedDB instead of Dexie (saves ~27 KB, but loses versioned migrations, which §6 requires). City data (788 KB gzip incl. Indian alternate names) is fetched only by city search.
 - **Measured during Phase 8 (2026-10-23):** initial JS 153.4 KB gzip (Today screen +12.6 KB); worker 30.1 KB gzip (festival resolver added); Month and Day detail are one lazy chunk (4.2 KB gzip).
+- **Measured at end of Phase 9 (2026-10-24):** initial JS 156.8 KB gzip; worker 32.0 KB gzip (moon, occurrences, .ics, date helper); all non-Today routes in one lazy chunk (11.7 KB gzip).
 - **Fonts:** self-host Noto Sans Gujarati / Devanagari, subset to used glyphs.
 
 ---
@@ -661,6 +663,7 @@ Each phase ends with a **STOP**: summary, files changed, open questions, suggest
 **Exit criteria:** onboarding completes; settings persist across reloads; the worker computes today offline.
 
 ### Phase 8: Core screens
+> **Status (2026-10-24): complete.** All v1 screens designed in code and approved (Bhavy waived manual review on 2026-10-23; self-checked at 390 px in all six themes and at 200% text). Moonrise/moonset (ADR 0022) and Holika Dahan's evening time added.
 > **2026-10-23:** no separate design tool. Screens are designed in code from the brief, ADR 0017 tokens, and the approved Today screen, and approved from the dev build (`docs/design/screens.md`). Today, Month, and Day detail come first; Onboarding, Personal events, and Settings designs follow.
 - **Design first:** design the remaining screens (Onboarding, Month, Day detail, Personal events, Settings), dark mode, and the Mandir/Raat palettes from `docs/design/brief.md`, ADR 0017 tokens, and the approved Today screen; get each approved and recorded in `docs/design/screens.md` before implementing it. (Personal events and Settings designs are implemented in Phase 9.)
 - Today, Month, Day detail per the approved designs.
@@ -670,6 +673,7 @@ Each phase ends with a **STOP**: summary, files changed, open questions, suggest
 **Exit criteria:** all v1 screen designs (both modes, all three palettes) approved in `docs/design/screens.md`; implemented screens match them; navigation works offline; no main-thread jank on month change.
 
 ### Phase 9: Personal events and reminders
+> **Status (2026-10-24): code complete.** Events CRUD with policy cascade + Advanced, date helper (confirm step, ±1 h warning, pre-1955 India local-time warning), Family conventions, .ics, JSON backup v1, backup nudge, family-preview build (`pnpm --filter @panchang/app build:preview` → `dist/` with `vercel.json`: `X-Robots-Tag: noindex`, SPA rewrites; persistent "save a backup before moving" banner). **Pending:** the preview deploy itself (`npx vercel deploy apps/app/dist --prod --name panchang-family-preview`, run by Bhavy: the deploy needs a local Vercel login) and the manual Google Calendar import check.
 - Events CRUD with policy options; upcoming list.
 - `.ics` export; JSON backup export/import with schema versioning.
 - Backup nudges.

@@ -1,5 +1,5 @@
 // TanStack Query over worker calls, with the IndexedDB month cache behind it (§7).
-import { ENGINE_VERSION } from "@panchang/engine";
+import { ENGINE_VERSION, type CivilDate } from "@panchang/engine";
 import { QueryClient, queryOptions } from "@tanstack/react-query";
 import { db } from "@/db";
 import type { YearMonth } from "@/lib/year-month";
@@ -52,6 +52,13 @@ export const festivalsQuery = (s: Settings, year: number) =>
   queryOptions({
     queryKey: ["festivals", ENGINE_VERSION, s.location.id, year],
     queryFn: () => worker.festivals(s.location, year),
+  });
+
+/** Moonrise/moonset on a local date at the settings city. */
+export const moonQuery = (s: Settings, date: CivilDate) =>
+  queryOptions({
+    queryKey: ["moon", ENGINE_VERSION, s.location.id, date],
+    queryFn: () => worker.moon(s.location, date),
   });
 
 export const citySearchQuery = (q: string) =>

@@ -22,7 +22,11 @@ const applyTheme = () => {
   html.dataset.palette = preview.get("palette") ?? s?.palette ?? "calm";
   html.dataset.mode =
     theme === "system" ? (prefersDark.matches ? "dark" : "light") : theme;
-  html.lang = s?.language ?? "en";
+  // ponytail: UI copy is English until Phase 10, so the page language stays "en" (Gujarati
+  // fragments carry their own lang="gu").
+  html.lang = "en";
+  // In-app text size on top of the OS/browser setting: rem-based layout scales with it.
+  html.style.fontSize = `${(s?.textScale ?? 1) * 100}%`;
 };
 prefersDark.addEventListener("change", applyTheme);
 useSettings.subscribe(applyTheme);

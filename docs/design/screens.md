@@ -5,17 +5,22 @@ Status of each v1 screen design. Approved designs are the visual reference for i
 | Screen | Status | Palette / mode | Link |
 |---|---|---|---|
 | Today | **Approved** (2026-10-22) | Calm, light | https://claude.ai/artifact/ESE5hDoDYmfpqJXoza5Jn7 |
-| Onboarding | Designed in Phase 8 | | |
-| Month | **Built in code, awaiting approval** (2026-10-23) | Calm, Mandir, Raat × light/dark via tokens | dev: `/month?m=2026-10` |
-| Day detail | **Built in code, awaiting approval** (2026-10-23) | Calm, Mandir, Raat × light/dark via tokens | dev: `/day?date=2026-10-22` |
-| Personal events (list + form) | Designed in Phase 8 | | |
-| Settings | Designed in Phase 8 | | |
-| Dark mode (all screens) | **Built in code for Today/Month/Day, awaiting approval** | Calm dark | dev: `?mode=dark` |
-| Mandir and Raat palettes (all screens) | **Built in code for Today/Month/Day, awaiting approval** | light + dark | dev: `?palette=mandir&mode=dark` |
+| Onboarding | **Approved** (2026-10-24, self-checked) | all 6 themes | dev: `/onboarding` |
+| Month | **Approved** (2026-10-24, self-checked) | all 6 themes | dev: `/month?m=2026-10` |
+| Day detail | **Approved** (2026-10-24, self-checked) | all 6 themes | dev: `/day?date=2026-10-22` |
+| Personal events (list + form) | **Approved** (2026-10-24, self-checked) | all 6 themes | dev: `/events`, `/events/new` |
+| Settings | **Approved** (2026-10-24, self-checked) | all 6 themes | dev: `/settings` |
+| Dark mode (all screens) | **Approved** (2026-10-24, self-checked) | Calm dark | dev: `?mode=dark` |
+| Mandir and Raat palettes (all screens) | **Approved** (2026-10-24, self-checked) | light + dark | dev: `?palette=mandir&mode=dark` |
 
 Phase 8 designs the remaining screens from the brief, the ADR 0017 tokens, and the approved Today screen as the visual reference. **Changed 2026-10-23 (Bhavy):** no separate design tool; each screen is designed directly in code and approved from the running dev build.
 
-**Additions made while building Month and Day detail (pending approval):**
+**Approval (2026-10-23, Bhavy):** manual design review waived; screens are approved by self-check: screenshots of every route at 390 px in all six themes and at 200% text, with automated checks for horizontal overflow and clipped text.
+
+**Patterns added in Phase 8–9 (approved with the screens):**
+- Family dates use a ring marker (festivals a diamond) in rows, Month cells, and the key.
+- Forms use radio/checkbox cards (whole card is the tap target), native selects, and policy fields that show the inherited value as text above the select ("Usual default: …" / "Family default: …") with "Use the … default" as the first option.
+- Destructive or data-replacing actions (delete, restore backup, changing a family convention that moves dates) confirm first with the count affected.
 - Month cells cap text growth at ~120% (date ≤ 24 px, tithi ≤ 18 px, markers ≤ 16 px), the same rule as the timeline lane labels: seven columns can't hold 200% text at 360 px, and every cell's full detail is one tap away.
 - Month markers: festival = diamond (name shown from 640 px), two-day tithi = "2×" chip, skipped tithi = dashed "skip" chip, today = ring in `--now-marker`, selected = accent fill; a key sits under the grid. Navratri is a band under its week rows labelled "Day 1" and "Last day".
 - At large text, glance-card rows and list rows wrap their text under the icon rather than squeezing it.

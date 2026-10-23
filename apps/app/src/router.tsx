@@ -77,6 +77,24 @@ const dayRoute = createRoute({
   component: lazyRouteComponent(() => import("@/routes"), "DayRoute"),
 });
 
+const eventsRoute = createRoute({
+  getParentRoute: () => appRoute,
+  path: "/events",
+  component: lazyRouteComponent(() => import("@/routes"), "EventsRoute"),
+});
+
+const eventRoute = createRoute({
+  getParentRoute: () => appRoute,
+  path: "/events/$id",
+  component: lazyRouteComponent(() => import("@/routes"), "EventRoute"),
+});
+
+const settingsRoute = createRoute({
+  getParentRoute: () => appRoute,
+  path: "/settings",
+  component: lazyRouteComponent(() => import("@/routes"), "SettingsRoute"),
+});
+
 const onboardingRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/onboarding",
@@ -85,7 +103,14 @@ const onboardingRoute = createRoute({
 });
 
 export const routeTree = rootRoute.addChildren([
-  appRoute.addChildren([indexRoute, monthRoute, dayRoute]),
+  appRoute.addChildren([
+    indexRoute,
+    monthRoute,
+    dayRoute,
+    eventsRoute,
+    eventRoute,
+    settingsRoute,
+  ]),
   onboardingRoute,
 ]);
 

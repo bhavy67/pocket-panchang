@@ -6,20 +6,23 @@ import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useDay, useFestivals, useNow } from "@/day-data";
 import { clockFor } from "@/lib/clock";
-import { dateLong, daysBetween, monthTitle, time } from "@/lib/format";
+import { dateLong, daysBetween, monthTitle } from "@/lib/format";
 import { yearMonthOf } from "@/lib/year-month";
 import {
   ElementsCard,
   howSheet,
   mismatchUrl,
   samvatLine,
-  SunCard,
+  SunMoonCard,
   tithiTitle,
 } from "@/panchang";
 import { useSettings } from "@/settings";
 import { NightChoghadiya, Timeline } from "@/timeline";
 import { btnOutline, card, Section, Sheet, type SheetContent } from "@/ui";
 import type { Festival } from "@/worker/api";
+import { EventRow } from "@/event-row";
+import { useOccurrenceRows } from "@/events-data";
+import { festivalTiming } from "@/today";
 
 export function DayDetail({
   date,
@@ -35,6 +38,7 @@ export function DayDetail({
     (f) =>
       f.date === date || (f.endDate && f.date <= date && date <= f.endDate),
   );
+  const family = useOccurrenceRows(s, date, 0);
   const [sheet, setSheet] = useState<SheetContent | null>(null);
   const tz = s.location.tz;
   const isToday = clockFor(tz).localDate(now) === date;
@@ -92,6 +96,18 @@ export function DayDetail({
         )}
       </header>
 
+      {family && family.length > 0 && (
+        <Section title="Family dates">
+          <ul className="flex flex-col gap-2">
+            {family.map((r) => (
+              <li key={r.event.id}>
+                <EventRow r={r} today={date} s={s} />
+              </li>
+            ))}
+          </ul>
+        </Section>
+      )}
+
       {festivals.length > 0 && (
         <Section title="Festivals">
           <FestivalList festivals={festivals} date={date} tz={tz} />
@@ -120,8 +136,8 @@ export function DayDetail({
               onOpen={setSheet}
             />
           </Section>
-          <Section title="Sun">
-            <SunCard view={view} tz={tz} />
+          <Section title="Sun and Moon">
+            <SunMoonCard view={view} s={s} />
           </Section>
           <footer className="flex flex-col items-center gap-2 px-4 py-8 text-center">
             <span className="text-sm text-text-muted">
@@ -197,10 +213,8 @@ function FestivalList({
                 {daysBetween(f.date, f.endDate) + 1}
               </span>
             )}
-            {f.afterBhadra && (
-              <span className="text-sm">
-                Rakhi: after {time(f.afterBhadra, tz)} (after Bhadra)
-              </span>
+            {festivalTiming(f, tz) && (
+              <span className="text-sm">{festivalTiming(f, tz)}</span>
             )}
             {f.fallback && (
               <span className="text-sm text-text-muted">

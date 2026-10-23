@@ -170,7 +170,7 @@ export function Sheet({
 }
 
 export const btnOutline =
-  "flex min-h-(--tap-min) items-center justify-center rounded-md border-[1.5px] border-border-strong bg-surface px-4 text-body font-semibold text-accent hover:bg-accent-subtle focus-ring";
+  "flex min-h-(--tap-min) items-center justify-center rounded-md border-[1.5px] border-border-strong bg-surface px-4 text-body font-semibold text-accent hover:bg-accent-subtle focus-ring disabled:cursor-not-allowed disabled:opacity-50";
 
 export function Section({
   title,
@@ -238,11 +238,8 @@ const NAV = [
       </>
     ),
   },
-] as const;
-
-// ponytail: Events and Settings ship in Phase 9; shown disabled so the nav keeps its final shape.
-const SOON = [
   {
+    to: "/events",
     label: "Events",
     icon: (
       <path
@@ -255,6 +252,7 @@ const SOON = [
     ),
   },
   {
+    to: "/settings",
     label: "Settings",
     icon: (
       <path
@@ -268,58 +266,68 @@ const SOON = [
 ] as const;
 
 const navItem =
-  "flex min-h-14 min-w-0 flex-col items-center justify-center gap-1 text-[min(var(--text-caption),20px)] [overflow-wrap:anywhere] focus-ring rounded-md";
+  "flex min-h-14 min-w-0 flex-col items-center justify-center gap-1 text-[length:min(var(--text-caption),20px)] [overflow-wrap:anywhere] focus-ring rounded-md";
 const pill = "flex h-7.5 w-14 items-center justify-center rounded-full";
+
+/**
+ * Family preview (ADR 0013): data lives per web address and won't carry over to the final app,
+ * so testers are asked to export before switching. Always visible, never dismissed.
+ */
+function PreviewBanner() {
+  return (
+    <p
+      role="note"
+      className="flex flex-wrap items-center gap-x-3 gap-y-1 border-b border-warning bg-warning-subtle px-4 py-2 text-sm"
+    >
+      <strong className="font-semibold">Family preview.</strong>
+      <span>
+        Before moving to the final app, save a backup in Settings → Backup and
+        restore it there.
+      </span>
+      <Link
+        to="/settings"
+        hash="backup"
+        className="font-semibold text-accent underline underline-offset-3 focus-ring"
+      >
+        Go to Backup
+      </Link>
+    </p>
+  );
+}
 
 export function Shell() {
   return (
-    <div className="min-h-dvh bg-bg text-text lg:flex">
-      <nav
-        aria-label="Main"
-        className="fixed inset-x-0 bottom-0 z-10 grid grid-cols-4 border-t border-border bg-surface px-2 pt-2 pb-[max(env(safe-area-inset-bottom),0.5rem)] lg:sticky lg:top-0 lg:h-dvh lg:w-28 lg:flex-none lg:grid-cols-1 lg:content-start lg:gap-2 lg:border-t-0 lg:border-r lg:pt-6"
-      >
-        {NAV.map((n) => (
-          <Link
-            key={n.to}
-            to={n.to}
-            activeOptions={{ exact: n.to === "/", includeSearch: false }}
-            className={`${navItem} text-text-muted data-[status=active]:font-bold data-[status=active]:text-accent [&[data-status=active]>span]:bg-accent-subtle`}
-          >
-            <span className={pill}>
-              <svg
-                width="22"
-                height="22"
-                viewBox="0 0 22 22"
-                aria-hidden="true"
-              >
-                {n.icon}
-              </svg>
-            </span>
-            {n.label}
-          </Link>
-        ))}
-        {SOON.map((n) => (
-          <span
-            key={n.label}
-            aria-disabled="true"
-            className={`${navItem} text-text-muted opacity-60`}
-          >
-            <span className={pill}>
-              <svg
-                width="22"
-                height="22"
-                viewBox="0 0 22 22"
-                aria-hidden="true"
-              >
-                {n.icon}
-              </svg>
-            </span>
-            {n.label}
-          </span>
-        ))}
-      </nav>
-      <div className="min-w-0 flex-1 pb-24 lg:pb-8">
-        <Outlet />
+    <div className="min-h-dvh bg-bg text-text">
+      {import.meta.env.VITE_FAMILY_PREVIEW === "1" && <PreviewBanner />}
+      <div className="lg:flex">
+        <nav
+          aria-label="Main"
+          className="fixed inset-x-0 bottom-0 z-10 grid grid-cols-4 border-t border-border bg-surface px-2 pt-2 pb-[max(env(safe-area-inset-bottom),0.5rem)] lg:sticky lg:top-0 lg:h-dvh lg:w-28 lg:flex-none lg:grid-cols-1 lg:content-start lg:gap-2 lg:border-t-0 lg:border-r lg:pt-6"
+        >
+          {NAV.map((n) => (
+            <Link
+              key={n.to}
+              to={n.to}
+              activeOptions={{ exact: n.to === "/", includeSearch: false }}
+              className={`${navItem} text-text-muted data-[status=active]:font-bold data-[status=active]:text-accent [&[data-status=active]>span]:bg-accent-subtle`}
+            >
+              <span className={pill}>
+                <svg
+                  width="22"
+                  height="22"
+                  viewBox="0 0 22 22"
+                  aria-hidden="true"
+                >
+                  {n.icon}
+                </svg>
+              </span>
+              {n.label}
+            </Link>
+          ))}
+        </nav>
+        <div className="min-w-0 flex-1 pb-24 lg:pb-8">
+          <Outlet />
+        </div>
       </div>
     </div>
   );

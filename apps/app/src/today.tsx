@@ -5,6 +5,8 @@ import { tithiLabel, weekdayName } from "@panchang/i18n";
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useFestivals, useNow, useToday, type DayView } from "@/day-data";
+import { EventRow, inDays } from "@/event-row";
+import { useOccurrenceRows } from "@/events-data";
 import { clockFor } from "@/lib/clock";
 import { dateShort, daysBetween, range, time } from "@/lib/format";
 import {
@@ -12,7 +14,7 @@ import {
   howSheet,
   indexAt,
   samvatLine,
-  SunCard,
+  SunMoonCard,
   tithiTitle,
 } from "@/panchang";
 import { useSettings, type Settings } from "@/settings";
@@ -26,6 +28,7 @@ import {
   toneOf,
 } from "@/timeline";
 import { card, QualityIcon, Section, Sheet, type SheetContent } from "@/ui";
+import type { Festival } from "@/worker/api";
 
 export function Today() {
   const s = useSettings((st) => st.settings)!;
@@ -74,8 +77,8 @@ export function Today() {
             <Timeline view={view} tz={tz} now={now} onOpen={setSheet} />
             <NightChoghadiya m={view.muhurta} tz={tz} onOpen={setSheet} />
           </Section>
-          <Section title="Sun">
-            <SunCard view={view} tz={tz} />
+          <Section title="Sun and Moon">
+            <SunMoonCard view={view} s={s} />
           </Section>
           <ComingUp s={s} from={date} />
           <footer className="flex flex-col items-center gap-2 px-4 py-8 text-center">
@@ -282,48 +285,87 @@ function Glance({
 /** Next festivals within 60 days, each with "in N days". Family dates join in Phase 9. */
 function ComingUp({ s, from }: { s: Settings; from: CivilDate }) {
   const year = Number(from.slice(0, 4));
-  const upcoming = useFestivals(s, [year, year + 1])
-    .filter((f) => f.date >= from && daysBetween(from, f.date) <= 60)
-    .slice(0, 3);
-  if (upcoming.length === 0) return null;
+  const festivals = useFestivals(s, [year, year + 1]).filter(
+    (f) => f.date >= from && daysBetween(from, f.date) <= 60,
+  );
+  const family = useOccurrenceRows(s, from, 60) ?? [];
+  const items = [
+    ...family.map((r) => ({ date: r.date, family: r })),
+    ...festivals.map((f) => ({ date: f.date, festival: f })),
+  ]
+    .sort((a, b) => a.date.localeCompare(b.date))
+    .slice(0, 4);
+  if (items.length === 0) return null;
   return (
     <Section title="Coming up">
       <ul className="flex flex-col gap-2">
-        {upcoming.map((f) => {
-          const n = daysBetween(from, f.date);
-          return (
-            <li key={f.id + f.date}>
-              <Link
-                to="/day"
-                search={{ date: f.date }}
-                className={`flex min-h-18 w-full flex-wrap items-center gap-3 p-4 hover:bg-surface-sunken focus-ring ${card}`}
-              >
-                <span
-                  aria-hidden="true"
-                  className="flex size-11 flex-none items-center justify-center rounded-full bg-festival-subtle"
-                >
-                  <span className="block size-3.5 rotate-45 bg-festival" />
-                </span>
-                <span className="flex min-w-[min(12rem,100%)] flex-1 flex-col">
-                  <span className="text-caption font-semibold text-festival">
-                    Festival{f.unverified && " · Not yet verified"}
-                  </span>
-                  <span className="text-lg leading-tight font-semibold">
-                    {f.names.en}
-                    {f.variant && ` (${f.variant.label.en})`}
-                  </span>
-                  <span className="text-sm text-text-muted">
-                    {dateShort(f.date)}
-                  </span>
-                </span>
-                <span className="flex-none text-right text-sm font-semibold">
-                  {n === 0 ? "today" : n === 1 ? "tomorrow" : `in ${n} days`}
-                </span>
-              </Link>
+        {items.map((it) =>
+          "family" in it ? (
+            <li key={`${it.family.event.id}|${it.date}`}>
+              <EventRow r={it.family} today={from} s={s} />
             </li>
-          );
-        })}
+          ) : (
+            <li key={it.festival.id + it.date}>
+              <FestivalRow f={it.festival} today={from} tz={s.location.tz} />
+            </li>
+          ),
+        )}
       </ul>
     </Section>
   );
 }
+
+function FestivalRow({
+  f,
+  today,
+  tz,
+}: {
+  f: Festival;
+  today: CivilDate;
+  tz: string;
+}) {
+  return (
+    <Link
+      to="/day"
+      search={{ date: f.date }}
+      className={`flex min-h-18 w-full flex-wrap items-center gap-3 p-4 hover:bg-surface-sunken focus-ring ${card}`}
+    >
+      <FestivalIcon />
+      <span className="flex min-w-[min(9rem,100%)] flex-1 flex-col">
+        <span className="text-caption font-semibold text-festival">
+          Festival{f.unverified && " · Not yet verified"}
+        </span>
+        <span className="text-lg leading-tight font-semibold">
+          {f.names.en}
+          {f.variant && ` (${f.variant.label.en})`}
+        </span>
+        <span className="text-sm text-text-muted">
+          {dateShort(f.date)}
+          {festivalTiming(f, tz) && ` · ${festivalTiming(f, tz)}`}
+        </span>
+      </span>
+      <span className="flex-none text-right text-sm font-semibold">
+        {inDays(daysBetween(today, f.date))}
+      </span>
+    </Link>
+  );
+}
+
+export function FestivalIcon() {
+  return (
+    <span
+      aria-hidden="true"
+      className="flex size-11 flex-none items-center justify-center rounded-full bg-festival-subtle"
+    >
+      <span className="block size-3.5 rotate-45 bg-festival" />
+    </span>
+  );
+}
+
+/** Holika Dahan's evening time and Raksha Bandhan's "after Bhadra" line (brief §2). */
+export const festivalTiming = (f: Festival, tz: string) =>
+  f.evening
+    ? `Evening, ${range(f.evening.start, f.evening.end, tz)}`
+    : f.afterBhadra
+      ? `Rakhi: after ${time(f.afterBhadra, tz)} (after Bhadra)`
+      : null;

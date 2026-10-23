@@ -12,6 +12,8 @@ export {
   sunLongitude,
 } from "./longitude";
 export type { Coordinates, SunEvent, SunriseDefinition } from "./sun";
+export type { MoonEvent } from "./moon";
+export { nextMoonrise, nextMoonset } from "./moon";
 export { DEFAULT_SUNRISE, nextSunrise, nextSunset } from "./sun";
 export type { TithiEnd } from "./tithi";
 export { tithiAt, tithiEnds } from "./tithi";

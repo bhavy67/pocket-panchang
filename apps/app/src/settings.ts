@@ -4,6 +4,7 @@ import {
   type EventKind,
   type Lang,
   type Location,
+  type OccurrencePolicy,
   type PolicyOverrides,
 } from "@panchang/calendar";
 import { isParseError, type ParseError } from "@panchang/engine";
@@ -48,14 +49,16 @@ export function defaultSettings(location: Location, language: Lang): Settings {
 
 // ---- Parsing (ADR 0014): IndexedDB is an input boundary. ----
 
-const fail = (message: string): ParseError => ({
+export const fail = (message: string): ParseError => ({
   kind: "parse-error",
   message,
 });
-const isObject = (v: unknown): v is Record<string, unknown> =>
+export const isObject = (v: unknown): v is Record<string, unknown> =>
   typeof v === "object" && v !== null && !Array.isArray(v);
-const oneOf = <T extends string>(v: unknown, values: readonly T[]): v is T =>
-  values.includes(v as T);
+export const oneOf = <T extends string | boolean>(
+  v: unknown,
+  values: readonly T[],
+): v is T => values.includes(v as T);
 
 export function parseLocation(v: unknown): Location | ParseError {
   if (!isObject(v)) return fail("Location must be an object");
@@ -83,12 +86,37 @@ function isTimeZone(tz: string): boolean {
   }
 }
 
-const EVENT_KINDS: readonly EventKind[] = [
+export const EVENT_KINDS: readonly EventKind[] = [
   "birthday",
   "shraddh",
   "anniversary",
   "custom",
 ];
+
+/** Allowed values per policy field (§4.9). */
+export const POLICY_VALUES: {
+  [K in keyof OccurrencePolicy]: readonly OccurrencePolicy[K][];
+} = {
+  window: ["sunrise", "aparahna"],
+  vriddhiTithi: ["first-day", "second-day"],
+  kshayaTithi: ["same-day", "following-day"],
+  adhikMonth: ["nija", "adhik", "match-origin", "both"],
+  pitruPaksha: [true, false],
+  tithiSource: ["moment", "calendar-day"],
+};
+
+export function parsePolicyOverrides(v: unknown): PolicyOverrides | ParseError {
+  if (!isObject(v)) return fail("Policy must be an object");
+  const out: Record<string, unknown> = {};
+  for (const [k, value] of Object.entries(v)) {
+    const allowed = (POLICY_VALUES as Record<string, readonly unknown[]>)[k];
+    if (!allowed) return fail(`Unknown policy field: ${k}`);
+    if (value === undefined) continue;
+    if (!allowed.includes(value)) return fail(`Bad value for ${k}`);
+    out[k] = value;
+  }
+  return out;
+}
 
 export function parseSettings(v: unknown): Settings | ParseError {
   if (!isObject(v)) return fail("Settings must be an object");
@@ -111,15 +139,14 @@ export function parseSettings(v: unknown): Settings | ParseError {
     return fail(`Bad theme: ${String(theme)}`);
   if (typeof textScale !== "number" || !(textScale >= 0.5 && textScale <= 3))
     return fail(`Bad text scale: ${String(textScale)}`);
-  const policy = v.householdPolicy;
-  // ponytail: kind-level shape only; per-field policy parsing lands with the Phase 9 editor.
-  if (
-    !isObject(policy) ||
-    !Object.entries(policy).every(
-      ([k, p]) => oneOf(k, EVENT_KINDS) && isObject(p),
-    )
-  )
-    return fail("Bad household policy");
+  const policy: Partial<Record<EventKind, PolicyOverrides>> = {};
+  if (!isObject(v.householdPolicy)) return fail("Bad household policy");
+  for (const [k, p] of Object.entries(v.householdPolicy)) {
+    if (!oneOf(k, EVENT_KINDS)) return fail(`Bad event kind in policy: ${k}`);
+    const parsed = parsePolicyOverrides(p);
+    if (isParseError(parsed)) return parsed;
+    policy[k] = parsed;
+  }
   return {
     location,
     tradition,

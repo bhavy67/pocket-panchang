@@ -52,6 +52,17 @@ describe.each(CITIES.map((c) => [c.name, c] as const))(
       }
     });
 
+    it("Holika Dahan carries an evening time inside pradosh and outside Bhadra", () => {
+      for (const list of years) {
+        const h = one(list, "holika-dahan");
+        if (h.fallback) continue;
+        expect(h.evening).toBeDefined();
+        const minutes = (h.evening!.end - h.evening!.start) / 60_000;
+        expect(minutes).toBeGreaterThan(0);
+        expect(minutes).toBeLessThanOrEqual(3 * 48 + 30); // pradosh ≈ 3 night muhurtas
+      }
+    });
+
     it("Navratri spans 8–10 civil days and Dussehra falls on or after its last day", () => {
       for (const list of years) {
         const n = one(list, "navratri");
