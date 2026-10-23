@@ -453,7 +453,7 @@ type CachedMonth = {
 
 1. **Golden fixtures:** reference values per city per year in `fixtures/` (tithi/nakshatra/yoga/karana end times, sunrise/sunset, festival dates).
    - Cities: Ahmedabad, Delhi, Chennai, New York, London.
-   - Years: at least 2 full years in v1.
+   - Years: 2 in v1, **sampled, not scraped in full**: ~24 chosen days per city-year (seasonal anchors incl. solstices, the v1 festival days, vriddhi/kshaya tithi days, lunar-month edges, DST days). Method and politeness rules: accuracy-fixtures skill.
    - Each fixture file records its source, retrieval date, and the reference's sunrise definition (ADR 0012).
 2. **Invariant/property tests (fast-check):**
    - Exactly 30 tithis per lunation
@@ -461,7 +461,7 @@ type CachedMonth = {
    - Nakshatras cycle in order; karana sequence correct
    - Vriddhi and kshaya counts consistent over a lunation
    - End times strictly increasing within a day
-3. **Cross-check:** compare against grahan in tests; flag disagreements beyond tolerance.
+3. **Cross-check:** compare against grahan in tests; flag disagreements beyond tolerance. Independent sunrise/sunset check for **every day** of both years in all 5 cities against NOAA's published solar equations (test-only helper), with USNO spot checks on disagreement.
 4. **Edge cases:** DST transition days (New York, London), date-line-adjacent zones, high latitudes, adhik-month years, kshaya tithis, leap years.
 5. **CI accuracy report:** printed on every run (max/mean error per element). Published in the README.
 6. **E2E (Playwright):** onboarding, today view, month navigation, create personal event, `.ics` export.
@@ -609,7 +609,8 @@ Each phase ends with a **STOP**: summary, files changed, open questions, suggest
 - Vriddhi/kshaya detection; full day assembly (§4.5).
 - New moons, sankrantis, lunar month naming, adhik/kshaya masa (Amanta; Purnimanta is v2).
 - Vikram Samvat (Kartikadi/Chaitradi) and Shaka.
-- Fixtures: all 5 cities, 2 years. Property tests. grahan cross-check. Accuracy report script.
+- Fixtures: all 5 cities, 2 years, ~24 sampled days per city-year (§10). NOAA sunrise cross-check for every day. Property tests. grahan cross-check. Accuracy report (`pnpm --filter @panchang/engine accuracy`).
+- Investigate the +62 s tithi-end bias found in Phase 4 (fixture notes): compare the engine's Moon longitude with an independent ephemeris (e.g. JPL Horizons) for a few instants.
 
 **Exit criteria:** all fixtures within tolerance; property tests pass; accuracy report generated in CI.
 

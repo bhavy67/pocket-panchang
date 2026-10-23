@@ -201,6 +201,11 @@ const dms = (label) => {
 const lat = dms("Latitude");
 const lng = dms("Longitude");
 
+// Keep hand-written findings (source.notes) when regenerating an existing fixture.
+const previousNotes = await readFile(out, "utf8")
+  .then((t) => JSON.parse(t).source?.notes)
+  .catch(() => undefined);
+
 await writeFile(
   out,
   JSON.stringify(
@@ -215,7 +220,9 @@ await writeFile(
         settings: "site defaults for this location",
         sunriseDefinition:
           "upper limb with refraction, no elevation (stated on Drik's sunrise page; ADR 0012)",
-        precision: "minutes as displayed; rounding vs truncation unknown",
+        precision:
+          "minutes, rounded to nearest (inferred 2026-10-23 from sunrise/sunset errors)",
+        ...(previousNotes ? { notes: previousNotes } : {}),
       },
       location: {
         name,

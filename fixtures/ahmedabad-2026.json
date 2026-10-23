@@ -5,7 +5,11 @@
     "retrievedAt": "2026-10-23",
     "settings": "site defaults for this location",
     "sunriseDefinition": "upper limb with refraction, no elevation (stated on Drik's sunrise page; ADR 0012)",
-    "precision": "minutes as displayed; rounding vs truncation unknown"
+    "precision": "minutes, rounded to nearest (inferred 2026-10-23 from sunrise/sunset errors)",
+    "notes": [
+      "2026-10-23: Drik rounds displayed times to the nearest minute, not truncation. Engine − Drik over Oct 2026: sunrise mean +7.6 s (−23…+33), sunset mean +2.1 s (−27…+29), about half negative.",
+      "2026-10-23: tithi ends show a real offset, not rounding: engine − Drik mean +62.2 s (+33…+93, none negative), i.e. engine elongation lags Drik's by ~0.5′. Still within ±2 min. Suspect lunar theory (astronomy-engine's Moon, ~±1′). To be checked in Phase 5 against an independent Moon ephemeris (e.g. JPL Horizons)."
+    ]
   },
   "location": {
     "name": "Ahmedabad",

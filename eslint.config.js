@@ -6,19 +6,47 @@ import reactHooks from "eslint-plugin-react-hooks";
 import tseslint from "typescript-eslint";
 
 const PURE = ["packages/engine/src/**", "packages/calendar/src/**"];
+/** Test-only files may use Node (fixtures, fs); pure-package source may not. */
+const TESTS = ["**/*.test.ts", "**/src/testing.ts"];
+const NO_NODE_IMPORTS = {
+  group: ["node:*"],
+  message: "engine/calendar are pure (§5.2): no Node APIs outside tests.",
+};
 
 // Real colour values only, so strings like "#today" and plain text don't match.
 const RAW_COLOUR = String.raw`/#[0-9a-fA-F]{3,8}\b|\brgba?\(|\bhsla?\(/`;
 
-const importRule = (paths, patterns) => [
+const importRule = (paths, patterns, extra = []) => [
   "error",
   {
     paths,
-    patterns: patterns.map((group) => ({
-      group,
-      message:
-        "Dependency direction is app → calendar → (engine, i18n); i18n → engine types only (ADR 0015).",
-    })),
+    patterns: [
+      ...patterns.map((group) => ({
+        group,
+        message:
+          "Dependency direction is app → calendar → (engine, i18n); i18n → engine types only (ADR 0015).",
+      })),
+      ...extra,
+    ],
+  },
+];
+
+/** Source files: direction + no Node. Test files: direction only (same rule, so two blocks). */
+const pureImportBlocks = (pkg, patterns) => [
+  {
+    files: [`packages/${pkg}/src/**`],
+    ignores: TESTS,
+    rules: {
+      "@typescript-eslint/no-restricted-imports": importRule([], patterns, [
+        NO_NODE_IMPORTS,
+      ]),
+    },
+  },
+  {
+    files: TESTS.map((t) => `packages/${pkg}/src/${t.replace("**/src/", "")}`),
+    rules: {
+      "@typescript-eslint/no-restricted-imports": importRule([], patterns),
+    },
   },
 ];
 
@@ -58,13 +86,17 @@ export default tseslint.config(
   // §5.2 rule 1 and 3: engine and calendar are pure; time zones only at the UI edge.
   {
     files: PURE,
+    ignores: TESTS,
     rules: {
       "no-restricted-globals": [
         "error",
-        ...["window", "document", "indexedDB", "Intl"].map((name) => ({
-          name,
-          message: "engine/calendar are pure (§5.2): no DOM, storage, or Intl.",
-        })),
+        ...["window", "document", "indexedDB", "Intl", "process"].map(
+          (name) => ({
+            name,
+            message:
+              "engine/calendar are pure (§5.2): no DOM, storage, Intl, or Node.",
+          }),
+        ),
       ],
       "no-restricted-syntax": [
         "error",
@@ -89,15 +121,7 @@ export default tseslint.config(
   },
 
   // §5.2 rule 5: dependency direction.
-  {
-    files: ["packages/engine/src/**"],
-    rules: {
-      "@typescript-eslint/no-restricted-imports": importRule(
-        [],
-        [["@panchang/*"]],
-      ),
-    },
-  },
+  ...pureImportBlocks("engine", [["@panchang/*"]]),
   {
     files: ["packages/i18n/src/**"],
     rules: {
@@ -113,15 +137,7 @@ export default tseslint.config(
       ),
     },
   },
-  {
-    files: ["packages/calendar/src/**"],
-    rules: {
-      "@typescript-eslint/no-restricted-imports": importRule(
-        [],
-        [["@panchang/app"]],
-      ),
-    },
-  },
+  ...pureImportBlocks("calendar", [["@panchang/app"]]),
 
   // App: hooks, accessibility, and no raw colours outside tokens.css (ADR 0017).
   {
