@@ -1,4 +1,5 @@
 // Lint enforces architecture rules, not just style (ADR 0015).
+import { builtinModules } from "node:module";
 import js from "@eslint/js";
 import prettier from "eslint-config-prettier";
 import jsxA11y from "eslint-plugin-jsx-a11y";
@@ -8,8 +9,14 @@ import tseslint from "typescript-eslint";
 const PURE = ["packages/engine/src/**", "packages/calendar/src/**"];
 /** Test-only files may use Node (fixtures, fs); pure-package source may not. */
 const TESTS = ["**/*.test.ts", "**/src/testing.ts"];
+/** grahan is a test-only cross-check (§4.1): never a runtime dependency. */
+const NO_GRAHAN = {
+  group: ["@grahan/*"],
+  message: "@grahan/* is test-only (§4.1): import it only from test files.",
+};
 const NO_NODE_IMPORTS = {
-  group: ["node:*"],
+  // Both forms: "node:fs" and bare "fs", "fs/promises", … (generated, so new builtins are covered).
+  group: ["node:*", ...builtinModules.filter((m) => !m.startsWith("_"))],
   message: "engine/calendar are pure (§5.2): no Node APIs outside tests.",
 };
 
@@ -39,6 +46,7 @@ const pureImportBlocks = (pkg, patterns) => [
     rules: {
       "@typescript-eslint/no-restricted-imports": importRule([], patterns, [
         NO_NODE_IMPORTS,
+        NO_GRAHAN,
       ]),
     },
   },
@@ -134,10 +142,23 @@ export default tseslint.config(
           },
         ],
         [["@panchang/calendar", "@panchang/app"]],
+        [NO_GRAHAN],
       ),
     },
   },
   ...pureImportBlocks("calendar", [["@panchang/app"]]),
+
+  {
+    files: ["apps/app/src/**"],
+    ignores: TESTS,
+    rules: {
+      "@typescript-eslint/no-restricted-imports": importRule(
+        [],
+        [],
+        [NO_GRAHAN],
+      ),
+    },
+  },
 
   // App: hooks, accessibility, and no raw colours outside tokens.css (ADR 0017).
   {

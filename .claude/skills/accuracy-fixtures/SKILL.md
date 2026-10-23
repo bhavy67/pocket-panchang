@@ -21,9 +21,19 @@ Source of truth: `PROJECT_PLAN.md` §10 (testing strategy) and §4.2 (error budg
 4. Store times as UTC instants (ISO 8601 `Z` or epoch ms) and keep the reference's local string alongside for audit. The engine never takes local time.
 5. Never hand-edit a reference value to match engine output. If the reference looks wrong, flag it to Bhavy with evidence.
 
+## Drik blocks automated access (2026-10-23)
+
+Drik served a reCAPTCHA ("Spam Blocker") page after ~110 requests at ≥ 4 s spacing. **Do not fetch Drik automatically again, and never work around a CAPTCHA.** `scripts/fetch-drik.mjs` aborts on a challenge page; use `--cache-only` to re-extract from `.cache/drik/` without any network access. The Drik reference is Ahmedabad 2026–27 (82 days). Other cities use the independent checks below.
+
+## Independent checks (no Drik)
+
+- **NOAA** solar equations (`noaa.test.ts`): sunrise/sunset every day of 2026–27, all 5 cities, ±1 min (measured ≤ 5.4 s).
+- **JPL Horizons** (`ephemeris.test.ts`, `jpl-elements.test.ts`): Sun/Moon longitudes, and every engine tithi/nakshatra/yoga end on the other cities' sample days plus 1982–83 new moons and sankrantis (measured ≤ 11 s; sankranti ≤ 25 s). Regenerate instants with `pnpm --filter @panchang/engine jpl-instants`, then re-query in batches of ≤ 60 (the API rejects URLs over ~2 KB) and keep responses in `.cache/horizons/`.
+- **grahan** (`grahan.test.ts`, test-only): sunrise, elements at sunrise and end times on every sample day, all cities, ±1 min.
+
 ## Collecting reference data (Phase 4 method)
 
-- `node scripts/fetch-drik.mjs <geonameId> <name> <from> <to> <out.json>` scrapes Drik day pages.
+- `node scripts/fetch-drik.mjs fixtures/sample-days.json [city] --cache-only` re-extracts Drik fixtures from cached pages (no new fetching; see above). Sample days come from `pnpm --filter @panchang/engine select-days`.
 - Politeness rules: check robots.txt first (2026-10-23: `/panchang/` allowed; `/ajax/`, `/dp-api/` disallowed); ≥ 4 s between requests; raw pages cached in `.cache/drik/` (gitignored, never committed); commit only extracted values with source, URL template, retrieval date, and Drik's own coordinates.
 - "upto Full Night" on Drik means the tithi continues past the next sunrise (no end that civil day).
 - `pnpm --filter @panchang/engine accuracy` prints the error table (max |err|, mean bias) for every fixture file.

@@ -24,3 +24,11 @@ jobs:
       - run: pnpm format:check
       - run: pnpm test # includes the token contrast/completeness check (ADR 0017)
       - run: pnpm build
+      # Accuracy report (§10): printed in the log and kept as a Markdown artifact for the README.
+      - run: pnpm --filter @panchang/engine accuracy
+        env:
+          ACCURACY_REPORT: ${{ github.workspace }}/accuracy-report.md
+      - uses: actions/upload-artifact@v7
+        with:
+          name: accuracy-report
+          path: accuracy-report.md

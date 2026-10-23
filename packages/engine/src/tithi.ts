@@ -1,5 +1,5 @@
-import { findCrossing } from "./crossing";
 import { elongation } from "./longitude";
+import { segmentEnds } from "./segments";
 import type { Instant } from "./time";
 
 const TITHI_DEG = 12;
@@ -23,20 +23,8 @@ export type TithiEnd = {
  * (sunrise, next sunrise]; the udaya tithi is tithiAt(sunrise) (§4.5).
  */
 export function tithiEnds(start: Instant, end: Instant): TithiEnd[] {
-  const ends: TithiEnd[] = [];
-  let from = start;
-  let tithi = tithiAt(start);
-  for (;;) {
-    // Tithi n ends when elongation reaches 12n°; tithi 30 ends at 360° = 0°.
-    const endsAt = findCrossing(
-      elongation,
-      (tithi * TITHI_DEG) % 360,
-      from,
-      end,
-    );
-    if (endsAt === null) return ends;
-    ends.push({ tithi, endsAt });
-    from = endsAt;
-    tithi = (tithi % 30) + 1;
-  }
+  return segmentEnds(elongation, 30, start, end).map(({ index, endsAt }) => ({
+    tithi: index,
+    endsAt,
+  }));
 }

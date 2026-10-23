@@ -14,6 +14,10 @@ When a personal event's month is a **kshaya masa** that year (one lunar month co
 - **No occurrence that year, with a notice**: honest but pushes a once-a-century case onto the user.
 - **A policy field**: unjustified for a case outside every realistic reminder horizon.
 
+## Engine result (Phase 5, 2026-10-23)
+
+The engine finds, for 1982–83: **adhik Ashvin** (from 17 Sep 1982) → … → **Pausha, absorbing Magha** (the two-sankranti month from 14 Jan 1983) → **adhik Phalguna** (from 13 Feb 1983). New-moon and sankranti instants agree with JPL Horizons within 3 s and 25 s respectively. Drik's label for the two-sankranti month could not be fetched (Drik blocks automated access); it stays a pending source verification.
+
 ## Consequences
 
 - **Required fixture tests in the 1982–83 cycle**, not just "no crash". Kshaya years typically sit alongside adhik months in the same cycle (commonly cited for 1982–83: an adhik month before and after the kshaya month; confirm the exact months from the reference when building the fixture). The tests must cover, in that same cycle:

@@ -4,11 +4,12 @@
     "urlTemplate": "https://www.drikpanchang.com/panchang/day-panchang.html?geoname-id=1279233&date={DD}/{MM}/{YYYY}",
     "retrievedAt": "2026-10-23",
     "settings": "site defaults for this location",
-    "sunriseDefinition": "upper limb with refraction, no elevation (stated on Drik's sunrise page; ADR 0012)",
+    "sunriseDefinition": "upper limb with refraction, no elevation (ADR 0012)",
     "precision": "minutes, rounded to nearest (inferred 2026-10-23 from sunrise/sunset errors)",
     "notes": [
       "2026-10-23: Drik rounds displayed times to the nearest minute, not truncation. Engine − Drik over Oct 2026: sunrise mean +7.6 s (−23…+33), sunset mean +2.1 s (−27…+29), about half negative.",
-      "2026-10-23: tithi ends show a real offset, not rounding: engine − Drik mean +62.2 s (+33…+93, none negative), i.e. engine elongation lags Drik's by ~0.5′. Still within ±2 min. Suspect lunar theory (astronomy-engine's Moon, ~±1′). To be checked in Phase 5 against an independent Moon ephemeris (e.g. JPL Horizons)."
+      "2026-10-23: tithi ends show a real offset, not rounding: engine − Drik mean +62.2 s (+33…+93, none negative), i.e. engine elongation lags Drik's by ~0.5′. Still within ±2 min. Suspect lunar theory (astronomy-engine's Moon, ~±1′). To be checked in Phase 5 against an independent Moon ephemeris (e.g. JPL Horizons).",
+      "2026-10-23 (Phase 5): cause of the +62 s tithi offset is on the reference side. Engine vs JPL Horizons at these 32 instants: Sun −1.2″ (−1.7…−0.7), Moon +3.4″ (+1.5…+4.9), i.e. ≤ ~10 s. JPL's own elongation at Drik's displayed times is 36.6″ (18…56″) short of the boundary, so Drik's tithi ends are ~70 s earlier than the true crossings. Possibly ~30 s from Drik truncating tithi times (its sunrise times are rounded); the remaining ~40 s (~20″) is unexplained (candidate: aberration handling). Not calibrated away; tolerance stays ±2 min. See fixtures/horizons/ahmedabad-2026-10-tithi-ends.json."
     ]
   },
   "location": {
@@ -21,6 +22,1107 @@
   },
   "days": [
     {
+      "date": "2026-01-06",
+      "utcOffset": "+05:30",
+      "sunrise": {
+        "local": "2026-01-06 07:22",
+        "utc": "2026-01-06T01:52:00Z"
+      },
+      "sunset": {
+        "local": "2026-01-06 18:09",
+        "utc": "2026-01-06T12:39:00Z"
+      },
+      "weekday": 3,
+      "amantaMonth": "Pausha",
+      "samvat": {
+        "gujarati": 2082,
+        "vikram": 2082,
+        "shaka": 1947
+      },
+      "lahiriAyanamsha": 24.227226,
+      "tithiEnds": [
+        {
+          "index": 18,
+          "name": "Tritiya",
+          "local": "2026-01-06 08:01",
+          "utc": "2026-01-06T02:31:00Z"
+        },
+        {
+          "index": 19,
+          "name": "Chaturthi",
+          "local": "2026-01-07 06:52",
+          "utc": "2026-01-07T01:22:00Z"
+        }
+      ],
+      "nakshatraEnds": [
+        {
+          "index": 9,
+          "name": "Ashlesha",
+          "local": "2026-01-06 12:17",
+          "utc": "2026-01-06T06:47:00Z"
+        }
+      ],
+      "yogaEnds": [
+        {
+          "index": 2,
+          "name": "Priti",
+          "local": "2026-01-06 20:21",
+          "utc": "2026-01-06T14:51:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 36,
+          "name": "Vishti",
+          "local": "2026-01-06 08:01",
+          "utc": "2026-01-06T02:31:00Z"
+        },
+        {
+          "index": 37,
+          "name": "Bava",
+          "local": "2026-01-06 19:21",
+          "utc": "2026-01-06T13:51:00Z"
+        },
+        {
+          "index": 38,
+          "name": "Balava",
+          "local": "2026-01-07 06:52",
+          "utc": "2026-01-07T01:22:00Z"
+        }
+      ],
+      "reasons": [
+        "kshaya tithi"
+      ]
+    },
+    {
+      "date": "2026-01-09",
+      "utcOffset": "+05:30",
+      "sunrise": {
+        "local": "2026-01-09 07:22",
+        "utc": "2026-01-09T01:52:00Z"
+      },
+      "sunset": {
+        "local": "2026-01-09 18:11",
+        "utc": "2026-01-09T12:41:00Z"
+      },
+      "weekday": 6,
+      "amantaMonth": "Pausha",
+      "samvat": {
+        "gujarati": 2082,
+        "vikram": 2082,
+        "shaka": 1947
+      },
+      "lahiriAyanamsha": 24.227341,
+      "tithiEnds": [],
+      "nakshatraEnds": [
+        {
+          "index": 12,
+          "name": "Uttara Phalguni",
+          "local": "2026-01-09 13:40",
+          "utc": "2026-01-09T08:10:00Z"
+        }
+      ],
+      "yogaEnds": [
+        {
+          "index": 5,
+          "name": "Shobhana",
+          "local": "2026-01-09 16:56",
+          "utc": "2026-01-09T11:26:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 43,
+          "name": "Vishti",
+          "local": "2026-01-09 19:39",
+          "utc": "2026-01-09T14:09:00Z"
+        }
+      ],
+      "reasons": [
+        "vriddhi tithi"
+      ]
+    },
+    {
+      "date": "2026-01-14",
+      "utcOffset": "+05:30",
+      "sunrise": {
+        "local": "2026-01-14 07:23",
+        "utc": "2026-01-14T01:53:00Z"
+      },
+      "sunset": {
+        "local": "2026-01-14 18:15",
+        "utc": "2026-01-14T12:45:00Z"
+      },
+      "weekday": 4,
+      "amantaMonth": "Pausha",
+      "samvat": {
+        "gujarati": 2082,
+        "vikram": 2082,
+        "shaka": 1947
+      },
+      "lahiriAyanamsha": 24.227532,
+      "tithiEnds": [
+        {
+          "index": 26,
+          "name": "Ekadashi",
+          "local": "2026-01-14 17:52",
+          "utc": "2026-01-14T12:22:00Z"
+        }
+      ],
+      "nakshatraEnds": [
+        {
+          "index": 17,
+          "name": "Anuradha",
+          "local": "2026-01-15 03:03",
+          "utc": "2026-01-14T21:33:00Z"
+        }
+      ],
+      "yogaEnds": [
+        {
+          "index": 10,
+          "name": "Ganda",
+          "local": "2026-01-14 19:56",
+          "utc": "2026-01-14T14:26:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 52,
+          "name": "Balava",
+          "local": "2026-01-14 17:52",
+          "utc": "2026-01-14T12:22:00Z"
+        },
+        {
+          "index": 53,
+          "name": "Kaulava",
+          "local": "2026-01-15 07:06",
+          "utc": "2026-01-15T01:36:00Z"
+        }
+      ],
+      "reasons": [
+        "Uttarayan / Makar Sankranti"
+      ]
+    },
+    {
+      "date": "2026-01-15",
+      "utcOffset": "+05:30",
+      "sunrise": {
+        "local": "2026-01-15 07:23",
+        "utc": "2026-01-15T01:53:00Z"
+      },
+      "sunset": {
+        "local": "2026-01-15 18:15",
+        "utc": "2026-01-15T12:45:00Z"
+      },
+      "weekday": 5,
+      "amantaMonth": "Pausha",
+      "samvat": {
+        "gujarati": 2082,
+        "vikram": 2082,
+        "shaka": 1947
+      },
+      "lahiriAyanamsha": 24.22757,
+      "tithiEnds": [
+        {
+          "index": 27,
+          "name": "Dwadashi",
+          "local": "2026-01-15 20:16",
+          "utc": "2026-01-15T14:46:00Z"
+        }
+      ],
+      "nakshatraEnds": [
+        {
+          "index": 18,
+          "name": "Jyeshtha",
+          "local": "2026-01-16 05:47",
+          "utc": "2026-01-16T00:17:00Z"
+        }
+      ],
+      "yogaEnds": [
+        {
+          "index": 11,
+          "name": "Vriddhi",
+          "local": "2026-01-15 20:38",
+          "utc": "2026-01-15T15:08:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 54,
+          "name": "Taitila",
+          "local": "2026-01-15 20:16",
+          "utc": "2026-01-15T14:46:00Z"
+        }
+      ],
+      "reasons": [
+        "seasonal anchor"
+      ]
+    },
+    {
+      "date": "2026-01-31",
+      "utcOffset": "+05:30",
+      "sunrise": {
+        "local": "2026-01-31 07:20",
+        "utc": "2026-01-31T01:50:00Z"
+      },
+      "sunset": {
+        "local": "2026-01-31 18:27",
+        "utc": "2026-01-31T12:57:00Z"
+      },
+      "weekday": 7,
+      "amantaMonth": "Magha",
+      "samvat": {
+        "gujarati": 2082,
+        "vikram": 2082,
+        "shaka": 1947
+      },
+      "lahiriAyanamsha": 24.228182,
+      "tithiEnds": [
+        {
+          "index": 13,
+          "name": "Trayodashi",
+          "local": "2026-01-31 08:25",
+          "utc": "2026-01-31T02:55:00Z"
+        },
+        {
+          "index": 14,
+          "name": "Chaturdashi",
+          "local": "2026-02-01 05:52",
+          "utc": "2026-02-01T00:22:00Z"
+        }
+      ],
+      "nakshatraEnds": [
+        {
+          "index": 7,
+          "name": "Punarvasu",
+          "local": "2026-02-01 01:34",
+          "utc": "2026-01-31T20:04:00Z"
+        }
+      ],
+      "yogaEnds": [
+        {
+          "index": 1,
+          "name": "Vishkambha",
+          "local": "2026-01-31 13:33",
+          "utc": "2026-01-31T08:03:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 26,
+          "name": "Taitila",
+          "local": "2026-01-31 08:25",
+          "utc": "2026-01-31T02:55:00Z"
+        },
+        {
+          "index": 27,
+          "name": "Garaja",
+          "local": "2026-01-31 19:07",
+          "utc": "2026-01-31T13:37:00Z"
+        },
+        {
+          "index": 28,
+          "name": "Vanija",
+          "local": "2026-02-01 05:52",
+          "utc": "2026-02-01T00:22:00Z"
+        }
+      ],
+      "reasons": [
+        "kshaya tithi"
+      ]
+    },
+    {
+      "date": "2026-02-09",
+      "utcOffset": "+05:30",
+      "sunrise": {
+        "local": "2026-02-09 07:16",
+        "utc": "2026-02-09T01:46:00Z"
+      },
+      "sunset": {
+        "local": "2026-02-09 18:32",
+        "utc": "2026-02-09T13:02:00Z"
+      },
+      "weekday": 2,
+      "amantaMonth": "Magha",
+      "samvat": {
+        "gujarati": 2082,
+        "vikram": 2082,
+        "shaka": 1947
+      },
+      "lahiriAyanamsha": 24.228527,
+      "tithiEnds": [],
+      "nakshatraEnds": [],
+      "yogaEnds": [
+        {
+          "index": 11,
+          "name": "Vriddhi",
+          "local": "2026-02-10 00:52",
+          "utc": "2026-02-09T19:22:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 45,
+          "name": "Balava",
+          "local": "2026-02-09 18:12",
+          "utc": "2026-02-09T12:42:00Z"
+        }
+      ],
+      "reasons": [
+        "vriddhi tithi"
+      ]
+    },
+    {
+      "date": "2026-02-16",
+      "utcOffset": "+05:30",
+      "sunrise": {
+        "local": "2026-02-16 07:11",
+        "utc": "2026-02-16T01:41:00Z"
+      },
+      "sunset": {
+        "local": "2026-02-16 18:36",
+        "utc": "2026-02-16T13:06:00Z"
+      },
+      "weekday": 2,
+      "amantaMonth": "Magha",
+      "samvat": {
+        "gujarati": 2082,
+        "vikram": 2082,
+        "shaka": 1947
+      },
+      "lahiriAyanamsha": 24.228794,
+      "tithiEnds": [
+        {
+          "index": 29,
+          "name": "Chaturdashi",
+          "local": "2026-02-16 17:34",
+          "utc": "2026-02-16T12:04:00Z"
+        }
+      ],
+      "nakshatraEnds": [
+        {
+          "index": 22,
+          "name": "Shravana",
+          "local": "2026-02-16 20:47",
+          "utc": "2026-02-16T15:17:00Z"
+        }
+      ],
+      "yogaEnds": [
+        {
+          "index": 18,
+          "name": "Variyana",
+          "local": "2026-02-17 01:50",
+          "utc": "2026-02-16T20:20:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 58,
+          "name": "Shakuni",
+          "local": "2026-02-16 17:34",
+          "utc": "2026-02-16T12:04:00Z"
+        },
+        {
+          "index": 59,
+          "name": "Chatushpada",
+          "local": "2026-02-17 05:36",
+          "utc": "2026-02-17T00:06:00Z"
+        }
+      ],
+      "reasons": [
+        "near Maha Shivaratri"
+      ]
+    },
+    {
+      "date": "2026-03-03",
+      "utcOffset": "+05:30",
+      "sunrise": {
+        "local": "2026-03-03 07:00",
+        "utc": "2026-03-03T01:30:00Z"
+      },
+      "sunset": {
+        "local": "2026-03-03 18:44",
+        "utc": "2026-03-03T13:14:00Z"
+      },
+      "weekday": 3,
+      "amantaMonth": "Phalguna",
+      "samvat": {
+        "gujarati": 2082,
+        "vikram": 2082,
+        "shaka": 1947
+      },
+      "lahiriAyanamsha": 24.229368,
+      "tithiEnds": [
+        {
+          "index": 15,
+          "name": "Purnima",
+          "local": "2026-03-03 17:07",
+          "utc": "2026-03-03T11:37:00Z"
+        }
+      ],
+      "nakshatraEnds": [
+        {
+          "index": 10,
+          "name": "Magha",
+          "local": "2026-03-03 07:31",
+          "utc": "2026-03-03T02:01:00Z"
+        }
+      ],
+      "yogaEnds": [
+        {
+          "index": 7,
+          "name": "Sukarma",
+          "local": "2026-03-03 10:25",
+          "utc": "2026-03-03T04:55:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 30,
+          "name": "Bava",
+          "local": "2026-03-03 17:07",
+          "utc": "2026-03-03T11:37:00Z"
+        },
+        {
+          "index": 31,
+          "name": "Balava",
+          "local": "2026-03-04 04:54",
+          "utc": "2026-03-03T23:24:00Z"
+        }
+      ],
+      "reasons": [
+        "near Holika Dahan"
+      ]
+    },
+    {
+      "date": "2026-03-04",
+      "utcOffset": "+05:30",
+      "sunrise": {
+        "local": "2026-03-04 06:59",
+        "utc": "2026-03-04T01:29:00Z"
+      },
+      "sunset": {
+        "local": "2026-03-04 18:44",
+        "utc": "2026-03-04T13:14:00Z"
+      },
+      "weekday": 4,
+      "amantaMonth": "Phalguna",
+      "samvat": {
+        "gujarati": 2082,
+        "vikram": 2082,
+        "shaka": 1947
+      },
+      "lahiriAyanamsha": 24.229406,
+      "tithiEnds": [
+        {
+          "index": 16,
+          "name": "Pratipada",
+          "local": "2026-03-04 16:48",
+          "utc": "2026-03-04T11:18:00Z"
+        }
+      ],
+      "nakshatraEnds": [
+        {
+          "index": 11,
+          "name": "Purva Phalguni",
+          "local": "2026-03-04 07:39",
+          "utc": "2026-03-04T02:09:00Z"
+        }
+      ],
+      "yogaEnds": [
+        {
+          "index": 8,
+          "name": "Dhriti",
+          "local": "2026-03-04 08:52",
+          "utc": "2026-03-04T03:22:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 32,
+          "name": "Kaulava",
+          "local": "2026-03-04 16:48",
+          "utc": "2026-03-04T11:18:00Z"
+        },
+        {
+          "index": 33,
+          "name": "Taitila",
+          "local": "2026-03-05 04:51",
+          "utc": "2026-03-04T23:21:00Z"
+        }
+      ],
+      "reasons": [
+        "near Dhuleti"
+      ]
+    },
+    {
+      "date": "2026-03-15",
+      "utcOffset": "+05:30",
+      "sunrise": {
+        "local": "2026-03-15 06:49",
+        "utc": "2026-03-15T01:19:00Z"
+      },
+      "sunset": {
+        "local": "2026-03-15 18:49",
+        "utc": "2026-03-15T13:19:00Z"
+      },
+      "weekday": 1,
+      "amantaMonth": "Phalguna",
+      "samvat": {
+        "gujarati": 2082,
+        "vikram": 2082,
+        "shaka": 1947
+      },
+      "lahiriAyanamsha": 24.229826,
+      "tithiEnds": [
+        {
+          "index": 26,
+          "name": "Ekadashi",
+          "local": "2026-03-15 09:16",
+          "utc": "2026-03-15T03:46:00Z"
+        }
+      ],
+      "nakshatraEnds": [
+        {
+          "index": 22,
+          "name": "Shravana",
+          "local": "2026-03-16 05:56",
+          "utc": "2026-03-16T00:26:00Z"
+        }
+      ],
+      "yogaEnds": [
+        {
+          "index": 19,
+          "name": "Parigha",
+          "local": "2026-03-15 10:25",
+          "utc": "2026-03-15T04:55:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 52,
+          "name": "Balava",
+          "local": "2026-03-15 09:16",
+          "utc": "2026-03-15T03:46:00Z"
+        },
+        {
+          "index": 53,
+          "name": "Kaulava",
+          "local": "2026-03-15 21:33",
+          "utc": "2026-03-15T16:03:00Z"
+        }
+      ],
+      "reasons": [
+        "seasonal anchor"
+      ]
+    },
+    {
+      "date": "2026-04-15",
+      "utcOffset": "+05:30",
+      "sunrise": {
+        "local": "2026-04-15 06:19",
+        "utc": "2026-04-15T00:49:00Z"
+      },
+      "sunset": {
+        "local": "2026-04-15 19:00",
+        "utc": "2026-04-15T13:30:00Z"
+      },
+      "weekday": 4,
+      "amantaMonth": "Chaitra",
+      "samvat": {
+        "gujarati": 2082,
+        "vikram": 2083,
+        "shaka": 1948
+      },
+      "lahiriAyanamsha": 24.231011,
+      "tithiEnds": [
+        {
+          "index": 28,
+          "name": "Trayodashi",
+          "local": "2026-04-15 22:31",
+          "utc": "2026-04-15T17:01:00Z"
+        }
+      ],
+      "nakshatraEnds": [
+        {
+          "index": 25,
+          "name": "Purva Bhadrapada",
+          "local": "2026-04-15 15:22",
+          "utc": "2026-04-15T09:52:00Z"
+        }
+      ],
+      "yogaEnds": [
+        {
+          "index": 25,
+          "name": "Brahma",
+          "local": "2026-04-15 13:25",
+          "utc": "2026-04-15T07:55:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 55,
+          "name": "Garaja",
+          "local": "2026-04-15 11:27",
+          "utc": "2026-04-15T05:57:00Z"
+        },
+        {
+          "index": 56,
+          "name": "Vanija",
+          "local": "2026-04-15 22:31",
+          "utc": "2026-04-15T17:01:00Z"
+        }
+      ],
+      "reasons": [
+        "seasonal anchor"
+      ]
+    },
+    {
+      "date": "2026-04-18",
+      "utcOffset": "+05:30",
+      "sunrise": {
+        "local": "2026-04-18 06:17",
+        "utc": "2026-04-18T00:47:00Z"
+      },
+      "sunset": {
+        "local": "2026-04-18 19:01",
+        "utc": "2026-04-18T13:31:00Z"
+      },
+      "weekday": 7,
+      "amantaMonth": "Vaishakha",
+      "samvat": {
+        "gujarati": 2082,
+        "vikram": 2083,
+        "shaka": 1948
+      },
+      "lahiriAyanamsha": 24.231126,
+      "tithiEnds": [
+        {
+          "index": 1,
+          "name": "Pratipada",
+          "local": "2026-04-18 14:10",
+          "utc": "2026-04-18T08:40:00Z"
+        }
+      ],
+      "nakshatraEnds": [
+        {
+          "index": 1,
+          "name": "Ashwini",
+          "local": "2026-04-18 09:42",
+          "utc": "2026-04-18T04:12:00Z"
+        }
+      ],
+      "yogaEnds": [
+        {
+          "index": 2,
+          "name": "Priti",
+          "local": "2026-04-18 23:56",
+          "utc": "2026-04-18T18:26:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 2,
+          "name": "Bava",
+          "local": "2026-04-18 14:10",
+          "utc": "2026-04-18T08:40:00Z"
+        },
+        {
+          "index": 3,
+          "name": "Balava",
+          "local": "2026-04-19 00:30",
+          "utc": "2026-04-18T19:00:00Z"
+        }
+      ],
+      "reasons": [
+        "lunar month start (Vaishakha)"
+      ]
+    },
+    {
+      "date": "2026-05-15",
+      "utcOffset": "+05:30",
+      "sunrise": {
+        "local": "2026-05-15 05:59",
+        "utc": "2026-05-15T00:29:00Z"
+      },
+      "sunset": {
+        "local": "2026-05-15 19:13",
+        "utc": "2026-05-15T13:43:00Z"
+      },
+      "weekday": 6,
+      "amantaMonth": "Vaishakha",
+      "samvat": {
+        "gujarati": 2082,
+        "vikram": 2083,
+        "shaka": 1948
+      },
+      "lahiriAyanamsha": 24.232158,
+      "tithiEnds": [
+        {
+          "index": 28,
+          "name": "Trayodashi",
+          "local": "2026-05-15 08:31",
+          "utc": "2026-05-15T03:01:00Z"
+        },
+        {
+          "index": 29,
+          "name": "Chaturdashi",
+          "local": "2026-05-16 05:11",
+          "utc": "2026-05-15T23:41:00Z"
+        }
+      ],
+      "nakshatraEnds": [
+        {
+          "index": 1,
+          "name": "Ashwini",
+          "local": "2026-05-15 20:14",
+          "utc": "2026-05-15T14:44:00Z"
+        }
+      ],
+      "yogaEnds": [
+        {
+          "index": 3,
+          "name": "Ayushmana",
+          "local": "2026-05-15 14:21",
+          "utc": "2026-05-15T08:51:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 56,
+          "name": "Vanija",
+          "local": "2026-05-15 08:31",
+          "utc": "2026-05-15T03:01:00Z"
+        },
+        {
+          "index": 57,
+          "name": "Vishti",
+          "local": "2026-05-15 18:54",
+          "utc": "2026-05-15T13:24:00Z"
+        },
+        {
+          "index": 58,
+          "name": "Shakuni",
+          "local": "2026-05-16 05:11",
+          "utc": "2026-05-15T23:41:00Z"
+        }
+      ],
+      "reasons": [
+        "seasonal anchor"
+      ]
+    },
+    {
+      "date": "2026-05-17",
+      "utcOffset": "+05:30",
+      "sunrise": {
+        "local": "2026-05-17 05:58",
+        "utc": "2026-05-17T00:28:00Z"
+      },
+      "sunset": {
+        "local": "2026-05-17 19:14",
+        "utc": "2026-05-17T13:44:00Z"
+      },
+      "weekday": 1,
+      "amantaMonth": "Jyeshtha (Adhik)",
+      "samvat": {
+        "gujarati": 2082,
+        "vikram": 2083,
+        "shaka": 1948
+      },
+      "lahiriAyanamsha": 24.232235,
+      "tithiEnds": [
+        {
+          "index": 1,
+          "name": "Pratipada",
+          "local": "2026-05-17 21:40",
+          "utc": "2026-05-17T16:10:00Z"
+        }
+      ],
+      "nakshatraEnds": [
+        {
+          "index": 3,
+          "name": "Krittika",
+          "local": "2026-05-17 14:32",
+          "utc": "2026-05-17T09:02:00Z"
+        }
+      ],
+      "yogaEnds": [
+        {
+          "index": 5,
+          "name": "Shobhana",
+          "local": "2026-05-17 06:15",
+          "utc": "2026-05-17T00:45:00Z"
+        },
+        {
+          "index": 6,
+          "name": "Atiganda",
+          "local": "2026-05-18 02:00",
+          "utc": "2026-05-17T20:30:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 1,
+          "name": "Kinstughna",
+          "local": "2026-05-17 11:36",
+          "utc": "2026-05-17T06:06:00Z"
+        },
+        {
+          "index": 2,
+          "name": "Bava",
+          "local": "2026-05-17 21:40",
+          "utc": "2026-05-17T16:10:00Z"
+        }
+      ],
+      "reasons": [
+        "adhik month"
+      ]
+    },
+    {
+      "date": "2026-06-21",
+      "utcOffset": "+05:30",
+      "sunrise": {
+        "local": "2026-06-21 05:55",
+        "utc": "2026-06-21T00:25:00Z"
+      },
+      "sunset": {
+        "local": "2026-06-21 19:28",
+        "utc": "2026-06-21T13:58:00Z"
+      },
+      "weekday": 1,
+      "amantaMonth": "Jyeshtha",
+      "samvat": {
+        "gujarati": 2082,
+        "vikram": 2083,
+        "shaka": 1948
+      },
+      "lahiriAyanamsha": 24.233574,
+      "tithiEnds": [
+        {
+          "index": 7,
+          "name": "Saptami",
+          "local": "2026-06-21 15:20",
+          "utc": "2026-06-21T09:50:00Z"
+        }
+      ],
+      "nakshatraEnds": [
+        {
+          "index": 11,
+          "name": "Purva Phalguni",
+          "local": "2026-06-21 09:31",
+          "utc": "2026-06-21T04:01:00Z"
+        }
+      ],
+      "yogaEnds": [
+        {
+          "index": 16,
+          "name": "Siddhi",
+          "local": "2026-06-21 11:21",
+          "utc": "2026-06-21T05:51:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 14,
+          "name": "Vanija",
+          "local": "2026-06-21 15:20",
+          "utc": "2026-06-21T09:50:00Z"
+        },
+        {
+          "index": 15,
+          "name": "Vishti",
+          "local": "2026-06-22 03:24",
+          "utc": "2026-06-21T21:54:00Z"
+        }
+      ],
+      "reasons": [
+        "seasonal anchor"
+      ]
+    },
+    {
+      "date": "2026-08-28",
+      "utcOffset": "+05:30",
+      "sunrise": {
+        "local": "2026-08-28 06:21",
+        "utc": "2026-08-28T00:51:00Z"
+      },
+      "sunset": {
+        "local": "2026-08-28 19:01",
+        "utc": "2026-08-28T13:31:00Z"
+      },
+      "weekday": 6,
+      "amantaMonth": "Shravana",
+      "samvat": {
+        "gujarati": 2082,
+        "vikram": 2083,
+        "shaka": 1948
+      },
+      "lahiriAyanamsha": 24.236175,
+      "tithiEnds": [
+        {
+          "index": 15,
+          "name": "Purnima",
+          "local": "2026-08-28 09:48",
+          "utc": "2026-08-28T04:18:00Z"
+        }
+      ],
+      "nakshatraEnds": [
+        {
+          "index": 24,
+          "name": "Shatabhisha",
+          "local": "2026-08-29 03:13",
+          "utc": "2026-08-28T21:43:00Z"
+        }
+      ],
+      "yogaEnds": [
+        {
+          "index": 6,
+          "name": "Atiganda",
+          "local": "2026-08-28 07:28",
+          "utc": "2026-08-28T01:58:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 30,
+          "name": "Bava",
+          "local": "2026-08-28 09:48",
+          "utc": "2026-08-28T04:18:00Z"
+        },
+        {
+          "index": 31,
+          "name": "Balava",
+          "local": "2026-08-28 21:56",
+          "utc": "2026-08-28T16:26:00Z"
+        }
+      ],
+      "reasons": [
+        "near Raksha Bandhan"
+      ]
+    },
+    {
+      "date": "2026-09-04",
+      "utcOffset": "+05:30",
+      "sunrise": {
+        "local": "2026-09-04 06:23",
+        "utc": "2026-09-04T00:53:00Z"
+      },
+      "sunset": {
+        "local": "2026-09-04 18:54",
+        "utc": "2026-09-04T13:24:00Z"
+      },
+      "weekday": 6,
+      "amantaMonth": "Shravana",
+      "samvat": {
+        "gujarati": 2082,
+        "vikram": 2083,
+        "shaka": 1948
+      },
+      "lahiriAyanamsha": 24.236443,
+      "tithiEnds": [
+        {
+          "index": 23,
+          "name": "Ashtami",
+          "local": "2026-09-05 00:13",
+          "utc": "2026-09-04T18:43:00Z"
+        }
+      ],
+      "nakshatraEnds": [
+        {
+          "index": 4,
+          "name": "Rohini",
+          "local": "2026-09-04 23:04",
+          "utc": "2026-09-04T17:34:00Z"
+        }
+      ],
+      "yogaEnds": [
+        {
+          "index": 14,
+          "name": "Harshana",
+          "local": "2026-09-04 15:44",
+          "utc": "2026-09-04T10:14:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 45,
+          "name": "Balava",
+          "local": "2026-09-04 13:20",
+          "utc": "2026-09-04T07:50:00Z"
+        },
+        {
+          "index": 46,
+          "name": "Kaulava",
+          "local": "2026-09-05 00:13",
+          "utc": "2026-09-04T18:43:00Z"
+        }
+      ],
+      "reasons": [
+        "near Janmashtami"
+      ]
+    },
+    {
+      "date": "2026-09-15",
+      "utcOffset": "+05:30",
+      "sunrise": {
+        "local": "2026-09-15 06:26",
+        "utc": "2026-09-15T00:56:00Z"
+      },
+      "sunset": {
+        "local": "2026-09-15 18:43",
+        "utc": "2026-09-15T13:13:00Z"
+      },
+      "weekday": 3,
+      "amantaMonth": "Bhadrapada",
+      "samvat": {
+        "gujarati": 2082,
+        "vikram": 2083,
+        "shaka": 1948
+      },
+      "lahiriAyanamsha": 24.236864,
+      "tithiEnds": [
+        {
+          "index": 4,
+          "name": "Chaturthi",
+          "local": "2026-09-15 07:44",
+          "utc": "2026-09-15T02:14:00Z"
+        }
+      ],
+      "nakshatraEnds": [
+        {
+          "index": 15,
+          "name": "Swati",
+          "local": "2026-09-15 15:21",
+          "utc": "2026-09-15T09:51:00Z"
+        }
+      ],
+      "yogaEnds": [
+        {
+          "index": 26,
+          "name": "Indra",
+          "local": "2026-09-15 12:20",
+          "utc": "2026-09-15T06:50:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 8,
+          "name": "Vishti",
+          "local": "2026-09-15 07:44",
+          "utc": "2026-09-15T02:14:00Z"
+        },
+        {
+          "index": 9,
+          "name": "Bava",
+          "local": "2026-09-15 20:17",
+          "utc": "2026-09-15T14:47:00Z"
+        }
+      ],
+      "reasons": [
+        "seasonal anchor"
+      ]
+    },
+    {
       "date": "2026-10-01",
       "utcOffset": "+05:30",
       "sunrise": {
@@ -31,13 +1133,54 @@
         "local": "2026-10-01 18:27",
         "utc": "2026-10-01T12:57:00Z"
       },
+      "weekday": 5,
+      "amantaMonth": "Bhadrapada",
+      "samvat": {
+        "gujarati": 2082,
+        "vikram": 2083,
+        "shaka": 1948
+      },
+      "lahiriAyanamsha": 24.237476,
       "tithiEnds": [
         {
-          "tithi": 20,
+          "index": 20,
           "name": "Panchami",
           "local": "2026-10-01 12:35",
           "utc": "2026-10-01T07:05:00Z"
         }
+      ],
+      "nakshatraEnds": [
+        {
+          "index": 4,
+          "name": "Rohini",
+          "local": "2026-10-02 04:27",
+          "utc": "2026-10-01T22:57:00Z"
+        }
+      ],
+      "yogaEnds": [
+        {
+          "index": 16,
+          "name": "Siddhi",
+          "local": "2026-10-01 21:18",
+          "utc": "2026-10-01T15:48:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 40,
+          "name": "Taitila",
+          "local": "2026-10-01 12:35",
+          "utc": "2026-10-01T07:05:00Z"
+        },
+        {
+          "index": 41,
+          "name": "Garaja",
+          "local": "2026-10-01 23:24",
+          "utc": "2026-10-01T17:54:00Z"
+        }
+      ],
+      "reasons": [
+        "October 2026 full month (Phase 4)"
       ]
     },
     {
@@ -51,13 +1194,54 @@
         "local": "2026-10-02 18:26",
         "utc": "2026-10-02T12:56:00Z"
       },
+      "weekday": 6,
+      "amantaMonth": "Bhadrapada",
+      "samvat": {
+        "gujarati": 2082,
+        "vikram": 2083,
+        "shaka": 1948
+      },
+      "lahiriAyanamsha": 24.237514,
       "tithiEnds": [
         {
-          "tithi": 21,
+          "index": 21,
           "name": "Shashthi",
           "local": "2026-10-02 10:15",
           "utc": "2026-10-02T04:45:00Z"
         }
+      ],
+      "nakshatraEnds": [
+        {
+          "index": 5,
+          "name": "Mrigashira",
+          "local": "2026-10-03 02:55",
+          "utc": "2026-10-02T21:25:00Z"
+        }
+      ],
+      "yogaEnds": [
+        {
+          "index": 17,
+          "name": "Vyatipata",
+          "local": "2026-10-02 18:18",
+          "utc": "2026-10-02T12:48:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 42,
+          "name": "Vanija",
+          "local": "2026-10-02 10:15",
+          "utc": "2026-10-02T04:45:00Z"
+        },
+        {
+          "index": 43,
+          "name": "Vishti",
+          "local": "2026-10-02 21:06",
+          "utc": "2026-10-02T15:36:00Z"
+        }
+      ],
+      "reasons": [
+        "October 2026 full month (Phase 4)"
       ]
     },
     {
@@ -71,19 +1255,66 @@
         "local": "2026-10-03 18:25",
         "utc": "2026-10-03T12:55:00Z"
       },
+      "weekday": 7,
+      "amantaMonth": "Bhadrapada",
+      "samvat": {
+        "gujarati": 2082,
+        "vikram": 2083,
+        "shaka": 1948
+      },
+      "lahiriAyanamsha": 24.237553,
       "tithiEnds": [
         {
-          "tithi": 22,
+          "index": 22,
           "name": "Saptami",
           "local": "2026-10-03 07:59",
           "utc": "2026-10-03T02:29:00Z"
         },
         {
-          "tithi": 23,
+          "index": 23,
           "name": "Ashtami",
           "local": "2026-10-04 05:51",
           "utc": "2026-10-04T00:21:00Z"
         }
+      ],
+      "nakshatraEnds": [
+        {
+          "index": 6,
+          "name": "Ardra",
+          "local": "2026-10-04 01:29",
+          "utc": "2026-10-03T19:59:00Z"
+        }
+      ],
+      "yogaEnds": [
+        {
+          "index": 18,
+          "name": "Variyana",
+          "local": "2026-10-03 15:21",
+          "utc": "2026-10-03T09:51:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 44,
+          "name": "Bava",
+          "local": "2026-10-03 07:59",
+          "utc": "2026-10-03T02:29:00Z"
+        },
+        {
+          "index": 45,
+          "name": "Balava",
+          "local": "2026-10-03 18:54",
+          "utc": "2026-10-03T13:24:00Z"
+        },
+        {
+          "index": 46,
+          "name": "Kaulava",
+          "local": "2026-10-04 05:51",
+          "utc": "2026-10-04T00:21:00Z"
+        }
+      ],
+      "reasons": [
+        "October 2026 full month (Phase 4)"
       ]
     },
     {
@@ -97,13 +1328,54 @@
         "local": "2026-10-04 18:24",
         "utc": "2026-10-04T12:54:00Z"
       },
+      "weekday": 1,
+      "amantaMonth": "Bhadrapada",
+      "samvat": {
+        "gujarati": 2082,
+        "vikram": 2083,
+        "shaka": 1948
+      },
+      "lahiriAyanamsha": 24.237591,
       "tithiEnds": [
         {
-          "tithi": 24,
+          "index": 24,
           "name": "Navami",
           "local": "2026-10-05 03:53",
           "utc": "2026-10-04T22:23:00Z"
         }
+      ],
+      "nakshatraEnds": [
+        {
+          "index": 7,
+          "name": "Punarvasu",
+          "local": "2026-10-05 00:13",
+          "utc": "2026-10-04T18:43:00Z"
+        }
+      ],
+      "yogaEnds": [
+        {
+          "index": 19,
+          "name": "Parigha",
+          "local": "2026-10-04 12:32",
+          "utc": "2026-10-04T07:02:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 47,
+          "name": "Taitila",
+          "local": "2026-10-04 16:51",
+          "utc": "2026-10-04T11:21:00Z"
+        },
+        {
+          "index": 48,
+          "name": "Garaja",
+          "local": "2026-10-05 03:53",
+          "utc": "2026-10-04T22:23:00Z"
+        }
+      ],
+      "reasons": [
+        "October 2026 full month (Phase 4)"
       ]
     },
     {
@@ -117,13 +1389,54 @@
         "local": "2026-10-05 18:23",
         "utc": "2026-10-05T12:53:00Z"
       },
+      "weekday": 2,
+      "amantaMonth": "Bhadrapada",
+      "samvat": {
+        "gujarati": 2082,
+        "vikram": 2083,
+        "shaka": 1948
+      },
+      "lahiriAyanamsha": 24.237629,
       "tithiEnds": [
         {
-          "tithi": 25,
+          "index": 25,
           "name": "Dashami",
           "local": "2026-10-06 02:07",
           "utc": "2026-10-05T20:37:00Z"
         }
+      ],
+      "nakshatraEnds": [
+        {
+          "index": 8,
+          "name": "Pushya",
+          "local": "2026-10-05 23:09",
+          "utc": "2026-10-05T17:39:00Z"
+        }
+      ],
+      "yogaEnds": [
+        {
+          "index": 20,
+          "name": "Shiva",
+          "local": "2026-10-05 09:51",
+          "utc": "2026-10-05T04:21:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 49,
+          "name": "Vanija",
+          "local": "2026-10-05 14:58",
+          "utc": "2026-10-05T09:28:00Z"
+        },
+        {
+          "index": 50,
+          "name": "Vishti",
+          "local": "2026-10-06 02:07",
+          "utc": "2026-10-05T20:37:00Z"
+        }
+      ],
+      "reasons": [
+        "October 2026 full month (Phase 4)"
       ]
     },
     {
@@ -137,13 +1450,60 @@
         "local": "2026-10-06 18:22",
         "utc": "2026-10-06T12:52:00Z"
       },
+      "weekday": 3,
+      "amantaMonth": "Bhadrapada",
+      "samvat": {
+        "gujarati": 2082,
+        "vikram": 2083,
+        "shaka": 1948
+      },
+      "lahiriAyanamsha": 24.237667,
       "tithiEnds": [
         {
-          "tithi": 26,
+          "index": 26,
           "name": "Ekadashi",
           "local": "2026-10-07 00:34",
           "utc": "2026-10-06T19:04:00Z"
         }
+      ],
+      "nakshatraEnds": [
+        {
+          "index": 9,
+          "name": "Ashlesha",
+          "local": "2026-10-06 22:17",
+          "utc": "2026-10-06T16:47:00Z"
+        }
+      ],
+      "yogaEnds": [
+        {
+          "index": 21,
+          "name": "Siddha",
+          "local": "2026-10-06 07:20",
+          "utc": "2026-10-06T01:50:00Z"
+        },
+        {
+          "index": 22,
+          "name": "Sadhya",
+          "local": "2026-10-07 05:00",
+          "utc": "2026-10-06T23:30:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 51,
+          "name": "Bava",
+          "local": "2026-10-06 13:19",
+          "utc": "2026-10-06T07:49:00Z"
+        },
+        {
+          "index": 52,
+          "name": "Balava",
+          "local": "2026-10-07 00:34",
+          "utc": "2026-10-06T19:04:00Z"
+        }
+      ],
+      "reasons": [
+        "October 2026 full month (Phase 4)"
       ]
     },
     {
@@ -157,13 +1517,54 @@
         "local": "2026-10-07 18:21",
         "utc": "2026-10-07T12:51:00Z"
       },
+      "weekday": 4,
+      "amantaMonth": "Bhadrapada",
+      "samvat": {
+        "gujarati": 2082,
+        "vikram": 2083,
+        "shaka": 1948
+      },
+      "lahiriAyanamsha": 24.237706,
       "tithiEnds": [
         {
-          "tithi": 27,
+          "index": 27,
           "name": "Dwadashi",
           "local": "2026-10-07 23:16",
           "utc": "2026-10-07T17:46:00Z"
         }
+      ],
+      "nakshatraEnds": [
+        {
+          "index": 10,
+          "name": "Magha",
+          "local": "2026-10-07 21:40",
+          "utc": "2026-10-07T16:10:00Z"
+        }
+      ],
+      "yogaEnds": [
+        {
+          "index": 23,
+          "name": "Shubha",
+          "local": "2026-10-08 02:52",
+          "utc": "2026-10-07T21:22:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 53,
+          "name": "Kaulava",
+          "local": "2026-10-07 11:53",
+          "utc": "2026-10-07T06:23:00Z"
+        },
+        {
+          "index": 54,
+          "name": "Taitila",
+          "local": "2026-10-07 23:16",
+          "utc": "2026-10-07T17:46:00Z"
+        }
+      ],
+      "reasons": [
+        "October 2026 full month (Phase 4)"
       ]
     },
     {
@@ -177,13 +1578,54 @@
         "local": "2026-10-08 18:21",
         "utc": "2026-10-08T12:51:00Z"
       },
+      "weekday": 5,
+      "amantaMonth": "Bhadrapada",
+      "samvat": {
+        "gujarati": 2082,
+        "vikram": 2083,
+        "shaka": 1948
+      },
+      "lahiriAyanamsha": 24.237744,
       "tithiEnds": [
         {
-          "tithi": 28,
+          "index": 28,
           "name": "Trayodashi",
           "local": "2026-10-08 22:15",
           "utc": "2026-10-08T16:45:00Z"
         }
+      ],
+      "nakshatraEnds": [
+        {
+          "index": 11,
+          "name": "Purva Phalguni",
+          "local": "2026-10-08 21:20",
+          "utc": "2026-10-08T15:50:00Z"
+        }
+      ],
+      "yogaEnds": [
+        {
+          "index": 24,
+          "name": "Shukla",
+          "local": "2026-10-09 00:58",
+          "utc": "2026-10-08T19:28:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 55,
+          "name": "Garaja",
+          "local": "2026-10-08 10:43",
+          "utc": "2026-10-08T05:13:00Z"
+        },
+        {
+          "index": 56,
+          "name": "Vanija",
+          "local": "2026-10-08 22:15",
+          "utc": "2026-10-08T16:45:00Z"
+        }
+      ],
+      "reasons": [
+        "October 2026 full month (Phase 4)"
       ]
     },
     {
@@ -197,13 +1639,54 @@
         "local": "2026-10-09 18:20",
         "utc": "2026-10-09T12:50:00Z"
       },
+      "weekday": 6,
+      "amantaMonth": "Bhadrapada",
+      "samvat": {
+        "gujarati": 2082,
+        "vikram": 2083,
+        "shaka": 1948
+      },
+      "lahiriAyanamsha": 24.237782,
       "tithiEnds": [
         {
-          "tithi": 29,
+          "index": 29,
           "name": "Chaturdashi",
           "local": "2026-10-09 21:35",
           "utc": "2026-10-09T16:05:00Z"
         }
+      ],
+      "nakshatraEnds": [
+        {
+          "index": 12,
+          "name": "Uttara Phalguni",
+          "local": "2026-10-09 21:19",
+          "utc": "2026-10-09T15:49:00Z"
+        }
+      ],
+      "yogaEnds": [
+        {
+          "index": 25,
+          "name": "Brahma",
+          "local": "2026-10-09 23:21",
+          "utc": "2026-10-09T17:51:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 57,
+          "name": "Vishti",
+          "local": "2026-10-09 09:52",
+          "utc": "2026-10-09T04:22:00Z"
+        },
+        {
+          "index": 58,
+          "name": "Shakuni",
+          "local": "2026-10-09 21:35",
+          "utc": "2026-10-09T16:05:00Z"
+        }
+      ],
+      "reasons": [
+        "October 2026 full month (Phase 4)"
       ]
     },
     {
@@ -217,13 +1700,54 @@
         "local": "2026-10-10 18:19",
         "utc": "2026-10-10T12:49:00Z"
       },
+      "weekday": 7,
+      "amantaMonth": "Bhadrapada",
+      "samvat": {
+        "gujarati": 2082,
+        "vikram": 2083,
+        "shaka": 1948
+      },
+      "lahiriAyanamsha": 24.237821,
       "tithiEnds": [
         {
-          "tithi": 30,
+          "index": 30,
           "name": "Amavasya",
           "local": "2026-10-10 21:19",
           "utc": "2026-10-10T15:49:00Z"
         }
+      ],
+      "nakshatraEnds": [
+        {
+          "index": 13,
+          "name": "Hasta",
+          "local": "2026-10-10 21:42",
+          "utc": "2026-10-10T16:12:00Z"
+        }
+      ],
+      "yogaEnds": [
+        {
+          "index": 26,
+          "name": "Indra",
+          "local": "2026-10-10 22:02",
+          "utc": "2026-10-10T16:32:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 59,
+          "name": "Chatushpada",
+          "local": "2026-10-10 09:24",
+          "utc": "2026-10-10T03:54:00Z"
+        },
+        {
+          "index": 60,
+          "name": "Nagava",
+          "local": "2026-10-10 21:19",
+          "utc": "2026-10-10T15:49:00Z"
+        }
+      ],
+      "reasons": [
+        "October 2026 full month (Phase 4)"
       ]
     },
     {
@@ -237,13 +1761,54 @@
         "local": "2026-10-11 18:18",
         "utc": "2026-10-11T12:48:00Z"
       },
+      "weekday": 1,
+      "amantaMonth": "Ashwina",
+      "samvat": {
+        "gujarati": 2082,
+        "vikram": 2083,
+        "shaka": 1948
+      },
+      "lahiriAyanamsha": 24.237859,
       "tithiEnds": [
         {
-          "tithi": 1,
+          "index": 1,
           "name": "Pratipada",
           "local": "2026-10-11 21:30",
           "utc": "2026-10-11T16:00:00Z"
         }
+      ],
+      "nakshatraEnds": [
+        {
+          "index": 14,
+          "name": "Chitra",
+          "local": "2026-10-11 22:32",
+          "utc": "2026-10-11T17:02:00Z"
+        }
+      ],
+      "yogaEnds": [
+        {
+          "index": 27,
+          "name": "Vaidhriti",
+          "local": "2026-10-11 21:05",
+          "utc": "2026-10-11T15:35:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 1,
+          "name": "Kinstughna",
+          "local": "2026-10-11 09:21",
+          "utc": "2026-10-11T03:51:00Z"
+        },
+        {
+          "index": 2,
+          "name": "Bava",
+          "local": "2026-10-11 21:30",
+          "utc": "2026-10-11T16:00:00Z"
+        }
+      ],
+      "reasons": [
+        "near Navratri start"
       ]
     },
     {
@@ -257,13 +1822,54 @@
         "local": "2026-10-12 18:17",
         "utc": "2026-10-12T12:47:00Z"
       },
+      "weekday": 2,
+      "amantaMonth": "Ashwina",
+      "samvat": {
+        "gujarati": 2082,
+        "vikram": 2083,
+        "shaka": 1948
+      },
+      "lahiriAyanamsha": 24.237897,
       "tithiEnds": [
         {
-          "tithi": 2,
+          "index": 2,
           "name": "Dwitiya",
           "local": "2026-10-12 22:13",
           "utc": "2026-10-12T16:43:00Z"
         }
+      ],
+      "nakshatraEnds": [
+        {
+          "index": 15,
+          "name": "Swati",
+          "local": "2026-10-12 23:52",
+          "utc": "2026-10-12T18:22:00Z"
+        }
+      ],
+      "yogaEnds": [
+        {
+          "index": 1,
+          "name": "Vishkambha",
+          "local": "2026-10-12 20:32",
+          "utc": "2026-10-12T15:02:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 3,
+          "name": "Balava",
+          "local": "2026-10-12 09:48",
+          "utc": "2026-10-12T04:18:00Z"
+        },
+        {
+          "index": 4,
+          "name": "Kaulava",
+          "local": "2026-10-12 22:13",
+          "utc": "2026-10-12T16:43:00Z"
+        }
+      ],
+      "reasons": [
+        "October 2026 full month (Phase 4)"
       ]
     },
     {
@@ -277,13 +1883,54 @@
         "local": "2026-10-13 18:16",
         "utc": "2026-10-13T12:46:00Z"
       },
+      "weekday": 3,
+      "amantaMonth": "Ashwina",
+      "samvat": {
+        "gujarati": 2082,
+        "vikram": 2083,
+        "shaka": 1948
+      },
+      "lahiriAyanamsha": 24.237935,
       "tithiEnds": [
         {
-          "tithi": 3,
+          "index": 3,
           "name": "Tritiya",
           "local": "2026-10-13 23:27",
           "utc": "2026-10-13T17:57:00Z"
         }
+      ],
+      "nakshatraEnds": [
+        {
+          "index": 16,
+          "name": "Vishakha",
+          "local": "2026-10-14 01:43",
+          "utc": "2026-10-13T20:13:00Z"
+        }
+      ],
+      "yogaEnds": [
+        {
+          "index": 2,
+          "name": "Priti",
+          "local": "2026-10-13 20:24",
+          "utc": "2026-10-13T14:54:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 5,
+          "name": "Taitila",
+          "local": "2026-10-13 10:46",
+          "utc": "2026-10-13T05:16:00Z"
+        },
+        {
+          "index": 6,
+          "name": "Garaja",
+          "local": "2026-10-13 23:27",
+          "utc": "2026-10-13T17:57:00Z"
+        }
+      ],
+      "reasons": [
+        "October 2026 full month (Phase 4)"
       ]
     },
     {
@@ -297,13 +1944,54 @@
         "local": "2026-10-14 18:15",
         "utc": "2026-10-14T12:45:00Z"
       },
+      "weekday": 4,
+      "amantaMonth": "Ashwina",
+      "samvat": {
+        "gujarati": 2082,
+        "vikram": 2083,
+        "shaka": 1948
+      },
+      "lahiriAyanamsha": 24.237974,
       "tithiEnds": [
         {
-          "tithi": 4,
+          "index": 4,
           "name": "Chaturthi",
           "local": "2026-10-15 01:13",
           "utc": "2026-10-14T19:43:00Z"
         }
+      ],
+      "nakshatraEnds": [
+        {
+          "index": 17,
+          "name": "Anuradha",
+          "local": "2026-10-15 04:03",
+          "utc": "2026-10-14T22:33:00Z"
+        }
+      ],
+      "yogaEnds": [
+        {
+          "index": 3,
+          "name": "Ayushmana",
+          "local": "2026-10-14 20:39",
+          "utc": "2026-10-14T15:09:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 7,
+          "name": "Vanija",
+          "local": "2026-10-14 12:16",
+          "utc": "2026-10-14T06:46:00Z"
+        },
+        {
+          "index": 8,
+          "name": "Vishti",
+          "local": "2026-10-15 01:13",
+          "utc": "2026-10-14T19:43:00Z"
+        }
+      ],
+      "reasons": [
+        "October 2026 full month (Phase 4)"
       ]
     },
     {
@@ -317,13 +2005,47 @@
         "local": "2026-10-15 18:14",
         "utc": "2026-10-15T12:44:00Z"
       },
+      "weekday": 5,
+      "amantaMonth": "Ashwina",
+      "samvat": {
+        "gujarati": 2082,
+        "vikram": 2083,
+        "shaka": 1948
+      },
+      "lahiriAyanamsha": 24.238012,
       "tithiEnds": [
         {
-          "tithi": 5,
+          "index": 5,
           "name": "Panchami",
           "local": "2026-10-16 03:25",
           "utc": "2026-10-15T21:55:00Z"
         }
+      ],
+      "nakshatraEnds": [],
+      "yogaEnds": [
+        {
+          "index": 4,
+          "name": "Saubhagya",
+          "local": "2026-10-15 21:15",
+          "utc": "2026-10-15T15:45:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 9,
+          "name": "Bava",
+          "local": "2026-10-15 14:16",
+          "utc": "2026-10-15T08:46:00Z"
+        },
+        {
+          "index": 10,
+          "name": "Balava",
+          "local": "2026-10-16 03:25",
+          "utc": "2026-10-15T21:55:00Z"
+        }
+      ],
+      "reasons": [
+        "October 2026 full month (Phase 4)"
       ]
     },
     {
@@ -337,13 +2059,54 @@
         "local": "2026-10-16 18:13",
         "utc": "2026-10-16T12:43:00Z"
       },
+      "weekday": 6,
+      "amantaMonth": "Ashwina",
+      "samvat": {
+        "gujarati": 2082,
+        "vikram": 2083,
+        "shaka": 1948
+      },
+      "lahiriAyanamsha": 24.23805,
       "tithiEnds": [
         {
-          "tithi": 6,
+          "index": 6,
           "name": "Shashthi",
           "local": "2026-10-17 05:54",
           "utc": "2026-10-17T00:24:00Z"
         }
+      ],
+      "nakshatraEnds": [
+        {
+          "index": 18,
+          "name": "Jyeshtha",
+          "local": "2026-10-16 06:47",
+          "utc": "2026-10-16T01:17:00Z"
+        }
+      ],
+      "yogaEnds": [
+        {
+          "index": 5,
+          "name": "Shobhana",
+          "local": "2026-10-16 22:06",
+          "utc": "2026-10-16T16:36:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 11,
+          "name": "Kaulava",
+          "local": "2026-10-16 16:38",
+          "utc": "2026-10-16T11:08:00Z"
+        },
+        {
+          "index": 12,
+          "name": "Taitila",
+          "local": "2026-10-17 05:54",
+          "utc": "2026-10-17T00:24:00Z"
+        }
+      ],
+      "reasons": [
+        "October 2026 full month (Phase 4)"
       ]
     },
     {
@@ -357,7 +2120,42 @@
         "local": "2026-10-17 18:13",
         "utc": "2026-10-17T12:43:00Z"
       },
-      "tithiEnds": []
+      "weekday": 7,
+      "amantaMonth": "Ashwina",
+      "samvat": {
+        "gujarati": 2082,
+        "vikram": 2083,
+        "shaka": 1948
+      },
+      "lahiriAyanamsha": 24.238088,
+      "tithiEnds": [],
+      "nakshatraEnds": [
+        {
+          "index": 19,
+          "name": "Mula",
+          "local": "2026-10-17 09:47",
+          "utc": "2026-10-17T04:17:00Z"
+        }
+      ],
+      "yogaEnds": [
+        {
+          "index": 6,
+          "name": "Atiganda",
+          "local": "2026-10-17 23:03",
+          "utc": "2026-10-17T17:33:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 13,
+          "name": "Garaja",
+          "local": "2026-10-17 19:11",
+          "utc": "2026-10-17T13:41:00Z"
+        }
+      ],
+      "reasons": [
+        "October 2026 full month (Phase 4)"
+      ]
     },
     {
       "date": "2026-10-18",
@@ -370,13 +2168,54 @@
         "local": "2026-10-18 18:12",
         "utc": "2026-10-18T12:42:00Z"
       },
+      "weekday": 1,
+      "amantaMonth": "Ashwina",
+      "samvat": {
+        "gujarati": 2082,
+        "vikram": 2083,
+        "shaka": 1948
+      },
+      "lahiriAyanamsha": 24.238127,
       "tithiEnds": [
         {
-          "tithi": 7,
+          "index": 7,
           "name": "Saptami",
           "local": "2026-10-18 08:27",
           "utc": "2026-10-18T02:57:00Z"
         }
+      ],
+      "nakshatraEnds": [
+        {
+          "index": 20,
+          "name": "Purva Ashadha",
+          "local": "2026-10-18 12:49",
+          "utc": "2026-10-18T07:19:00Z"
+        }
+      ],
+      "yogaEnds": [
+        {
+          "index": 7,
+          "name": "Sukarma",
+          "local": "2026-10-18 23:56",
+          "utc": "2026-10-18T18:26:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 14,
+          "name": "Vanija",
+          "local": "2026-10-18 08:27",
+          "utc": "2026-10-18T02:57:00Z"
+        },
+        {
+          "index": 15,
+          "name": "Vishti",
+          "local": "2026-10-18 21:42",
+          "utc": "2026-10-18T16:12:00Z"
+        }
+      ],
+      "reasons": [
+        "October 2026 full month (Phase 4)"
       ]
     },
     {
@@ -390,13 +2229,54 @@
         "local": "2026-10-19 18:11",
         "utc": "2026-10-19T12:41:00Z"
       },
+      "weekday": 2,
+      "amantaMonth": "Ashwina",
+      "samvat": {
+        "gujarati": 2082,
+        "vikram": 2083,
+        "shaka": 1948
+      },
+      "lahiriAyanamsha": 24.238165,
       "tithiEnds": [
         {
-          "tithi": 8,
+          "index": 8,
           "name": "Ashtami",
           "local": "2026-10-19 10:51",
           "utc": "2026-10-19T05:21:00Z"
         }
+      ],
+      "nakshatraEnds": [
+        {
+          "index": 21,
+          "name": "Uttara Ashadha",
+          "local": "2026-10-19 15:38",
+          "utc": "2026-10-19T10:08:00Z"
+        }
+      ],
+      "yogaEnds": [
+        {
+          "index": 8,
+          "name": "Dhriti",
+          "local": "2026-10-20 00:35",
+          "utc": "2026-10-19T19:05:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 16,
+          "name": "Bava",
+          "local": "2026-10-19 10:51",
+          "utc": "2026-10-19T05:21:00Z"
+        },
+        {
+          "index": 17,
+          "name": "Balava",
+          "local": "2026-10-19 23:54",
+          "utc": "2026-10-19T18:24:00Z"
+        }
+      ],
+      "reasons": [
+        "October 2026 full month (Phase 4)"
       ]
     },
     {
@@ -410,13 +2290,54 @@
         "local": "2026-10-20 18:10",
         "utc": "2026-10-20T12:40:00Z"
       },
+      "weekday": 3,
+      "amantaMonth": "Ashwina",
+      "samvat": {
+        "gujarati": 2082,
+        "vikram": 2083,
+        "shaka": 1948
+      },
+      "lahiriAyanamsha": 24.238203,
       "tithiEnds": [
         {
-          "tithi": 9,
+          "index": 9,
           "name": "Navami",
           "local": "2026-10-20 12:50",
           "utc": "2026-10-20T07:20:00Z"
         }
+      ],
+      "nakshatraEnds": [
+        {
+          "index": 22,
+          "name": "Shravana",
+          "local": "2026-10-20 18:02",
+          "utc": "2026-10-20T12:32:00Z"
+        }
+      ],
+      "yogaEnds": [
+        {
+          "index": 9,
+          "name": "Shula",
+          "local": "2026-10-21 00:50",
+          "utc": "2026-10-20T19:20:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 18,
+          "name": "Kaulava",
+          "local": "2026-10-20 12:50",
+          "utc": "2026-10-20T07:20:00Z"
+        },
+        {
+          "index": 19,
+          "name": "Taitila",
+          "local": "2026-10-21 01:36",
+          "utc": "2026-10-20T20:06:00Z"
+        }
+      ],
+      "reasons": [
+        "near Navratri end"
       ]
     },
     {
@@ -430,13 +2351,54 @@
         "local": "2026-10-21 18:09",
         "utc": "2026-10-21T12:39:00Z"
       },
+      "weekday": 4,
+      "amantaMonth": "Ashwina",
+      "samvat": {
+        "gujarati": 2082,
+        "vikram": 2083,
+        "shaka": 1948
+      },
+      "lahiriAyanamsha": 24.238241,
       "tithiEnds": [
         {
-          "tithi": 10,
+          "index": 10,
           "name": "Dashami",
           "local": "2026-10-21 14:11",
           "utc": "2026-10-21T08:41:00Z"
         }
+      ],
+      "nakshatraEnds": [
+        {
+          "index": 23,
+          "name": "Dhanishtha",
+          "local": "2026-10-21 19:47",
+          "utc": "2026-10-21T14:17:00Z"
+        }
+      ],
+      "yogaEnds": [
+        {
+          "index": 10,
+          "name": "Ganda",
+          "local": "2026-10-22 00:33",
+          "utc": "2026-10-21T19:03:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 20,
+          "name": "Garaja",
+          "local": "2026-10-21 14:11",
+          "utc": "2026-10-21T08:41:00Z"
+        },
+        {
+          "index": 21,
+          "name": "Vanija",
+          "local": "2026-10-22 02:35",
+          "utc": "2026-10-21T21:05:00Z"
+        }
+      ],
+      "reasons": [
+        "near Dussehra"
       ]
     },
     {
@@ -450,13 +2412,54 @@
         "local": "2026-10-22 18:09",
         "utc": "2026-10-22T12:39:00Z"
       },
+      "weekday": 5,
+      "amantaMonth": "Ashwina",
+      "samvat": {
+        "gujarati": 2082,
+        "vikram": 2083,
+        "shaka": 1948
+      },
+      "lahiriAyanamsha": 24.23828,
       "tithiEnds": [
         {
-          "tithi": 11,
+          "index": 11,
           "name": "Ekadashi",
           "local": "2026-10-22 14:47",
           "utc": "2026-10-22T09:17:00Z"
         }
+      ],
+      "nakshatraEnds": [
+        {
+          "index": 24,
+          "name": "Shatabhisha",
+          "local": "2026-10-22 20:49",
+          "utc": "2026-10-22T15:19:00Z"
+        }
+      ],
+      "yogaEnds": [
+        {
+          "index": 11,
+          "name": "Vriddhi",
+          "local": "2026-10-22 23:40",
+          "utc": "2026-10-22T18:10:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 22,
+          "name": "Vishti",
+          "local": "2026-10-22 14:47",
+          "utc": "2026-10-22T09:17:00Z"
+        },
+        {
+          "index": 23,
+          "name": "Bava",
+          "local": "2026-10-23 02:47",
+          "utc": "2026-10-22T21:17:00Z"
+        }
+      ],
+      "reasons": [
+        "October 2026 full month (Phase 4)"
       ]
     },
     {
@@ -470,13 +2473,54 @@
         "local": "2026-10-23 18:08",
         "utc": "2026-10-23T12:38:00Z"
       },
+      "weekday": 6,
+      "amantaMonth": "Ashwina",
+      "samvat": {
+        "gujarati": 2082,
+        "vikram": 2083,
+        "shaka": 1948
+      },
+      "lahiriAyanamsha": 24.238318,
       "tithiEnds": [
         {
-          "tithi": 12,
+          "index": 12,
           "name": "Dwadashi",
           "local": "2026-10-23 14:35",
           "utc": "2026-10-23T09:05:00Z"
         }
+      ],
+      "nakshatraEnds": [
+        {
+          "index": 25,
+          "name": "Purva Bhadrapada",
+          "local": "2026-10-23 21:02",
+          "utc": "2026-10-23T15:32:00Z"
+        }
+      ],
+      "yogaEnds": [
+        {
+          "index": 12,
+          "name": "Dhruva",
+          "local": "2026-10-23 22:08",
+          "utc": "2026-10-23T16:38:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 24,
+          "name": "Balava",
+          "local": "2026-10-23 14:35",
+          "utc": "2026-10-23T09:05:00Z"
+        },
+        {
+          "index": 25,
+          "name": "Kaulava",
+          "local": "2026-10-24 02:11",
+          "utc": "2026-10-23T20:41:00Z"
+        }
+      ],
+      "reasons": [
+        "October 2026 full month (Phase 4)"
       ]
     },
     {
@@ -490,13 +2534,54 @@
         "local": "2026-10-24 18:07",
         "utc": "2026-10-24T12:37:00Z"
       },
+      "weekday": 7,
+      "amantaMonth": "Ashwina",
+      "samvat": {
+        "gujarati": 2082,
+        "vikram": 2083,
+        "shaka": 1948
+      },
+      "lahiriAyanamsha": 24.238356,
       "tithiEnds": [
         {
-          "tithi": 13,
+          "index": 13,
           "name": "Trayodashi",
           "local": "2026-10-24 13:36",
           "utc": "2026-10-24T08:06:00Z"
         }
+      ],
+      "nakshatraEnds": [
+        {
+          "index": 26,
+          "name": "Uttara Bhadrapada",
+          "local": "2026-10-24 20:32",
+          "utc": "2026-10-24T15:02:00Z"
+        }
+      ],
+      "yogaEnds": [
+        {
+          "index": 13,
+          "name": "Vyaghata",
+          "local": "2026-10-24 20:01",
+          "utc": "2026-10-24T14:31:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 26,
+          "name": "Taitila",
+          "local": "2026-10-24 13:36",
+          "utc": "2026-10-24T08:06:00Z"
+        },
+        {
+          "index": 27,
+          "name": "Garaja",
+          "local": "2026-10-25 00:51",
+          "utc": "2026-10-24T19:21:00Z"
+        }
+      ],
+      "reasons": [
+        "October 2026 full month (Phase 4)"
       ]
     },
     {
@@ -510,13 +2595,54 @@
         "local": "2026-10-25 18:06",
         "utc": "2026-10-25T12:36:00Z"
       },
+      "weekday": 1,
+      "amantaMonth": "Ashwina",
+      "samvat": {
+        "gujarati": 2082,
+        "vikram": 2083,
+        "shaka": 1948
+      },
+      "lahiriAyanamsha": 24.238394,
       "tithiEnds": [
         {
-          "tithi": 14,
+          "index": 14,
           "name": "Chaturdashi",
           "local": "2026-10-25 11:55",
           "utc": "2026-10-25T06:25:00Z"
         }
+      ],
+      "nakshatraEnds": [
+        {
+          "index": 27,
+          "name": "Revati",
+          "local": "2026-10-25 19:22",
+          "utc": "2026-10-25T13:52:00Z"
+        }
+      ],
+      "yogaEnds": [
+        {
+          "index": 14,
+          "name": "Harshana",
+          "local": "2026-10-25 17:22",
+          "utc": "2026-10-25T11:52:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 28,
+          "name": "Vanija",
+          "local": "2026-10-25 11:55",
+          "utc": "2026-10-25T06:25:00Z"
+        },
+        {
+          "index": 29,
+          "name": "Vishti",
+          "local": "2026-10-25 22:52",
+          "utc": "2026-10-25T17:22:00Z"
+        }
+      ],
+      "reasons": [
+        "October 2026 full month (Phase 4)"
       ]
     },
     {
@@ -530,13 +2656,54 @@
         "local": "2026-10-26 18:06",
         "utc": "2026-10-26T12:36:00Z"
       },
+      "weekday": 2,
+      "amantaMonth": "Ashwina",
+      "samvat": {
+        "gujarati": 2082,
+        "vikram": 2083,
+        "shaka": 1948
+      },
+      "lahiriAyanamsha": 24.238433,
       "tithiEnds": [
         {
-          "tithi": 15,
+          "index": 15,
           "name": "Purnima",
           "local": "2026-10-26 09:41",
           "utc": "2026-10-26T04:11:00Z"
         }
+      ],
+      "nakshatraEnds": [
+        {
+          "index": 1,
+          "name": "Ashwini",
+          "local": "2026-10-26 17:41",
+          "utc": "2026-10-26T12:11:00Z"
+        }
+      ],
+      "yogaEnds": [
+        {
+          "index": 15,
+          "name": "Vajra",
+          "local": "2026-10-26 14:17",
+          "utc": "2026-10-26T08:47:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 30,
+          "name": "Bava",
+          "local": "2026-10-26 09:41",
+          "utc": "2026-10-26T04:11:00Z"
+        },
+        {
+          "index": 31,
+          "name": "Balava",
+          "local": "2026-10-26 20:23",
+          "utc": "2026-10-26T14:53:00Z"
+        }
+      ],
+      "reasons": [
+        "October 2026 full month (Phase 4)"
       ]
     },
     {
@@ -550,19 +2717,66 @@
         "local": "2026-10-27 18:05",
         "utc": "2026-10-27T12:35:00Z"
       },
+      "weekday": 3,
+      "amantaMonth": "Ashwina",
+      "samvat": {
+        "gujarati": 2082,
+        "vikram": 2083,
+        "shaka": 1948
+      },
+      "lahiriAyanamsha": 24.238471,
       "tithiEnds": [
         {
-          "tithi": 16,
+          "index": 16,
           "name": "Pratipada",
           "local": "2026-10-27 07:01",
           "utc": "2026-10-27T01:31:00Z"
         },
         {
-          "tithi": 17,
+          "index": 17,
           "name": "Dwitiya",
           "local": "2026-10-28 04:06",
           "utc": "2026-10-27T22:36:00Z"
         }
+      ],
+      "nakshatraEnds": [
+        {
+          "index": 2,
+          "name": "Bharani",
+          "local": "2026-10-27 15:39",
+          "utc": "2026-10-27T10:09:00Z"
+        }
+      ],
+      "yogaEnds": [
+        {
+          "index": 16,
+          "name": "Siddhi",
+          "local": "2026-10-27 10:53",
+          "utc": "2026-10-27T05:23:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 32,
+          "name": "Kaulava",
+          "local": "2026-10-27 07:01",
+          "utc": "2026-10-27T01:31:00Z"
+        },
+        {
+          "index": 33,
+          "name": "Taitila",
+          "local": "2026-10-27 17:35",
+          "utc": "2026-10-27T12:05:00Z"
+        },
+        {
+          "index": 34,
+          "name": "Garaja",
+          "local": "2026-10-28 04:06",
+          "utc": "2026-10-27T22:36:00Z"
+        }
+      ],
+      "reasons": [
+        "October 2026 full month (Phase 4)"
       ]
     },
     {
@@ -576,13 +2790,60 @@
         "local": "2026-10-28 18:04",
         "utc": "2026-10-28T12:34:00Z"
       },
+      "weekday": 4,
+      "amantaMonth": "Ashwina",
+      "samvat": {
+        "gujarati": 2082,
+        "vikram": 2083,
+        "shaka": 1948
+      },
+      "lahiriAyanamsha": 24.238509,
       "tithiEnds": [
         {
-          "tithi": 18,
+          "index": 18,
           "name": "Tritiya",
           "local": "2026-10-29 01:06",
           "utc": "2026-10-28T19:36:00Z"
         }
+      ],
+      "nakshatraEnds": [
+        {
+          "index": 3,
+          "name": "Krittika",
+          "local": "2026-10-28 13:26",
+          "utc": "2026-10-28T07:56:00Z"
+        }
+      ],
+      "yogaEnds": [
+        {
+          "index": 17,
+          "name": "Vyatipata",
+          "local": "2026-10-28 07:18",
+          "utc": "2026-10-28T01:48:00Z"
+        },
+        {
+          "index": 18,
+          "name": "Variyana",
+          "local": "2026-10-29 03:40",
+          "utc": "2026-10-28T22:10:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 35,
+          "name": "Vanija",
+          "local": "2026-10-28 14:36",
+          "utc": "2026-10-28T09:06:00Z"
+        },
+        {
+          "index": 36,
+          "name": "Vishti",
+          "local": "2026-10-29 01:06",
+          "utc": "2026-10-28T19:36:00Z"
+        }
+      ],
+      "reasons": [
+        "October 2026 full month (Phase 4)"
       ]
     },
     {
@@ -596,13 +2857,54 @@
         "local": "2026-10-29 18:04",
         "utc": "2026-10-29T12:34:00Z"
       },
+      "weekday": 5,
+      "amantaMonth": "Ashwina",
+      "samvat": {
+        "gujarati": 2082,
+        "vikram": 2083,
+        "shaka": 1948
+      },
+      "lahiriAyanamsha": 24.238548,
       "tithiEnds": [
         {
-          "tithi": 19,
+          "index": 19,
           "name": "Chaturthi",
           "local": "2026-10-29 22:09",
           "utc": "2026-10-29T16:39:00Z"
         }
+      ],
+      "nakshatraEnds": [
+        {
+          "index": 4,
+          "name": "Rohini",
+          "local": "2026-10-29 11:11",
+          "utc": "2026-10-29T05:41:00Z"
+        }
+      ],
+      "yogaEnds": [
+        {
+          "index": 19,
+          "name": "Parigha",
+          "local": "2026-10-30 00:06",
+          "utc": "2026-10-29T18:36:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 37,
+          "name": "Bava",
+          "local": "2026-10-29 11:37",
+          "utc": "2026-10-29T06:07:00Z"
+        },
+        {
+          "index": 38,
+          "name": "Balava",
+          "local": "2026-10-29 22:09",
+          "utc": "2026-10-29T16:39:00Z"
+        }
+      ],
+      "reasons": [
+        "October 2026 full month (Phase 4)"
       ]
     },
     {
@@ -616,13 +2918,60 @@
         "local": "2026-10-30 18:03",
         "utc": "2026-10-30T12:33:00Z"
       },
+      "weekday": 6,
+      "amantaMonth": "Ashwina",
+      "samvat": {
+        "gujarati": 2082,
+        "vikram": 2083,
+        "shaka": 1948
+      },
+      "lahiriAyanamsha": 24.238586,
       "tithiEnds": [
         {
-          "tithi": 20,
+          "index": 20,
           "name": "Panchami",
           "local": "2026-10-30 19:24",
           "utc": "2026-10-30T13:54:00Z"
         }
+      ],
+      "nakshatraEnds": [
+        {
+          "index": 5,
+          "name": "Mrigashira",
+          "local": "2026-10-30 09:04",
+          "utc": "2026-10-30T03:34:00Z"
+        }
+      ],
+      "yogaEnds": [
+        {
+          "index": 20,
+          "name": "Shiva",
+          "local": "2026-10-30 20:41",
+          "utc": "2026-10-30T15:11:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 39,
+          "name": "Kaulava",
+          "local": "2026-10-30 08:45",
+          "utc": "2026-10-30T03:15:00Z"
+        },
+        {
+          "index": 40,
+          "name": "Taitila",
+          "local": "2026-10-30 19:24",
+          "utc": "2026-10-30T13:54:00Z"
+        },
+        {
+          "index": 41,
+          "name": "Garaja",
+          "local": "2026-10-31 06:08",
+          "utc": "2026-10-31T00:38:00Z"
+        }
+      ],
+      "reasons": [
+        "October 2026 full month (Phase 4)"
       ]
     },
     {
@@ -636,13 +2985,473 @@
         "local": "2026-10-31 18:02",
         "utc": "2026-10-31T12:32:00Z"
       },
+      "weekday": 7,
+      "amantaMonth": "Ashwina",
+      "samvat": {
+        "gujarati": 2082,
+        "vikram": 2083,
+        "shaka": 1948
+      },
+      "lahiriAyanamsha": 24.238624,
       "tithiEnds": [
         {
-          "tithi": 21,
+          "index": 21,
           "name": "Shashthi",
           "local": "2026-10-31 16:57",
           "utc": "2026-10-31T11:27:00Z"
         }
+      ],
+      "nakshatraEnds": [
+        {
+          "index": 6,
+          "name": "Ardra",
+          "local": "2026-10-31 07:12",
+          "utc": "2026-10-31T01:42:00Z"
+        },
+        {
+          "index": 7,
+          "name": "Punarvasu",
+          "local": "2026-11-01 05:39",
+          "utc": "2026-11-01T00:09:00Z"
+        }
+      ],
+      "yogaEnds": [
+        {
+          "index": 21,
+          "name": "Siddha",
+          "local": "2026-10-31 17:31",
+          "utc": "2026-10-31T12:01:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 42,
+          "name": "Vanija",
+          "local": "2026-10-31 16:57",
+          "utc": "2026-10-31T11:27:00Z"
+        },
+        {
+          "index": 43,
+          "name": "Vishti",
+          "local": "2026-11-01 03:51",
+          "utc": "2026-10-31T22:21:00Z"
+        }
+      ],
+      "reasons": [
+        "October 2026 full month (Phase 4)"
+      ]
+    },
+    {
+      "date": "2026-11-07",
+      "utcOffset": "+05:30",
+      "sunrise": {
+        "local": "2026-11-07 06:48",
+        "utc": "2026-11-07T01:18:00Z"
+      },
+      "sunset": {
+        "local": "2026-11-07 17:58",
+        "utc": "2026-11-07T12:28:00Z"
+      },
+      "weekday": 7,
+      "amantaMonth": "Ashwina",
+      "samvat": {
+        "gujarati": 2082,
+        "vikram": 2083,
+        "shaka": 1948
+      },
+      "lahiriAyanamsha": 24.238892,
+      "tithiEnds": [
+        {
+          "index": 28,
+          "name": "Trayodashi",
+          "local": "2026-11-07 10:47",
+          "utc": "2026-11-07T05:17:00Z"
+        }
+      ],
+      "nakshatraEnds": [
+        {
+          "index": 14,
+          "name": "Chitra",
+          "local": "2026-11-08 05:52",
+          "utc": "2026-11-08T00:22:00Z"
+        }
+      ],
+      "yogaEnds": [
+        {
+          "index": 2,
+          "name": "Priti",
+          "local": "2026-11-08 03:28",
+          "utc": "2026-11-07T21:58:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 56,
+          "name": "Vanija",
+          "local": "2026-11-07 10:47",
+          "utc": "2026-11-07T05:17:00Z"
+        },
+        {
+          "index": 57,
+          "name": "Vishti",
+          "local": "2026-11-07 23:04",
+          "utc": "2026-11-07T17:34:00Z"
+        }
+      ],
+      "reasons": [
+        "near Dhanteras"
+      ]
+    },
+    {
+      "date": "2026-11-08",
+      "utcOffset": "+05:30",
+      "sunrise": {
+        "local": "2026-11-08 06:48",
+        "utc": "2026-11-08T01:18:00Z"
+      },
+      "sunset": {
+        "local": "2026-11-08 17:58",
+        "utc": "2026-11-08T12:28:00Z"
+      },
+      "weekday": 1,
+      "amantaMonth": "Ashwina",
+      "samvat": {
+        "gujarati": 2082,
+        "vikram": 2083,
+        "shaka": 1948
+      },
+      "lahiriAyanamsha": 24.23893,
+      "tithiEnds": [
+        {
+          "index": 29,
+          "name": "Chaturdashi",
+          "local": "2026-11-08 11:27",
+          "utc": "2026-11-08T05:57:00Z"
+        }
+      ],
+      "nakshatraEnds": [],
+      "yogaEnds": [
+        {
+          "index": 3,
+          "name": "Ayushmana",
+          "local": "2026-11-09 03:03",
+          "utc": "2026-11-08T21:33:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 58,
+          "name": "Shakuni",
+          "local": "2026-11-08 11:27",
+          "utc": "2026-11-08T05:57:00Z"
+        },
+        {
+          "index": 59,
+          "name": "Chatushpada",
+          "local": "2026-11-08 23:56",
+          "utc": "2026-11-08T18:26:00Z"
+        }
+      ],
+      "reasons": [
+        "near Kali Chaudas"
+      ]
+    },
+    {
+      "date": "2026-11-09",
+      "utcOffset": "+05:30",
+      "sunrise": {
+        "local": "2026-11-09 06:49",
+        "utc": "2026-11-09T01:19:00Z"
+      },
+      "sunset": {
+        "local": "2026-11-09 17:58",
+        "utc": "2026-11-09T12:28:00Z"
+      },
+      "weekday": 2,
+      "amantaMonth": "Ashwina",
+      "samvat": {
+        "gujarati": 2082,
+        "vikram": 2083,
+        "shaka": 1948
+      },
+      "lahiriAyanamsha": 24.238968,
+      "tithiEnds": [
+        {
+          "index": 30,
+          "name": "Amavasya",
+          "local": "2026-11-09 12:31",
+          "utc": "2026-11-09T07:01:00Z"
+        }
+      ],
+      "nakshatraEnds": [
+        {
+          "index": 15,
+          "name": "Swati",
+          "local": "2026-11-09 07:24",
+          "utc": "2026-11-09T01:54:00Z"
+        }
+      ],
+      "yogaEnds": [
+        {
+          "index": 4,
+          "name": "Saubhagya",
+          "local": "2026-11-10 02:57",
+          "utc": "2026-11-09T21:27:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 60,
+          "name": "Nagava",
+          "local": "2026-11-09 12:31",
+          "utc": "2026-11-09T07:01:00Z"
+        },
+        {
+          "index": 1,
+          "name": "Kinstughna",
+          "local": "2026-11-10 01:12",
+          "utc": "2026-11-09T19:42:00Z"
+        }
+      ],
+      "reasons": [
+        "near Diwali"
+      ]
+    },
+    {
+      "date": "2026-11-10",
+      "utcOffset": "+05:30",
+      "sunrise": {
+        "local": "2026-11-10 06:50",
+        "utc": "2026-11-10T01:20:00Z"
+      },
+      "sunset": {
+        "local": "2026-11-10 17:57",
+        "utc": "2026-11-10T12:27:00Z"
+      },
+      "weekday": 3,
+      "amantaMonth": "Kartika",
+      "samvat": {
+        "gujarati": 2083,
+        "vikram": 2083,
+        "shaka": 1948
+      },
+      "lahiriAyanamsha": 24.239007,
+      "tithiEnds": [
+        {
+          "index": 1,
+          "name": "Pratipada",
+          "local": "2026-11-10 14:00",
+          "utc": "2026-11-10T08:30:00Z"
+        }
+      ],
+      "nakshatraEnds": [
+        {
+          "index": 16,
+          "name": "Vishakha",
+          "local": "2026-11-10 09:19",
+          "utc": "2026-11-10T03:49:00Z"
+        }
+      ],
+      "yogaEnds": [
+        {
+          "index": 5,
+          "name": "Shobhana",
+          "local": "2026-11-11 03:10",
+          "utc": "2026-11-10T21:40:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 2,
+          "name": "Bava",
+          "local": "2026-11-10 14:00",
+          "utc": "2026-11-10T08:30:00Z"
+        },
+        {
+          "index": 3,
+          "name": "Balava",
+          "local": "2026-11-11 02:53",
+          "utc": "2026-11-10T21:23:00Z"
+        }
+      ],
+      "reasons": [
+        "near Bestu Varas"
+      ]
+    },
+    {
+      "date": "2026-11-11",
+      "utcOffset": "+05:30",
+      "sunrise": {
+        "local": "2026-11-11 06:50",
+        "utc": "2026-11-11T01:20:00Z"
+      },
+      "sunset": {
+        "local": "2026-11-11 17:57",
+        "utc": "2026-11-11T12:27:00Z"
+      },
+      "weekday": 4,
+      "amantaMonth": "Kartika",
+      "samvat": {
+        "gujarati": 2083,
+        "vikram": 2083,
+        "shaka": 1948
+      },
+      "lahiriAyanamsha": 24.239045,
+      "tithiEnds": [
+        {
+          "index": 2,
+          "name": "Dwitiya",
+          "local": "2026-11-11 15:53",
+          "utc": "2026-11-11T10:23:00Z"
+        }
+      ],
+      "nakshatraEnds": [
+        {
+          "index": 17,
+          "name": "Anuradha",
+          "local": "2026-11-11 11:38",
+          "utc": "2026-11-11T06:08:00Z"
+        }
+      ],
+      "yogaEnds": [
+        {
+          "index": 6,
+          "name": "Atiganda",
+          "local": "2026-11-12 03:40",
+          "utc": "2026-11-11T22:10:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 4,
+          "name": "Kaulava",
+          "local": "2026-11-11 15:53",
+          "utc": "2026-11-11T10:23:00Z"
+        },
+        {
+          "index": 5,
+          "name": "Taitila",
+          "local": "2026-11-12 04:58",
+          "utc": "2026-11-11T23:28:00Z"
+        }
+      ],
+      "reasons": [
+        "near Bhai Bij"
+      ]
+    },
+    {
+      "date": "2026-11-15",
+      "utcOffset": "+05:30",
+      "sunrise": {
+        "local": "2026-11-15 06:53",
+        "utc": "2026-11-15T01:23:00Z"
+      },
+      "sunset": {
+        "local": "2026-11-15 17:55",
+        "utc": "2026-11-15T12:25:00Z"
+      },
+      "weekday": 1,
+      "amantaMonth": "Kartika",
+      "samvat": {
+        "gujarati": 2083,
+        "vikram": 2083,
+        "shaka": 1948
+      },
+      "lahiriAyanamsha": 24.239198,
+      "tithiEnds": [
+        {
+          "index": 6,
+          "name": "Shashthi",
+          "local": "2026-11-16 02:00",
+          "utc": "2026-11-15T20:30:00Z"
+        }
+      ],
+      "nakshatraEnds": [
+        {
+          "index": 21,
+          "name": "Uttara Ashadha",
+          "local": "2026-11-15 23:28",
+          "utc": "2026-11-15T17:58:00Z"
+        }
+      ],
+      "yogaEnds": [],
+      "karanaEnds": [
+        {
+          "index": 11,
+          "name": "Kaulava",
+          "local": "2026-11-15 12:43",
+          "utc": "2026-11-15T07:13:00Z"
+        },
+        {
+          "index": 12,
+          "name": "Taitila",
+          "local": "2026-11-16 02:00",
+          "utc": "2026-11-15T20:30:00Z"
+        }
+      ],
+      "reasons": [
+        "seasonal anchor"
+      ]
+    },
+    {
+      "date": "2026-12-21",
+      "utcOffset": "+05:30",
+      "sunrise": {
+        "local": "2026-12-21 07:16",
+        "utc": "2026-12-21T01:46:00Z"
+      },
+      "sunset": {
+        "local": "2026-12-21 17:59",
+        "utc": "2026-12-21T12:29:00Z"
+      },
+      "weekday": 2,
+      "amantaMonth": "Margashirsha",
+      "samvat": {
+        "gujarati": 2083,
+        "vikram": 2083,
+        "shaka": 1948
+      },
+      "lahiriAyanamsha": 24.240576,
+      "tithiEnds": [
+        {
+          "index": 12,
+          "name": "Dwadashi",
+          "local": "2026-12-21 17:36",
+          "utc": "2026-12-21T12:06:00Z"
+        }
+      ],
+      "nakshatraEnds": [
+        {
+          "index": 2,
+          "name": "Bharani",
+          "local": "2026-12-21 13:08",
+          "utc": "2026-12-21T07:38:00Z"
+        }
+      ],
+      "yogaEnds": [
+        {
+          "index": 21,
+          "name": "Siddha",
+          "local": "2026-12-22 01:32",
+          "utc": "2026-12-21T20:02:00Z"
+        }
+      ],
+      "karanaEnds": [
+        {
+          "index": 24,
+          "name": "Balava",
+          "local": "2026-12-21 17:36",
+          "utc": "2026-12-21T12:06:00Z"
+        },
+        {
+          "index": 25,
+          "name": "Kaulava",
+          "local": "2026-12-22 04:03",
+          "utc": "2026-12-21T22:33:00Z"
+        }
+      ],
+      "reasons": [
+        "seasonal anchor"
       ]
     }
   ]

@@ -18,7 +18,7 @@ Source of truth: `PROJECT_PLAN.md` §3 (glossary) and §4 (calculation spec). Do
 | Vara | 7 | Weekday; Hindu day = sunrise → sunrise | — |
 | Paksha | 2 | Shukla = tithi 1–15, Krishna = 16–30 | — |
 
-Ayanamsa is always **Lahiri**. Astronomy source is **astronomy-engine** only. Never Swiss Ephemeris (license). **grahan** is a test-only cross-check and never a runtime dependency.
+Ayanamsa is always **Lahiri, mean variant** (Swiss Ephemeris SIDM_LAHIRI; ADR 0019). Astronomy source is **astronomy-engine** only. Never Swiss Ephemeris (license). **grahan** is a test-only cross-check and never a runtime dependency.
 
 ## Day assembly (§4.5)
 
@@ -30,7 +30,7 @@ Ayanamsa is always **Lahiri**. Astronomy source is **astronomy-engine** only. Ne
 ## Months and years (§4.6)
 
 - Amanta month = new moon → new moon (internal frame; v1 is Amanta-only). Purnimanta (v2) is **not** a plain half-month shift in adhik years (ADR 0002).
-- Month name from the sidereal solar rashi (sankranti). No sankranti → **adhik** (named after the next month; followed by **nija**). Two sankrantis → **kshaya masa** (rare, must still work).
+- Month name from the sidereal solar rashi at the starting new moon, +1 (exact rule and samvat year boundaries: ADR 0020). No sankranti → **adhik** (named after the next month; followed by **nija**). Two sankrantis → **kshaya masa** (rare, must still work).
 - Vikram Samvat Kartikadi increments at Kartik Shukla Pratipada (default); Chaitradi via settings. Shaka increments at Chaitra Shukla Pratipada.
 
 ## Crossing finder (§4.3)

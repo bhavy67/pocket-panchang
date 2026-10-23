@@ -1,0 +1,174 @@
+{
+  "source": {
+    "name": "JPL Horizons API",
+    "url": "https://ssd.jpl.nasa.gov/api/horizons.api",
+    "query": "EPHEM_TYPE=OBSERVER, CENTER=500@399 (geocentre), QUANTITIES=31 (ObsEcLon: IAU76/80 ecliptic-of-date apparent longitude, with light-time, deflection, aberration), TIME_TYPE=UT, COMMAND=301 (Moon) / 10 (Sun)",
+    "retrievedAt": "2026-10-23",
+    "instants": "the 32 Drik Panchang tithi-end times in fixtures/ahmedabad-2026.json (Oct 2026)",
+    "notes": [
+      "Used by packages/engine/src/ephemeris.test.ts. Finding (2026-10-23): engine matches JPL to ≤ 5″; Drik's tithi ends are ~70 s earlier than JPL-implied crossings."
+    ]
+  },
+  "rows": [
+    {
+      "utc": "2026-10-01T07:05:00Z",
+      "sunLongitude": 188.1287938,
+      "moonLongitude": 68.1221598
+    },
+    {
+      "utc": "2026-10-02T04:45:00Z",
+      "sunLongitude": 189.0163618,
+      "moonLongitude": 81.0097526
+    },
+    {
+      "utc": "2026-10-03T02:29:00Z",
+      "sunLongitude": 189.9071924,
+      "moonLongitude": 93.8967259
+    },
+    {
+      "utc": "2026-10-04T00:21:00Z",
+      "sunLongitude": 190.8040228,
+      "moonLongitude": 106.7929049
+    },
+    {
+      "utc": "2026-10-04T22:23:00Z",
+      "sunLongitude": 191.7082253,
+      "moonLongitude": 119.6967041
+    },
+    {
+      "utc": "2026-10-05T20:37:00Z",
+      "sunLongitude": 192.6211739,
+      "moonLongitude": 132.6119397
+    },
+    {
+      "utc": "2026-10-06T19:04:00Z",
+      "sunLongitude": 193.5435607,
+      "moonLongitude": 145.5343801
+    },
+    {
+      "utc": "2026-10-07T17:46:00Z",
+      "sunLongitude": 194.4767643,
+      "moonLongitude": 158.467361
+    },
+    {
+      "utc": "2026-10-08T16:45:00Z",
+      "sunLongitude": 195.4221669,
+      "moonLongitude": 171.4093243
+    },
+    {
+      "utc": "2026-10-09T16:05:00Z",
+      "sunLongitude": 196.3825255,
+      "moonLongitude": 184.371479
+    },
+    {
+      "utc": "2026-10-10T15:49:00Z",
+      "sunLongitude": 197.3599158,
+      "moonLongitude": 197.3508608
+    },
+    {
+      "utc": "2026-10-11T16:00:00Z",
+      "sunLongitude": 198.356416,
+      "moonLongitude": 210.3438403
+    },
+    {
+      "utc": "2026-10-12T16:43:00Z",
+      "sunLongitude": 199.3754815,
+      "moonLongitude": 223.3694942
+    },
+    {
+      "utc": "2026-10-13T17:57:00Z",
+      "sunLongitude": 200.4164466,
+      "moonLongitude": 236.4068121
+    },
+    {
+      "utc": "2026-10-14T19:43:00Z",
+      "sunLongitude": 201.4800187,
+      "moonLongitude": 249.4737848
+    },
+    {
+      "utc": "2026-10-15T21:55:00Z",
+      "sunLongitude": 202.5620863,
+      "moonLongitude": 262.5570584
+    },
+    {
+      "utc": "2026-10-17T00:24:00Z",
+      "sunLongitude": 203.6564624,
+      "moonLongitude": 275.65023
+    },
+    {
+      "utc": "2026-10-18T02:57:00Z",
+      "sunLongitude": 204.7541912,
+      "moonLongitude": 288.7417718
+    },
+    {
+      "utc": "2026-10-19T05:21:00Z",
+      "sunLongitude": 205.8463002,
+      "moonLongitude": 301.8366463
+    },
+    {
+      "utc": "2026-10-20T07:20:00Z",
+      "sunLongitude": 206.9217325,
+      "moonLongitude": 314.9144931
+    },
+    {
+      "utc": "2026-10-21T08:41:00Z",
+      "sunLongitude": 207.9714846,
+      "moonLongitude": 327.9604408
+    },
+    {
+      "utc": "2026-10-22T09:17:00Z",
+      "sunLongitude": 208.9906857,
+      "moonLongitude": 340.9775497
+    },
+    {
+      "utc": "2026-10-23T09:05:00Z",
+      "sunLongitude": 209.9772258,
+      "moonLongitude": 353.9649292
+    },
+    {
+      "utc": "2026-10-24T08:06:00Z",
+      "sunLongitude": 210.9317616,
+      "moonLongitude": 6.9193832
+    },
+    {
+      "utc": "2026-10-25T06:25:00Z",
+      "sunLongitude": 211.8577215,
+      "moonLongitude": 19.8429313
+    },
+    {
+      "utc": "2026-10-26T04:11:00Z",
+      "sunLongitude": 212.7613096,
+      "moonLongitude": 32.7537553
+    },
+    {
+      "utc": "2026-10-27T01:31:00Z",
+      "sunLongitude": 213.6473561,
+      "moonLongitude": 45.636598
+    },
+    {
+      "utc": "2026-10-27T22:36:00Z",
+      "sunLongitude": 214.5234683,
+      "moonLongitude": 58.5102379
+    },
+    {
+      "utc": "2026-10-28T19:36:00Z",
+      "sunLongitude": 215.3965716,
+      "moonLongitude": 71.3848211
+    },
+    {
+      "utc": "2026-10-29T16:39:00Z",
+      "sunLongitude": 216.2722141,
+      "moonLongitude": 84.2566181
+    },
+    {
+      "utc": "2026-10-30T13:54:00Z",
+      "sunLongitude": 217.1566457,
+      "moonLongitude": 97.1432488
+    },
+    {
+      "utc": "2026-10-31T11:27:00Z",
+      "sunLongitude": 218.0540439,
+      "moonLongitude": 110.046547
+    }
+  ]
+}

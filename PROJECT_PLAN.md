@@ -171,7 +171,7 @@ f(t) = normalize(angle(t) − target)   // angle = elongation, sidereal moon, (s
 
 ### 4.6 Months and years
 - Lunar month = new moon → next new moon (Amanta). Purnimanta naming (v2) is derived from Amanta, but it is **not** a plain half-month shift in adhik-month years (see ADR 0002).
-- Month name = determined by the sidereal solar rashi (sankranti logic).
+- Month name = determined by the sidereal solar rashi (sankranti logic): exact rule in ADR 0020.
 - Adhik: no sankranti between consecutive new moons. Kshaya: two sankrantis (rare; must still be handled).
 - Vikram Samvat (Kartikadi): increments at Kartik Shukla Pratipada. Chaitradi variant supported via settings.
 - Shaka Samvat: increments at Chaitra Shukla Pratipada.
@@ -389,6 +389,19 @@ type PersonalEvent = {
   updatedAt: number;
 };
 
+/** Output of engine `assembleDay(localMidnight, coordinates)` (§4.5, Phase 5). localMidnight is computed by the caller from the IANA zone (the engine bans Intl). */
+type PanchangDay = {
+  kind: "day";
+  sunrise: Instant; nextSunrise: Instant; sunset: SunEvent;
+  vara: number;                                   // 0 = Ravivara, from the sunrise-to-sunrise day
+  tithi: ElementDay; paksha: "shukla" | "krishna";
+  nakshatra: ElementDay; yoga: ElementDay; karana: ElementDay;
+  bhadra: { start: Instant; end: Instant }[];    // Vishti windows overlapping the day (ADR 0018)
+  month: { name: LunarMonth; adhik: boolean; absorbs: LunarMonth | null }; // ADR 0020
+  samvat: { vikramKartikadi: number; vikramChaitradi: number; shaka: number };
+} | { kind: "no-civil-day"; sunUp: boolean };      // polar (§4.4)
+type ElementDay = { atSunrise: number; ends: { index: number; endsAt: Instant }[]; vriddhi: boolean; kshaya: number[] };
+
 type CachedMonth = {
   key: string;                     // `${engineVersion}|${locationId}|${tradition}|${yyyy-mm}`
   days: PanchangDay[];
@@ -454,6 +467,7 @@ type CachedMonth = {
 1. **Golden fixtures:** reference values per city per year in `fixtures/` (tithi/nakshatra/yoga/karana end times, sunrise/sunset, festival dates).
    - Cities: Ahmedabad, Delhi, Chennai, New York, London.
    - Years: 2 in v1, **sampled, not scraped in full**: ~24 chosen days per city-year (seasonal anchors incl. solstices, the v1 festival days, vriddhi/kshaya tithi days, lunar-month edges, DST days). Method and politeness rules: accuracy-fixtures skill.
+   - **Drik reference is Ahmedabad only (82 days, 2026–27):** Drik served a CAPTCHA after ~110 polite requests (2026-10-23); automated fetching stopped for good. The other cities are checked independently: NOAA sunrise/sunset every day, element end instants against JPL Horizons, and grahan.
    - Each fixture file records its source, retrieval date, and the reference's sunrise definition (ADR 0012).
 2. **Invariant/property tests (fast-check):**
    - Exactly 30 tithis per lunation
@@ -528,6 +542,9 @@ Rules that need a cited classical or reference source before being marked verifi
 - [ ] Uttarayan: Gujarat's civic date (14 Jan) vs the astronomical Makar Sankranti date with the after-sunset rule; check 2025–2027 against references before deciding what to display ([ADR 0018](docs/adr/0018-festival-rules.md))
 - [ ] Janmashtami: the Smarta and Vaishnava resolution rules, cited, and checked against references for the fixture years ([ADR 0018](docs/adr/0018-festival-rules.md))
 - [ ] Navratri end-day rule: confirm the last day resolves under the same window and tie-break as the first (provisional), against a classical source and references ([ADR 0018](docs/adr/0018-festival-rules.md))
+- [ ] New-year day when pratipada is kshaya: the year starts on the first sunrise tithi ≥ Sud 1 ([ADR 0020](docs/adr/0020-month-naming-and-samvat.md))
+- [ ] Year start when Chaitra or Kartika is adhik: assumed nija ([ADR 0020](docs/adr/0020-month-naming-and-samvat.md))
+- [ ] Drik's label for the 1983 two-sankranti month (engine: Pausha absorbing Magha) ([ADR 0008](docs/adr/0008-kshaya-masa-occurrence.md))
 - [ ] Holika Dahan Bhadra-avoidance rule (incl. when Bhadra covers all of pradosh): classical source and reference ([ADR 0018](docs/adr/0018-festival-rules.md))
 
 ---
@@ -605,7 +622,7 @@ Each phase ends with a **STOP**: summary, files changed, open questions, suggest
 **Exit criteria:** sunrise within ±1 min and tithi end times within ±2 min of the reference for the fixture month. Bhavy can explain the error budget and the crossing finder.
 
 ### Phase 5 [OWN]: Engine complete
-- Lahiri ayanamsa; nakshatra, yoga, karana, vara.
+- Lahiri ayanamsa (mean, ADR 0019); nakshatra, yoga, karana, vara.
 - Vriddhi/kshaya detection; full day assembly (§4.5).
 - New moons, sankrantis, lunar month naming, adhik/kshaya masa (Amanta; Purnimanta is v2).
 - Vikram Samvat (Kartikadi/Chaitradi) and Shaka.

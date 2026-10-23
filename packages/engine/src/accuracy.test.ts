@@ -1,38 +1,53 @@
-// Accuracy report: engine vs golden fixtures (§10, accuracy-fixtures skill).
-// Prints the error table with `pnpm --filter @panchang/engine accuracy`.
-import { readdirSync, readFileSync } from "node:fs";
+// Accuracy report: engine vs Drik Panchang golden fixtures (§10, accuracy-fixtures skill).
+//   pnpm --filter @panchang/engine accuracy                 → prints the table
+//   ACCURACY_REPORT=report.md pnpm --filter … accuracy      → also writes Markdown (CI artifact)
+import { readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { describe, expect, it } from "vitest";
+import { afterAll, describe, expect, it } from "vitest";
+import { assembleDay, type ElementDay, type PanchangDay } from "./day";
+import { lahiriAyanamsa } from "./ayanamsa";
 import {
   DEFAULT_SUNRISE,
   nextSunrise,
   nextSunset,
-  type Coordinates,
   type SunEvent,
   type SunriseDefinition,
 } from "./sun";
-import { tithiEnds } from "./tithi";
+import { localMidnight } from "./testing";
 import type { Instant } from "./time";
 
 type Stamp = { local: string; utc: string };
+type End = Stamp & { index: number };
+type Day = {
+  date: string;
+  sunrise: Stamp;
+  sunset: Stamp;
+  weekday: number | null;
+  amantaMonth: string | null;
+  samvat: { gujarati: number; vikram: number; shaka: number };
+  lahiriAyanamsha: number;
+  tithiEnds: End[];
+  nakshatraEnds: End[];
+  yogaEnds: End[];
+  karanaEnds: End[];
+};
 type Fixture = {
+  file: string;
   source: { name: string; retrievedAt: string };
-  location: { name: string; latitude: number; longitude: number };
-  days: {
-    date: string;
-    utcOffset: string;
-    sunrise: Stamp;
-    sunset: Stamp;
-    tithiEnds: (Stamp & { tithi: number })[];
-  }[];
+  location: { name: string; latitude: number; longitude: number; tz: string };
+  days: Day[];
 };
 
 const FIXTURES_DIR = join(import.meta.dirname, "../../../fixtures");
 const fixtures: Fixture[] = readdirSync(FIXTURES_DIR)
-  .filter((f) => f.endsWith(".json"))
-  .map(
-    (f) => JSON.parse(readFileSync(join(FIXTURES_DIR, f), "utf8")) as Fixture,
-  );
+  .filter((f) => /^[a-z-]+-\d{4}(-\d{2})?\.json$/.test(f))
+  .map((f) => ({
+    file: f,
+    ...(JSON.parse(readFileSync(join(FIXTURES_DIR, f), "utf8")) as Omit<
+      Fixture,
+      "file"
+    >),
+  }));
 
 const DEFINITIONS: [string, SunriseDefinition][] = [
   ["upper + refraction (default)", DEFAULT_SUNRISE],
@@ -40,49 +55,63 @@ const DEFINITIONS: [string, SunriseDefinition][] = [
   ["upper, no refraction", { limb: "upper", refraction: false }],
   ["centre, no refraction", { limb: "centre", refraction: false }],
 ];
+const ELEMENTS = [
+  ["tithi", "tithiEnds"],
+  ["nakshatra", "nakshatraEnds"],
+  ["yoga", "yogaEnds"],
+  ["karana", "karanaEnds"],
+] as const;
+/** Drik month spellings → canonical names (GLOSSARY.md). */
+const MONTH_ALIASES: Record<string, string> = { Ashwina: "Ashvin" };
 
-function eventAt(e: SunEvent): Instant {
+const eventAt = (e: SunEvent): Instant => {
   if (e.kind !== "event") throw new Error("expected a sun event");
   return e.at;
-}
-
-/** Local midnight of the fixture's civil date, as a UTC instant. */
-function localMidnight(date: string, utcOffset: string): Instant {
-  const sign = utcOffset.startsWith("-") ? -1 : 1;
-  const [h, m] = utcOffset.slice(1).split(":").map(Number) as [number, number];
-  return (Date.parse(`${date}T00:00:00Z`) -
-    sign * (h * 60 + m) * 60_000) as Instant;
-}
+};
 
 type Stats = { max: number; mean: number; n: number };
 const stats = (errorsSec: number[]): Stats => ({
-  max: Math.max(...errorsSec.map(Math.abs)),
-  mean: errorsSec.reduce((a, b) => a + b, 0) / errorsSec.length,
+  max: errorsSec.length ? Math.max(...errorsSec.map(Math.abs)) : 0,
+  mean: errorsSec.length
+    ? errorsSec.reduce((a, b) => a + b, 0) / errorsSec.length
+    : 0,
   n: errorsSec.length,
 });
 const fmt = (s: Stats) =>
-  `max |err| ${s.max.toFixed(0).padStart(4)} s   mean ${s.mean >= 0 ? "+" : ""}${s.mean.toFixed(0)} s   (n=${s.n})`;
+  `${s.max.toFixed(0)} s | ${s.mean >= 0 ? "+" : ""}${s.mean.toFixed(0)} s | ${s.n}`;
 
-describe.each(fixtures.map((f) => [f.location.name, f] as const))(
+const markdown: string[] = [
+  "# Accuracy report",
+  "",
+  "Engine − reference. The reference shows whole minutes (±30 s of every error is rounding). Tolerances (§4.2): sunrise/sunset ±1 min, element end times ±2 min.",
+  "",
+];
+
+afterAll(() => {
+  const out = process.env["ACCURACY_REPORT"];
+  if (out) writeFileSync(out, markdown.join("\n") + "\n");
+});
+
+describe.each(fixtures.map((f) => [f.file, f] as const))(
   "%s",
-  (_name, fixture) => {
-    const place: Coordinates = {
+  (_file, fixture) => {
+    const place = {
       latitude: fixture.location.latitude,
       longitude: fixture.location.longitude,
     };
+    const midnight = (date: string) => localMidnight(date, fixture.location.tz);
 
-    const sunErrors = DEFINITIONS.map(([label, definition]) => {
+    const sunRows = DEFINITIONS.map(([label, definition]) => {
       const rise: number[] = [];
       const set: number[] = [];
       for (const day of fixture.days) {
-        const midnight = localMidnight(day.date, day.utcOffset);
         rise.push(
-          (eventAt(nextSunrise(midnight, place, definition)) -
+          (eventAt(nextSunrise(midnight(day.date), place, definition)) -
             Date.parse(day.sunrise.utc)) /
             1000,
         );
         set.push(
-          (eventAt(nextSunset(midnight, place, definition)) -
+          (eventAt(nextSunset(midnight(day.date), place, definition)) -
             Date.parse(day.sunset.utc)) /
             1000,
         );
@@ -90,53 +119,107 @@ describe.each(fixtures.map((f) => [f.location.name, f] as const))(
       return { label, rise: stats(rise), set: stats(set) };
     });
 
-    const tithiErrors: number[] = [];
-    const mismatches: string[] = [];
-    for (const day of fixture.days) {
-      const sunrise = eventAt(
-        nextSunrise(localMidnight(day.date, day.utcOffset), place),
+    const days = fixture.days.map((ref) => {
+      const ours = assembleDay(midnight(ref.date), place);
+      if (ours.kind !== "day") throw new Error(`${ref.date}: no civil day`);
+      return { ref, ours };
+    });
+
+    const elementRows = ELEMENTS.map(([key, field]) => {
+      const errors: number[] = [];
+      const mismatches: string[] = [];
+      for (const { ref, ours } of days) {
+        const element: ElementDay = ours[key];
+        const refEnds = ref[field];
+        if (
+          element.ends.map((e) => e.index).join() !==
+          refEnds.map((e) => e.index).join()
+        ) {
+          mismatches.push(
+            `${ref.date}: ours [${element.ends.map((e) => e.index).join(",")}] vs reference [${refEnds.map((e) => e.index).join(",")}]`,
+          );
+        } else {
+          element.ends.forEach((e, i) =>
+            errors.push((e.endsAt - Date.parse(refEnds[i]!.utc)) / 1000),
+          );
+        }
+      }
+      return { key, stats: stats(errors), mismatches };
+    });
+
+    const calendarMismatches: string[] = [];
+    const ayanamsaOffsets: number[] = [];
+    for (const { ref, ours } of days) {
+      const month = (d: PanchangDay) =>
+        `${d.month.name}${d.month.adhik ? " (Adhik)" : ""}`;
+      const refMonth = ref.amantaMonth?.replace(
+        /^\w+/,
+        (m) => MONTH_ALIASES[m] ?? m,
       );
-      const ours = tithiEnds(sunrise, eventAt(nextSunrise(sunrise, place)));
-      const ourTithis = ours.map((e) => e.tithi).join(",");
-      const refTithis = day.tithiEnds.map((e) => e.tithi).join(",");
-      if (ourTithis !== refTithis)
-        mismatches.push(
-          `${day.date}: ours [${ourTithis}] vs reference [${refTithis}]`,
+      if (refMonth && refMonth !== month(ours))
+        calendarMismatches.push(
+          `${ref.date}: month ${month(ours)} vs ${ref.amantaMonth}`,
         );
-      else
-        ours.forEach((e, i) =>
-          tithiErrors.push(
-            (e.endsAt - Date.parse(day.tithiEnds[i]!.utc)) / 1000,
-          ),
+      const s = ours.samvat;
+      if (
+        s.vikramKartikadi !== ref.samvat.gujarati ||
+        s.vikramChaitradi !== ref.samvat.vikram ||
+        s.shaka !== ref.samvat.shaka
+      ) {
+        calendarMismatches.push(
+          `${ref.date}: samvat ${JSON.stringify(s)} vs ${JSON.stringify(ref.samvat)}`,
+        );
+      }
+      if (ref.weekday !== null && ours.vara + 1 !== ref.weekday)
+        calendarMismatches.push(
+          `${ref.date}: weekday ${ours.vara + 1} vs ${ref.weekday}`,
+        );
+      if (ref.lahiriAyanamsha)
+        ayanamsaOffsets.push(
+          (lahiriAyanamsa(ours.sunrise) - ref.lahiriAyanamsha) * 3600,
         );
     }
-    const tithi = stats(tithiErrors);
 
-    it("prints the accuracy report (errors = engine − reference; reference has minute precision)", () => {
+    it("reports (and writes the Markdown section)", () => {
+      const title = `${fixture.location.name}: ${fixture.days.length} days (${fixture.days[0]!.date} … ${fixture.days.at(-1)!.date}), ${fixture.source.name}, retrieved ${fixture.source.retrievedAt}`;
       const lines = [
-        `${fixture.location.name}: ${fixture.days[0]!.date} … ${fixture.days.at(-1)!.date}, ${fixture.source.name} (retrieved ${fixture.source.retrievedAt})`,
-        ...sunErrors.flatMap((r) => [
-          `  sunrise  ${r.label.padEnd(30)} ${fmt(r.rise)}`,
-          `  sunset   ${r.label.padEnd(30)} ${fmt(r.set)}`,
+        `## ${title}`,
+        "",
+        "| What | max \\|err\\| | mean | n |",
+        "|---|---|---|---|",
+        ...sunRows.flatMap((r) => [
+          `| sunrise, ${r.label} | ${fmt(r.rise)} |`,
+          `| sunset, ${r.label} | ${fmt(r.set)} |`,
         ]),
-        `  tithi ends (default sunrise)            ${fmt(tithi)}`,
-        `  tithi sets differing per civil day: ${mismatches.length}${mismatches.length ? "\n    " + mismatches.join("\n    ") : ""}`,
+        ...elementRows.map((r) => `| ${r.key} ends | ${fmt(r.stats)} |`),
+        "",
+        `Element sets differing per civil day: ${elementRows.reduce((a, r) => a + r.mismatches.length, 0)}. Month/samvat/weekday mismatches: ${calendarMismatches.length}.`,
+        ayanamsaOffsets.length
+          ? `Engine Lahiri − Drik's displayed ayanamsa: mean ${(ayanamsaOffsets.reduce((a, b) => a + b, 0) / ayanamsaOffsets.length).toFixed(1)}″ (a constant offset; see ADR 0019).`
+          : "",
+        "",
       ];
+      markdown.push(...lines);
       console.log(lines.join("\n"));
       expect(lines.length).toBeGreaterThan(0);
     });
 
-    it("default sunrise and sunset are within ±1 min of the reference every day (§4.2)", () => {
-      expect(sunErrors[0]!.rise.max).toBeLessThanOrEqual(60);
-      expect(sunErrors[0]!.set.max).toBeLessThanOrEqual(60);
+    it("default sunrise and sunset are within ±1 min every day (§4.2)", () => {
+      expect(sunRows[0]!.rise.max).toBeLessThanOrEqual(60);
+      expect(sunRows[0]!.set.max).toBeLessThanOrEqual(60);
     });
 
-    it("every civil day has the same tithis ending as the reference (vriddhi and kshaya days included)", () => {
-      expect(mismatches).toEqual([]);
-    });
+    it.each(ELEMENTS.map(([key]) => key))(
+      "%s: same ends every civil day, each within ±2 min (§4.2)",
+      (key) => {
+        const row = elementRows.find((r) => r.key === key)!;
+        expect(row.mismatches).toEqual([]);
+        expect(row.stats.max).toBeLessThanOrEqual(120);
+      },
+    );
 
-    it("tithi end times are within ±2 min of the reference (§4.2)", () => {
-      expect(tithi.max).toBeLessThanOrEqual(120);
+    it("month, samvat and weekday match the reference every day", () => {
+      expect(calendarMismatches).toEqual([]);
     });
   },
 );

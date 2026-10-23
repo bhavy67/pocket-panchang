@@ -8,12 +8,17 @@
   "scripts": {
     "typecheck": "tsc -b",
     "test": "vitest run --passWithNoTests",
-    "accuracy": "vitest run src/accuracy.test.ts --silent=false"
+    "accuracy": "vitest run src/accuracy.test.ts --silent=false",
+    "select-days": "vitest run --config vitest.tools.config.ts tools/select-sample-days.tool.ts --silent=false",
+    "jpl-instants": "vitest run --config vitest.tools.config.ts tools/jpl-instants.tool.ts --silent=false"
   },
   "dependencies": {
     "astronomy-engine": "2.1.19"
   },
   "devDependencies": {
-    "@types/node": "24.19.2"
+    "@grahan/core": "1.0.1",
+    "@grahan/vedic": "1.0.1",
+    "@types/node": "24.19.2",
+    "fast-check": "4.10.2"
   }
 }
