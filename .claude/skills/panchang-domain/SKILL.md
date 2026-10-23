@@ -44,6 +44,7 @@ All end times are roots of `f(t) = normalize(angle(t) − target)`. Bracket with
 
 ## Festivals and personal events
 
+- Observance windows and tie-breaks: ADR 0021 (madhyahna/aparahna = 3rd/4th fifth of daylight; pradosh = first 3 of 15 night muhurtas; nishita = 8th). Festival rules are provisional until hand-verified (docs/verification/).
 - Festivals are **data** (`FestivalRule`, §4.7): month (Amanta frame), paksha, tithi, window (sunrise/madhyahna/aparahna/pradosh/nishita), tieBreak, `adhikPolicy: "nija-only"`. A rule ships **only** with `verified` filled.
 - Personal events: lunar date stored in Amanta (ADR 0002). `OccurrencePolicy` (§4.9) resolves per field by cascade: event override → household "Family conventions" (per kind) → built-in per kind (ADR 0005). Window, tie-breaks, Pitru Paksha, observance location, adhik/kshaya rules: ADRs 0003–0010. Convention defaults are **provisional** until the §13 "Pending family confirmations" checklist is cleared.
 - Muhurta: Rahu Kaal/Yamaganda/Gulika = daylight ÷ 8 with weekday tables; Choghadiya = day and night ÷ 8 each with weekday starting sequence.

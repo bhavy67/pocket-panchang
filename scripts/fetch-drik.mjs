@@ -179,6 +179,26 @@ function extract(html, date) {
     },
     lahiriAyanamsha: Number(/Lahiri Ayanamsha ([\d.]+)/.exec(all)?.[1]),
     ...Object.fromEntries(
+      [
+        ["rahuKalam", "Rahu Kalam"],
+        ["yamaganda", "Yamaganda"],
+        ["gulikai", "Gulikai Kalam"],
+      ].map(([field, label]) => {
+        const m = new RegExp(
+          `${label} (\\d{2}:\\d{2} (?:AM|PM)(?: , \\w{3} \\d{1,2})?) to (\\d{2}:\\d{2} (?:AM|PM)(?: , \\w{3} \\d{1,2})?)`,
+        ).exec(all);
+        if (!m) return [field, null];
+        const [start, end] = [localTime(m[1], date), localTime(m[2], date)];
+        return [
+          field,
+          {
+            start: { local: start, utc: toUtc(start, offset) },
+            end: { local: end, utc: toUtc(end, offset) },
+          },
+        ];
+      }),
+    ),
+    ...Object.fromEntries(
       Object.entries(ELEMENTS).map(([field, column]) => [field, ends(column)]),
     ),
   };

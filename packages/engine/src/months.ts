@@ -52,17 +52,36 @@ function newMoonAfter(t: Instant): Instant {
   return found;
 }
 
-/** The lunation containing `t`: start ≤ t < end. */
-export function lunationAt(
-  t: Instant,
-  variant: AyanamsaVariant = DEFAULT_AYANAMSA,
-): Lunation {
-  let start = newMoonAfter((t - 31 * DAY_MS) as Instant);
-  let end = newMoonAfter(start);
-  while (end <= t) {
-    start = end;
-    end = newMoonAfter(start);
+/**
+ * Lunations are immutable facts, so they are cached per ayanamsa variant (bounded). This keeps
+ * `assembleDay` cheap: a 30-day month needs ~2 lunation computations instead of ~30 × 15.
+ * A pure memo: same inputs, same outputs; no time, I/O or global state is read.
+ */
+const CACHE_LIMIT = 64;
+const cache = new Map<AyanamsaVariant, Lunation[]>();
+
+function remember(variant: AyanamsaVariant, lunation: Lunation): Lunation {
+  const list = cache.get(variant) ?? [];
+  if (!list.some((l) => l.start === lunation.start)) {
+    list.push(lunation);
+    list.sort((a, b) => a.start - b.start);
+    if (list.length > CACHE_LIMIT) {
+      // Drop whichever end is farther from the new entry.
+      if (lunation.start - list[0]!.start > list.at(-1)!.start - lunation.start)
+        list.shift();
+      else list.pop();
+    }
+    cache.set(variant, list);
   }
+  return lunation;
+}
+
+/** Names a lunation from its new moons (ADR 0020). */
+function build(
+  start: Instant,
+  end: Instant,
+  variant: AyanamsaVariant,
+): Lunation {
   // Sankrantis: the Sun entering the next rashis after the one it is in at the new moon.
   const rashiAtStart = segmentAt(siderealSun(start, variant), RASHI_COUNT) - 1; // 0 = Mesha
   const sankrantis: Instant[] = [];
@@ -79,11 +98,10 @@ export function lunationAt(
     sankrantis.push(at);
   }
   // A month is named by the rashi the Sun enters during it: Mesha (0) → Chaitra.
-  const name = LUNAR_MONTHS[(rashiAtStart + 1) % 12]!;
   return {
     start,
     end,
-    name,
+    name: LUNAR_MONTHS[(rashiAtStart + 1) % 12]!,
     adhik: sankrantis.length === 0,
     absorbs:
       sankrantis.length === 2 ? LUNAR_MONTHS[(rashiAtStart + 2) % 12]! : null,
@@ -91,12 +109,47 @@ export function lunationAt(
   };
 }
 
-/** The lunation before `lunation`. */
+/** The lunation containing `t`: start ≤ t < end. */
+export function lunationAt(
+  t: Instant,
+  variant: AyanamsaVariant = DEFAULT_AYANAMSA,
+): Lunation {
+  const known = cache.get(variant) ?? [];
+  const hit = known.find((l) => l.start <= t && t < l.end);
+  if (hit) return hit;
+  // Reuse a cached predecessor's end as this lunation's start when it is the right one.
+  const before = known.filter((l) => l.end <= t).at(-1);
+  if (before && t - before.end < 30 * DAY_MS) {
+    const end = newMoonAfter(before.end);
+    if (t < end) return remember(variant, build(before.end, end, variant));
+  }
+  let start = newMoonAfter((t - 31 * DAY_MS) as Instant);
+  let end = newMoonAfter(start);
+  while (end <= t) {
+    start = end;
+    end = newMoonAfter(start);
+  }
+  return remember(variant, build(start, end, variant));
+}
+
+/** The lunation before `lunation`: one search, since it ends where `lunation` starts. */
 export function previousLunation(
   lunation: Lunation,
   variant: AyanamsaVariant = DEFAULT_AYANAMSA,
 ): Lunation {
-  return lunationAt((lunation.start - DAY_MS) as Instant, variant);
+  const known = (cache.get(variant) ?? []).find(
+    (l) => l.end === lunation.start,
+  );
+  if (known) return known;
+  // Lunations last 29.2–29.9 days, so the first new moon after start − 31 d is the previous one.
+  return remember(
+    variant,
+    build(
+      newMoonAfter((lunation.start - 31 * DAY_MS) as Instant),
+      lunation.start,
+      variant,
+    ),
+  );
 }
 
 export type Samvat = {

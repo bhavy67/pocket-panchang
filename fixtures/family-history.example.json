@@ -1,0 +1,13 @@
+{
+  "_comment": "Example only (made-up event). Copy to fixtures/private/family-history.json (gitignored) and fill in real dates your family observed.",
+  "observance": { "id": "1279233", "name": "Ahmedabad", "lat": 23.025556, "lng": 72.587222, "tz": "Asia/Kolkata", "country": "IN" },
+  "events": [
+    {
+      "title": "Example varsi",
+      "kind": "shraddh",
+      "lunarDate": { "month": "Kartika", "paksha": "krishna", "tithi": 5 },
+      "observed": ["2024-11-20", "2025-11-09"],
+      "pitruPakshaObserved": ["2024-09-22", "2025-09-11"]
+    }
+  ]
+}

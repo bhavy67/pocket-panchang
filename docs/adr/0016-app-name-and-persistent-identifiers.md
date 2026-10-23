@@ -22,6 +22,8 @@ Anything persisted on user devices or in their calendars is as permanent as the 
 
 The brand appears only in UI strings and the manifest's `name` / `short_name`.
 
+**`.ics` UID year = lunar (Shaka) year** of the occurrence day (Phase 6), not the Gregorian year: an event in Pausha can occur twice in one Gregorian year (early January and late December) but only once per lunar year.
+
 **`.ics` UID discriminator:** one event can yield several occurrences in one year (annual + Pitru Paksha, ADR 0004; `both` in an adhik year, ADR 0009). `{eventId}-{year}` alone would collide, and calendar apps would merge them. `{occurrence}` is `annual`, `pitru-paksha`, or `adhik` / `nija` when `both` applies. UIDs must be stable so re-exported `.ics` files update existing calendar entries instead of duplicating them.
 
 ## Consequences

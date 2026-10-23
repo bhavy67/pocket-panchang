@@ -45,3 +45,5 @@ export type { LunarMonth, Lunation, Samvat } from "./months";
 export { LUNAR_MONTHS, lunationAt, previousLunation, samvatAt } from "./months";
 export type { SegmentEnd } from "./segments";
 export { segmentEnds } from "./segments";
+export type { CivilDate } from "./civil-date";
+export { addDays, parseCivilDate } from "./civil-date";

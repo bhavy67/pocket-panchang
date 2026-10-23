@@ -6,8 +6,10 @@
     ".": "./src/index.ts"
   },
   "scripts": {
-    "typecheck": "tsc --noEmit",
-    "test": "vitest run --passWithNoTests"
+    "typecheck": "tsc -b",
+    "test": "vitest run",
+    "festival-checklist": "vitest run --config vitest.tools.config.ts tools/festival-checklist.tool.ts --silent=false",
+    "family-history": "vitest run --config vitest.tools.config.ts tools/family-history.tool.ts --silent=false"
   },
   "dependencies": {
     "@panchang/engine": "workspace:*",
