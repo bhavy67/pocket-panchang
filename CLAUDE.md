@@ -19,6 +19,11 @@ A beautiful, private, offline Hindu panchang that's Gujarati-first and diaspora-
 7. **Correctness beats features.** A wrong tithi or festival date is a critical bug. Never ship unverified festival rules.
 8. **Keep `PROJECT_PLAN.md` current.** If a decision changes `PROJECT_PLAN.md`, update the relevant section. If an architectural or domain decision changes `PROJECT_PLAN.md`, record an ADR in `docs/adr/`. Naming or tooling-alignment changes only need the `PROJECT_PLAN.md` update.
 
+**Collaboration speed-ups (Bhavy, 2026-10-23):**
+- Reports: max ~10 lines. Results, decisions needed, anything surprising. No line-by-line walkthroughs unless asked.
+- No quizzes.
+- Batch steps where possible; stop between steps only when a decision is needed.
+
 ## Project skills (`.claude/skills/`)
 
 - `phase-workflow`: running a phase and the mandatory STOP format

@@ -139,7 +139,7 @@ Part-time at ~10 h/week. The original ~5–6 week target predates the Phase 1 sc
 - **grahan** (MIT TypeScript panchang library) is used **only as an independent cross-check in tests**, never as a runtime dependency.
 
 ### 4.2 Error budget (be able to explain this)
-- The Moon gains ~12°/day on the Sun (varies ~10.8–14.5°/day).
+- The Moon gains ~12°/day on the Sun (varies ~10.8–14.5°/day; measured hourly over 2020–2040 with astronomy-engine: 10.75–14.39°/day).
 - A 1′ longitude error therefore shifts a tithi end time by ~2 minutes.
 - Target: tithi/nakshatra end times within **±2 min** of the reference; sunrise/sunset within **±1 min**.
 - The measured numbers (not just targets) go in the README accuracy report.

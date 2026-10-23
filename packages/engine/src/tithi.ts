@@ -1,0 +1,42 @@
+import { findCrossing } from "./crossing";
+import { elongation } from "./longitude";
+import type { Instant } from "./time";
+
+const TITHI_DEG = 12;
+
+/**
+ * Tithi number 1–30 at an instant: each tithi is a 12° slice of elongation.
+ * 1–15 Shukla (15 = Purnima), 16–30 Krishna (30 = Amavasya).
+ */
+export function tithiAt(instant: Instant): number {
+  return Math.floor(elongation(instant) / TITHI_DEG) + 1;
+}
+
+export type TithiEnd = {
+  /** The tithi that ends (1–30). */
+  readonly tithi: number;
+  readonly endsAt: Instant;
+};
+
+/**
+ * Every tithi that ends in (start, end], in time order. For a civil day, pass
+ * (sunrise, next sunrise]; the udaya tithi is tithiAt(sunrise) (§4.5).
+ */
+export function tithiEnds(start: Instant, end: Instant): TithiEnd[] {
+  const ends: TithiEnd[] = [];
+  let from = start;
+  let tithi = tithiAt(start);
+  for (;;) {
+    // Tithi n ends when elongation reaches 12n°; tithi 30 ends at 360° = 0°.
+    const endsAt = findCrossing(
+      elongation,
+      (tithi * TITHI_DEG) % 360,
+      from,
+      end,
+    );
+    if (endsAt === null) return ends;
+    ends.push({ tithi, endsAt });
+    from = endsAt;
+    tithi = (tithi % 30) + 1;
+  }
+}

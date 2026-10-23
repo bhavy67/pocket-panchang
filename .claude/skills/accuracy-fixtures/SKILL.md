@@ -21,6 +21,29 @@ Source of truth: `PROJECT_PLAN.md` §10 (testing strategy) and §4.2 (error budg
 4. Store times as UTC instants (ISO 8601 `Z` or epoch ms) and keep the reference's local string alongside for audit. The engine never takes local time.
 5. Never hand-edit a reference value to match engine output. If the reference looks wrong, flag it to Bhavy with evidence.
 
+## Collecting reference data (Phase 4 method)
+
+- `node scripts/fetch-drik.mjs <geonameId> <name> <from> <to> <out.json>` scrapes Drik day pages.
+- Politeness rules: check robots.txt first (2026-10-23: `/panchang/` allowed; `/ajax/`, `/dp-api/` disallowed); ≥ 4 s between requests; raw pages cached in `.cache/drik/` (gitignored, never committed); commit only extracted values with source, URL template, retrieval date, and Drik's own coordinates.
+- "upto Full Night" on Drik means the tithi continues past the next sunrise (no end that civil day).
+- `pnpm --filter @panchang/engine accuracy` prints the error table (max |err|, mean bias) for every fixture file.
+
+## Phase 5 coverage: sampling, not full scraping (proposed 2026-10-23)
+
+Do **not** scrape 5 cities × 2 years in full. Per city-year, collect **~24 chosen days**:
+
+| Days | What | Why |
+|---|---|---|
+| 6 | Seasonal anchors, every 2nd month (incl. both solstices) | Sunrise drift with declination and equation of time |
+| 10 | The v1 festival days that year (Diwali sequence, Navratri start/end, Holika Dahan/Dhuleti, Janmashtami, Raksha Bandhan, Maha Shivaratri, Uttarayan) | Festival resolver (Phase 6) |
+| 4 | 2 vriddhi + 2 kshaya tithi days (found from engine output, then checked against the reference) | Day assembly edge cases |
+| 2 | Lunar-month edges: an Amavasya day, and an adhik-month start/end or sankranti day | Month naming, adhik/kshaya masa |
+| 2 | DST transition days (New York, London); for Indian cities, 2 more anchors | Time zone handling at the edge |
+
+That is ~240 pages for 5 cities × 2 years (~16 min at 4 s/request, cached). Overlaps free slots for more edge days.
+
+**Independent sunrise cross-check (no scraping):** implement NOAA's published solar equations (public domain; zenith 90.833° = upper limb + 34′ refraction, the same definition) in a test-only helper and compare engine sunrise/sunset for **every day** of both years in all 5 cities, aiming for ±1 min (NOAA states ~1 min accuracy within ±72° latitude). Spot-check a handful of days against the USNO API if NOAA and the engine disagree.
+
 ## Tolerances
 
 | Element | Tolerance |

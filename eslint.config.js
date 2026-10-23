@@ -41,7 +41,19 @@ export default tseslint.config(
       "@typescript-eslint/await-thenable": "error",
     },
   },
-  { files: ["**/*.js"], ...tseslint.configs.disableTypeChecked },
+  { files: ["**/*.{js,mjs}"], ...tseslint.configs.disableTypeChecked },
+  // Node scripts (no `globals` dependency for four names).
+  {
+    files: ["scripts/**/*.mjs"],
+    languageOptions: {
+      globals: {
+        console: "readonly",
+        fetch: "readonly",
+        process: "readonly",
+        setTimeout: "readonly",
+      },
+    },
+  },
 
   // §5.2 rule 1 and 3: engine and calendar are pure; time zones only at the UI edge.
   {

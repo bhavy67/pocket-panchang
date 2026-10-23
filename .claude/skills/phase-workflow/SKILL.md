@@ -23,6 +23,12 @@ Phases are defined in `PROJECT_PLAN.md` §15. Working rules are in §0. Commit f
 - **Git is read-only.** `git status`, `git diff`, `git log` are fine. Never commit, push, tag, rebase, reset, merge, or drop stashes. These are also denied in `.claude/settings.json`.
 - Check exit criteria by actually running them (tests, builds, scripts). Report real output, including failures.
 
+## Speed-ups (Bhavy, 2026-10-23)
+
+- Reports: max ~10 lines. Results, decisions needed, anything surprising. No line-by-line walkthroughs unless asked.
+- No quizzes.
+- Batch steps where possible; stop between steps only when a decision is needed.
+
 ## STOP (mandatory at the end of every phase)
 
 End the phase with exactly this structure, then stop and wait:
