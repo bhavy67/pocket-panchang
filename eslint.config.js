@@ -59,7 +59,17 @@ const pureImportBlocks = (pkg, patterns) => [
 ];
 
 export default tseslint.config(
-  { ignores: ["**/dist/**", "**/coverage/**", ".agents/**", "docs/**"] },
+  {
+    ignores: [
+      "**/dist/**",
+      "**/dist-e2e/**",
+      "**/test-results/**",
+      "**/playwright-report/**",
+      "**/coverage/**",
+      ".agents/**",
+      "docs/**",
+    ],
+  },
 
   js.configs.recommended,
   tseslint.configs.recommendedTypeChecked,

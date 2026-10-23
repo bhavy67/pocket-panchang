@@ -1,7 +1,10 @@
 // DOM tests run in jsdom with an in-memory IndexedDB (Dexie) and no real Worker.
 import "fake-indexeddb/auto";
 import { cleanup } from "@testing-library/react";
-import { afterEach } from "vitest";
+import { afterEach, beforeAll } from "vitest";
+import { loadLanguage } from "@/i18n";
+
+beforeAll(() => loadLanguage("en"));
 
 afterEach(cleanup);
 

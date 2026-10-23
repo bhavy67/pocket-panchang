@@ -7,6 +7,7 @@ import { useState } from "react";
 import { useFestivals, useNow, useToday, type DayView } from "@/day-data";
 import { EventRow, inDays } from "@/event-row";
 import { useOccurrenceRows } from "@/events-data";
+import { lang, t } from "@/i18n";
 import { clockFor } from "@/lib/clock";
 import { dateShort, daysBetween, range, time } from "@/lib/format";
 import {
@@ -21,13 +22,22 @@ import { useSettings, type Settings } from "@/settings";
 import {
   avoidPeriods,
   avoidSheet,
+  chogName,
   chogSheet,
   NightChoghadiya,
   qualityLabel,
+  rahuAvoid,
   Timeline,
   toneOf,
 } from "@/timeline";
-import { card, QualityIcon, Section, Sheet, type SheetContent } from "@/ui";
+import {
+  card,
+  InstallCard,
+  QualityIcon,
+  Section,
+  Sheet,
+  type SheetContent,
+} from "@/ui";
 import type { Festival } from "@/worker/api";
 
 export function Today() {
@@ -47,7 +57,8 @@ export function Today() {
           </span>
           <span className="text-sm text-text-muted">
             {dateShort(date)}
-            {view && (
+            {/* Gujarati dates already name the weekday. */}
+            {view && lang() === "en" && (
               <>
                 {" · "}
                 <span lang="gu">{weekdayName(view.day.vara, "gu")}</span>
@@ -60,27 +71,27 @@ export function Today() {
           onClick={() => setSheet(howSheet(s, view?.date ?? date))}
           className="min-h-(--tap-min) flex-none rounded-full border-[1.5px] border-border-strong bg-surface px-4 text-body font-semibold text-accent hover:bg-accent-subtle focus-ring"
         >
-          Help
+          {t("help")}
         </button>
       </header>
 
       {view?.muhurta ? (
         <>
           <Glance view={view} now={now} tz={tz} onOpen={setSheet} />
-          <Section title="Today's panchang">
+          <Section title={t("todaysPanchang")}>
             <ElementsCard view={view} tz={tz} />
           </Section>
-          <Section
-            title="Today, hour by hour"
-            sub="Sunrise to sunset, split into 8 Choghadiya. Tap any part for details."
-          >
+          <Section title={t("hourByHour")} sub={t("hourByHourSub")}>
             <Timeline view={view} tz={tz} now={now} onOpen={setSheet} />
             <NightChoghadiya m={view.muhurta} tz={tz} onOpen={setSheet} />
           </Section>
-          <Section title="Sun and Moon">
+          <Section title={t("sunAndMoon")}>
             <SunMoonCard view={view} s={s} />
           </Section>
           <ComingUp s={s} from={date} />
+          <div className="px-4 pt-8 empty:hidden">
+            <InstallCard where="today" />
+          </div>
           <footer className="flex flex-col items-center gap-2 px-4 py-8 text-center">
             <span className="text-sm text-text-muted">
               {samvatLine(view.day, s)}
@@ -90,15 +101,12 @@ export function Today() {
               onClick={() => setSheet(howSheet(s, view.date))}
               className="min-h-(--tap-min) px-4 text-body font-semibold text-accent underline underline-offset-3 focus-ring"
             >
-              How this is calculated
+              {t("howCalculated")}
             </button>
           </footer>
         </>
       ) : view ? (
-        <p className="px-4 text-body">
-          There is no sunrise or sunset here today, so the panchang can't be
-          worked out.
-        </p>
+        <p className="px-4 text-body">{t("noCivilDayToday")}</p>
       ) : (
         <GlanceSkeleton />
       )}
@@ -135,10 +143,13 @@ function Glance({
   const tithiEnd = day.tithi.ends.find((e) => e.endsAt > now);
   const tithiSince = [...day.tithi.ends].reverse().find((e) => e.endsAt <= now);
   const sub = tithiEnd
-    ? `until ${time(tithiEnd.endsAt, tz)}, then ${tithiLabel((tithiEnd.index % 30) + 1, "en")}`
+    ? t("tithiUntilThen", {
+        time: time(tithiEnd.endsAt, tz),
+        next: tithiLabel((tithiEnd.index % 30) + 1, lang()),
+      })
     : tithiSince
-      ? `since ${time(tithiSince.endsAt, tz)}`
-      : "all day";
+      ? t("tithiSince", { time: time(tithiSince.endsAt, tz) })
+      : t("allDay");
 
   const all = [...m.day, ...m.night];
   const cur = all.find((c) => now >= c.start && now < c.end);
@@ -152,20 +163,39 @@ function Glance({
   const names = avoidNow.map((a) => a.name);
   const overlap =
     good && avoidNow.length > 0
-      ? `${cur.name} is a good time, but ${names.join(" and ")} ${names.length > 1 ? "are" : "is"} also on, so many families wait to start new work. ${avoidNow
-          .map((a) => `${a.name} ends at ${time(a.end, tz)}`)
-          .join(" and ")}.`
+      ? `${t(names.length > 1 ? "overlapMany" : "overlapOne", {
+          cur: chogName(cur),
+          avoid: names.join(t("andJoin")),
+        })} ${avoidNow
+          .map((a) => t("endsAt", { name: a.name, time: time(a.end, tz) }))
+          .join(t("andJoin"))}.`
       : null;
-  const aria = `${title.en}. ${cur ? `Choghadiya: ${cur.name}, ${qualityLabel(cur).toLowerCase()}, until ${time(cur.end, tz)}. ` : ""}Rahu Kaal ${range(rahu.start, rahu.end, tz)}${rahuNow ? ", happening now" : ""}.`;
+  const primary = lang() === "gu" ? title.gu : title.en;
+  const secondary = lang() === "gu" ? title.en : title.gu;
+  const aria = t("glanceAria", {
+    title: primary,
+    chog: cur
+      ? t("glanceChogAria", {
+          name: chogName(cur),
+          quality: qualityLabel(cur),
+          time: time(cur.end, tz),
+        })
+      : "",
+    range: range(rahu.start, rahu.end, tz),
+    now: rahuNow ? t("happeningNow") : "",
+  });
 
   return (
     <section aria-label={aria} className={`mx-4 px-5 pt-5 pb-4 ${card}`}>
       <div className="flex flex-wrap items-baseline justify-between gap-3">
         <h1 className="text-headline leading-(--leading-heading) font-bold tracking-tight">
-          {title.en}
+          {primary}
         </h1>
-        <span lang="gu" className="text-lg text-text-muted">
-          {title.gu}
+        <span
+          lang={lang() === "gu" ? "en" : "gu"}
+          className="text-lg text-text-muted"
+        >
+          {secondary}
         </span>
       </div>
       <p className="mt-1 text-sm text-text-muted tabular-nums">{sub}</p>
@@ -186,13 +216,15 @@ function Glance({
             <QualityIcon tone={toneOf(cur)} size={32} />
             <span className="flex min-w-[min(12rem,100%)] flex-1 flex-col">
               <span className="text-lg leading-tight font-semibold">
-                Choghadiya: {cur.name}
-              </span>
+                {t("chogLine", { name: chogName(cur) })}
+              </span>{" "}
               <span
                 className={`text-sm leading-snug font-semibold ${good ? "text-auspicious" : "text-text-muted"}`}
               >
                 {qualityLabel(cur)} ·{" "}
-                <span className="tabular-nums">until {time(cur.end, tz)}</span>
+                <span className="tabular-nums">
+                  {t("untilTime", { time: time(cur.end, tz) })}
+                </span>
               </span>
             </span>
           </button>
@@ -205,22 +237,21 @@ function Glance({
             </span>
             <div className="flex min-w-[min(12rem,100%)] flex-1 flex-col">
               <span className="text-lg leading-tight font-semibold">
-                Many avoid now
+                {t("manyAvoidNow")}
               </span>
               <span className="mb-1 text-sm leading-snug">
-                Families often wait to start new or auspicious work.
+                {t("manyAvoidNowSub")}
               </span>
               {avoidNow.map((a) => (
                 <button
                   key={a.name + a.start}
                   type="button"
                   onClick={() => onOpen(avoidSheet(a, view, tz))}
-                  aria-label={`${a.name}, until ${time(a.end, tz)}`}
                   className="flex min-h-(--tap-min) w-full flex-wrap items-center justify-between gap-x-2 border-t border-border py-1 text-left focus-ring"
                 >
-                  <span className="text-body font-semibold">{a.name}</span>
+                  <span className="text-body font-semibold">{a.name}</span>{" "}
                   <span className="text-sm font-semibold text-inauspicious tabular-nums">
-                    until {time(a.end, tz)}
+                    {t("untilTime", { time: time(a.end, tz) })}
                   </span>
                 </button>
               ))}
@@ -229,27 +260,18 @@ function Glance({
         ) : (
           <button
             type="button"
-            onClick={() =>
-              onOpen(
-                avoidSheet(
-                  { ...rahu, name: "Rahu Kaal", kind: "rahu" },
-                  view,
-                  tz,
-                ),
-              )
-            }
+            onClick={() => onOpen(avoidSheet(rahuAvoid(m), view, tz))}
             className="flex min-h-16 w-full flex-wrap items-center gap-3 rounded-md border-[1.5px] border-border bg-surface p-3 text-left focus-ring"
           >
             <QualityIcon tone="bad" size={32} />
             <span className="flex min-w-[min(12rem,100%)] flex-1 flex-col">
               <span className="text-lg leading-tight font-semibold">
-                {now < rahu.start
-                  ? "Rahu Kaal later today"
-                  : "Rahu Kaal is over"}
+                {now < rahu.start ? t("rahuLater") : t("rahuOver")}
               </span>
               <span className="text-sm leading-snug font-semibold text-text-muted tabular-nums">
-                {now < rahu.start ? "" : "It was "}
-                {range(rahu.start, rahu.end, tz)}
+                {now < rahu.start
+                  ? range(rahu.start, rahu.end, tz)
+                  : t("itWas", { range: range(rahu.start, rahu.end, tz) })}
               </span>
             </span>
           </button>
@@ -259,9 +281,7 @@ function Glance({
       {overlap && (
         <p className="mt-3 text-sm">
           <strong className="font-semibold">
-            {names.length > 1
-              ? "All of these are happening now."
-              : "Both are happening now."}
+            {names.length > 1 ? t("allNow") : t("bothNow")}
           </strong>{" "}
           {overlap}
         </p>
@@ -270,11 +290,17 @@ function Glance({
       <div className="mt-3 flex items-center gap-3 border-t border-border pt-3">
         <QualityIcon tone="good" />
         <span className="text-body leading-snug">
-          <strong className="font-semibold">Next good time:</strong>{" "}
+          <strong className="font-semibold">{t("nextGoodTime")}</strong>{" "}
           <span className="tabular-nums">
             {nextGood
-              ? `${nextGood.name}, ${range(nextGood.start, nextGood.end, tz)}${m.night.includes(nextGood) ? " (tonight)" : ""}`
-              : "None left before tomorrow's sunrise"}
+              ? `${chogName(nextGood)}, ${
+                  m.night.includes(nextGood)
+                    ? t("tonight", {
+                        time: range(nextGood.start, nextGood.end, tz),
+                      })
+                    : range(nextGood.start, nextGood.end, tz)
+                }`
+              : t("noneLeft")}
           </span>
         </span>
       </div>
@@ -297,7 +323,7 @@ function ComingUp({ s, from }: { s: Settings; from: CivilDate }) {
     .slice(0, 4);
   if (items.length === 0) return null;
   return (
-    <Section title="Coming up">
+    <Section title={t("comingUp")}>
       <ul className="flex flex-col gap-2">
         {items.map((it) =>
           "family" in it ? (
@@ -333,11 +359,12 @@ function FestivalRow({
       <FestivalIcon />
       <span className="flex min-w-[min(9rem,100%)] flex-1 flex-col">
         <span className="text-caption font-semibold text-festival">
-          Festival{f.unverified && " · Not yet verified"}
+          {t("festival")}
+          {f.unverified && t("notVerified")}
         </span>
         <span className="text-lg leading-tight font-semibold">
-          {f.names.en}
-          {f.variant && ` (${f.variant.label.en})`}
+          {f.names[lang()]}
+          {f.variant && ` (${f.variant.label[lang()]})`}
         </span>
         <span className="text-sm text-text-muted">
           {dateShort(f.date)}
@@ -365,7 +392,9 @@ export function FestivalIcon() {
 /** Holika Dahan's evening time and Raksha Bandhan's "after Bhadra" line (brief §2). */
 export const festivalTiming = (f: Festival, tz: string) =>
   f.evening
-    ? `Evening, ${range(f.evening.start, f.evening.end, tz)}`
+    ? t("festivalEvening", {
+        range: range(f.evening.start, f.evening.end, tz),
+      })
     : f.afterBhadra
-      ? `Rakhi: after ${time(f.afterBhadra, tz)} (after Bhadra)`
+      ? t("rakhiAfter", { time: time(f.afterBhadra, tz) })
       : null;

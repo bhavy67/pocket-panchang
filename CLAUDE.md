@@ -43,6 +43,7 @@ pnpm lint             # ESLint incl. architecture rules (ADR 0015)
 pnpm test             # Vitest in every package (incl. token contrast check)
 pnpm build            # Vite build of apps/app
 pnpm --filter @panchang/app dev   # dev server
+pnpm --filter @panchang/app e2e   # Playwright E2E + axe + budgets (production build)
 ```
 
 ## Layout pointers

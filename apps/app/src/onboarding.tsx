@@ -4,6 +4,7 @@ import type { Lang } from "@panchang/calendar";
 import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { CityPicker, cityLabel } from "@/city-picker";
+import { loadLanguage, t } from "@/i18n";
 import { AHMEDABAD, defaultSettings, saveSettings } from "@/settings";
 import { btnOutline, card } from "@/ui";
 import type { City } from "@/worker/cities";
@@ -17,9 +18,10 @@ export function Onboarding() {
   const navigate = useNavigate();
   const [city, setCity] = useState<City | null>(null);
   const step = city ? 2 : 1;
-  const finish = (location = AHMEDABAD, language: Lang = "gu") => {
+  const finish = async (location = AHMEDABAD, language: Lang = "gu") => {
+    await loadLanguage(language);
     saveSettings(defaultSettings(location, language));
-    void navigate({ to: "/" });
+    await navigate({ to: "/" });
   };
 
   return (
@@ -31,13 +33,13 @@ export function Onboarding() {
             className={btnOutline}
             onClick={() => setCity(null)}
           >
-            ‹ Back
+            {t("back")}
           </button>
         ) : (
           <span />
         )}
         <p className="flex items-center gap-2 text-sm text-text-muted">
-          <span className="sr-only">Step {step} of 2</span>
+          <span className="sr-only">{t("stepOf", { n: step, total: 2 })}</span>
           {[1, 2].map((n) => (
             <span
               key={n}
@@ -49,28 +51,25 @@ export function Onboarding() {
         <button
           type="button"
           className="min-h-(--tap-min) px-3 text-body text-text-muted underline underline-offset-3 focus-ring"
-          onClick={() => finish()}
+          onClick={() => void finish()}
         >
-          Skip
+          {t("skip")}
         </button>
       </div>
 
       {step === 1 && (
         <header className="flex flex-col gap-2">
           <h1 className="text-headline leading-(--leading-heading) font-bold">
-            Your panchang, on your phone
+            {t("onbTitle")}
           </h1>
-          <p className="text-body text-text-muted">
-            Tithi, Choghadiya and your family's dates, worked out for your
-            city's sunrise. No account; nothing leaves your phone.
-          </p>
+          <p className="text-body text-text-muted">{t("onbBody")}</p>
         </header>
       )}
 
       {city ? (
         <section className="flex flex-col gap-4">
           <h2 className="text-title leading-(--leading-heading) font-bold">
-            Choose your language
+            {t("chooseLanguage")}
           </h2>
           <p className="text-text-muted">{cityLabel(city)}</p>
           {LANGUAGES.map(({ lang, label, note }) => (
@@ -79,7 +78,7 @@ export function Onboarding() {
               type="button"
               lang={lang}
               className={`flex min-h-16 flex-col items-start justify-center px-5 text-left hover:bg-surface-sunken focus-ring ${card}`}
-              onClick={() => finish(city.location, lang)}
+              onClick={() => void finish(city.location, lang)}
             >
               <span className="text-lg font-semibold">{label}</span>
               {lang !== "en" && (
@@ -92,14 +91,12 @@ export function Onboarding() {
         </section>
       ) : (
         <section className="flex flex-col gap-4">
-          <CityPicker label="Search your city" onPick={setCity} />
-          <p className="text-sm text-text-muted">
-            Sunrise in your city decides each day's tithi.
-          </p>
+          <CityPicker label={t("searchCity")} onPick={setCity} />
+          <p className="text-sm text-text-muted">{t("onbCityHint")}</p>
         </section>
       )}
       <p className="mt-auto text-caption text-text-muted">
-        City data: GeoNames (geonames.org), CC-BY 4.0
+        {t("cityAttributionShort")}
       </p>
     </main>
   );

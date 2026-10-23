@@ -26,6 +26,7 @@ import {
   type Instant,
 } from "@panchang/engine";
 import type { MonthDay, StoredEvent } from "@/db";
+import { SHOW_UNVERIFIED } from "@/flags";
 import { clockFor, localInstant } from "@/lib/clock";
 import type { YearMonth } from "@/lib/year-month";
 import { firstDay } from "@/lib/year-month";
@@ -70,7 +71,7 @@ export const api = {
     const unverified = new Set(
       FESTIVALS.filter((r) => r.verified.years.length === 0).map((r) => r.id),
     );
-    const rules = import.meta.env.DEV
+    const rules = SHOW_UNVERIFIED
       ? FESTIVALS
       : FESTIVALS.filter((r) => !unverified.has(r.id));
     const place = {

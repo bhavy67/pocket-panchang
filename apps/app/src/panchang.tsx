@@ -8,6 +8,7 @@ import {
   type PanchangDay,
 } from "@panchang/engine";
 import {
+  karanaDisplay,
   monthName,
   nakshatraName,
   tithiLabel,
@@ -16,6 +17,7 @@ import {
 } from "@panchang/i18n";
 import type { DayView } from "@/day-data";
 import { useQuery } from "@tanstack/react-query";
+import { lang, t } from "@/i18n";
 import { dateLong, timeOn } from "@/lib/format";
 import { moonQuery } from "@/queries";
 import type { Settings } from "@/settings";
@@ -39,14 +41,18 @@ function untilText(
   tz: string,
   date: CivilDate,
 ) {
-  if (el.ends.length === 0) return "All day, and past the next sunrise";
+  if (el.ends.length === 0) return t("allDayPastSunrise");
   return el.ends
-    .map(
-      (e, k) =>
-        `${k === 0 ? "Until" : `then ${name(e.index)} until`} ${timeOn(e.endsAt, tz, date)}`,
+    .map((e, k) =>
+      k === 0
+        ? t("elUntil", { time: timeOn(e.endsAt, tz, date) })
+        : t("elThenUntil", {
+            name: name(e.index),
+            time: timeOn(e.endsAt, tz, date),
+          }),
     )
-    .concat(`then ${name(next(el.ends.at(-1)!.index, count))}`)
-    .join(", ");
+    .concat(t("elThen", { name: name(next(el.ends.at(-1)!.index, count)) }))
+    .join(t("listJoin"));
 }
 
 export function tithiTitle(day: PanchangDay, tithi: number) {
@@ -65,29 +71,31 @@ export function ElementsCard({ view, tz }: { view: DayView; tz: string }) {
   const { day } = view;
   const rows = [
     {
-      label: "Tithi (lunar day)",
+      label: t("elTithi"),
       el: day.tithi,
       count: COUNT.tithi,
-      name: (i: number) => tithiLabel(i, "en"),
+      name: (i: number) => tithiLabel(i, lang()),
     },
     {
-      label: "Nakshatra (star)",
+      label: t("elNakshatra"),
       el: day.nakshatra,
       count: COUNT.nakshatra,
-      name: (i: number) => nakshatraName(i, "en"),
+      name: (i: number) => nakshatraName(i, lang()),
     },
     {
-      label: "Yoga",
+      label: t("elYoga"),
       el: day.yoga,
       count: COUNT.yoga,
-      name: (i: number) => yogaName(i, "en"),
+      name: (i: number) => yogaName(i, lang()),
     },
     {
-      label: "Karana (half of a tithi)",
+      label: t("elKarana"),
       el: day.karana,
       count: COUNT.karana,
-      name: (i: number) =>
-        karanaName(i) === "Vishti" ? "Vishti (Bhadra)" : karanaName(i),
+      name: (i: number) => {
+        const n = karanaDisplay(karanaName(i), lang());
+        return karanaName(i) === "Vishti" ? t("vishtiBhadra", { name: n }) : n;
+      },
     },
   ];
   return (
@@ -101,7 +109,7 @@ export function ElementsCard({ view, tz }: { view: DayView; tz: string }) {
             <span className="text-sm text-text-muted">{r.label}</span>
             {r.el.ends.length > 0 && (
               <span className="rounded-sm bg-warning-subtle px-2 py-0.5 text-caption font-semibold text-warning">
-                Changes today
+                {t("changesToday")}
               </span>
             )}
           </div>
@@ -115,12 +123,18 @@ export function ElementsCard({ view, tz }: { view: DayView; tz: string }) {
         </div>
       ))}
       <div className="flex flex-col gap-0.5 border-t border-border px-5 py-4">
-        <span className="text-sm text-text-muted">Weekday</span>
+        <span className="text-sm text-text-muted">{t("weekday")}</span>
         <span className="text-lg leading-snug font-semibold">
-          {weekdayName(day.vara, "en")} ·{" "}
-          <span lang="gu">{weekdayName(day.vara, "gu")}</span>
+          {lang() === "gu" ? (
+            weekdayName(day.vara, "gu")
+          ) : (
+            <>
+              {weekdayName(day.vara, "en")} ·{" "}
+              <span lang="gu">{weekdayName(day.vara, "gu")}</span>
+            </>
+          )}
         </span>
-        <span className="text-sm text-text-muted">Sunrise to next sunrise</span>
+        <span className="text-sm text-text-muted">{t("sunriseToSunrise")}</span>
       </div>
     </div>
   );
@@ -132,16 +146,14 @@ function TithiMarkers({ el }: { el: ElementDay }) {
     <>
       {el.vriddhi && (
         <span className="text-sm">
-          <strong className="font-semibold">Two-day tithi:</strong>{" "}
-          {tithiLabel(el.atSunrise, "en")} is also the tithi at tomorrow's
-          sunrise.
+          <strong className="font-semibold">{t("twoDayTithi")}</strong>{" "}
+          {t("twoDayTithiText", { tithi: tithiLabel(el.atSunrise, lang()) })}
         </span>
       )}
       {el.kshaya.map((k) => (
         <span key={k} className="text-sm">
-          <strong className="font-semibold">Skipped tithi:</strong>{" "}
-          {tithiLabel(k, "en")} begins and ends today, so no day is named after
-          it.
+          <strong className="font-semibold">{t("skippedTithi")}</strong>{" "}
+          {t("skippedTithiText", { tithi: tithiLabel(k, lang()) })}
         </span>
       ))}
     </>
@@ -153,19 +165,23 @@ export function SunMoonCard({ view, s }: { view: DayView; s: Settings }) {
   const { data: moon } = useQuery(moonQuery(s, view.date));
   const sunset = view.day.sunset.kind === "event" ? view.day.sunset.at : null;
   const cells = [
-    ["Sunrise", timeOn(view.day.sunrise, tz, view.date)],
-    ["Sunset", sunset === null ? "—" : timeOn(sunset, tz, view.date)],
+    [t("sunrise"), timeOn(view.day.sunrise, tz, view.date)],
+    [t("sunset"), sunset === null ? "—" : timeOn(sunset, tz, view.date)],
     [
-      "Moonrise",
+      t("moonrise"),
       moon
         ? moon.rise
           ? timeOn(moon.rise, tz, view.date)
-          : "None today"
+          : t("noneToday")
         : "…",
     ],
     [
-      "Moonset",
-      moon ? (moon.set ? timeOn(moon.set, tz, view.date) : "None today") : "…",
+      t("moonset"),
+      moon
+        ? moon.set
+          ? timeOn(moon.set, tz, view.date)
+          : t("noneToday")
+        : "…",
     ],
   ];
   return (
@@ -183,23 +199,23 @@ export function SunMoonCard({ view, s }: { view: DayView; s: Settings }) {
 export function samvatLine(day: PanchangDay, s: Settings) {
   switch (s.samvat) {
     case "vikram-kartikadi":
-      return `Vikram Samvat ${day.samvat.vikramKartikadi}`;
+      return t("samvatVikram", { year: day.samvat.vikramKartikadi });
     case "vikram-chaitradi":
-      return `Vikram Samvat ${day.samvat.vikramChaitradi} (Chaitra start)`;
+      return t("samvatVikramChaitra", { year: day.samvat.vikramChaitradi });
     case "shaka":
-      return `Shaka Samvat ${day.samvat.shaka}`;
+      return t("samvatShaka", { year: day.samvat.shaka });
   }
 }
 
 /** "How this is calculated" (brief §3.7), short form until the trust page lands. */
 export const howSheet = (s: Settings, date: DayView["date"]): SheetContent => ({
-  kicker: "Trust",
+  kicker: t("trust"),
   tone: "accent",
-  title: "How this is calculated",
+  title: t("howCalculated"),
   range: `${s.location.name} · ${dateLong(date)}`,
-  body: `Times use sunrise and sunset in ${s.location.name}. The tithi comes from the angle between the Sun and the Moon at sunrise. Everything is worked out on your phone; nothing is sent anywhere.`,
-  note: "If a date or time looks different from your printed calendar, please tell us.",
-  action: { label: "Report a mismatch", href: mismatchUrl(s, date) },
+  body: t("howBody", { city: s.location.name }),
+  note: t("howNote"),
+  action: { label: t("reportMismatch"), href: mismatchUrl(s, date) },
 });
 
 /** Pre-filled GitHub issue (§9 trust surfaces): date, city, settings, engine version. */

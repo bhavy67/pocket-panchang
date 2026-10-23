@@ -2,20 +2,21 @@
 import type { CivilDate } from "@panchang/engine";
 import { Link } from "@tanstack/react-router";
 import type { UpcomingRow } from "@/events-data";
+import { t } from "@/i18n";
 import { dateShort, daysBetween } from "@/lib/format";
 import { lunarLabel } from "@/policy";
 import type { Settings } from "@/settings";
 import { card } from "@/ui";
 
 export const inDays = (n: number) =>
-  n === 0 ? "today" : n === 1 ? "tomorrow" : `in ${n} days`;
+  n === 0 ? t("inToday") : n === 1 ? t("inTomorrow") : t("inDays", { n });
 
 export const rowLabels = (r: UpcomingRow) =>
   r.occurrences.map((o) =>
     o.kind === "pitru-paksha"
-      ? "Pitru Paksha"
+      ? t("pitruPaksha")
       : o.month === "adhik"
-        ? "Extra month"
+        ? t("extraMonth")
         : null,
   );
 
@@ -39,14 +40,16 @@ export function EventRow({
       <PersonalIcon />
       <span className="flex min-w-[min(9rem,100%)] flex-1 flex-col">
         <span className="text-caption font-semibold text-personal-event">
-          Family date{labels.length > 0 && ` · ${labels.join(" · ")}`}
+          {t("familyDate")}
+          {labels.length > 0 &&
+            t("rowLabelSep") + labels.join(t("rowLabelSep"))}
         </span>
         <span className="text-lg leading-tight font-semibold">
           {r.event.title}
         </span>
         <span className="text-sm text-text-muted">
           {lunarLabel(r.event.lunarDate)} · {dateShort(r.date)}
-          {city.id !== s.location.id && ` (${city.name})`}
+          {city.id !== s.location.id && t("inCity", { city: city.name })}
         </span>
       </span>
       <span className="flex-none text-right text-sm font-semibold">

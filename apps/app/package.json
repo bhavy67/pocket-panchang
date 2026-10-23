@@ -9,9 +9,12 @@
     "preview": "vite preview",
     "typecheck": "tsc -b",
     "test": "vitest run",
-    "build:preview": "VITE_FAMILY_PREVIEW=1 vite build && cp vercel.preview.json dist/vercel.json"
+    "build:preview": "VITE_FAMILY_PREVIEW=1 vite build && cp vercel.preview.json dist/vercel.json",
+    "e2e": "playwright test"
   },
   "dependencies": {
+    "@fontsource/noto-sans-devanagari": "5.3.0",
+    "@fontsource/noto-sans-gujarati": "5.3.0",
     "@panchang/calendar": "workspace:*",
     "@panchang/engine": "workspace:*",
     "@panchang/i18n": "workspace:*",
@@ -24,6 +27,8 @@
     "zustand": "5.0.16"
   },
   "devDependencies": {
+    "@axe-core/playwright": "4.14.0",
+    "@playwright/test": "1.64.1",
     "@tailwindcss/vite": "4.3.3",
     "@testing-library/react": "16.3.3",
     "@testing-library/user-event": "14.6.8",
@@ -36,6 +41,9 @@
     "rollup-plugin-visualizer": "7.1.1",
     "tailwindcss": "4.3.3",
     "vite": "8.3.5",
-    "vitest": "5.0.5"
+    "vite-plugin-pwa": "2.0.0",
+    "vitest": "5.0.5",
+    "workbox-build": "7.4.1",
+    "workbox-window": "7.4.1"
   }
 }

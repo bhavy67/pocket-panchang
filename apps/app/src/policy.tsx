@@ -5,70 +5,66 @@ import {
   type OccurrencePolicy,
   type PolicyOverrides,
 } from "@panchang/calendar";
-import { monthName, tithiLabel } from "@panchang/i18n";
+import { monthName, tithiLabel, type MessageKey } from "@panchang/i18n";
 import { useId } from "react";
 import type { StoredEvent } from "@/db";
 import { inputClass } from "@/city-picker";
+import { lang, t } from "@/i18n";
 import type { Settings } from "@/settings";
 
-export const KIND_LABEL: Record<EventKind, string> = {
-  birthday: "Birthday (by tithi)",
-  shraddh: "Varsi / Shraddh",
-  anniversary: "Anniversary",
-  custom: "Other",
+export const KIND_LABEL: Record<EventKind, MessageKey> = {
+  birthday: "kindBirthday",
+  shraddh: "kindShraddh",
+  anniversary: "kindAnniversary",
+  custom: "kindCustom",
 };
 
 type ChoiceField = Exclude<keyof OccurrencePolicy, "pitruPaksha">;
 
+/** Policy fields with message keys; resolve with t() at render time. */
 export const FIELDS: {
   field: ChoiceField;
-  label: string;
-  help: string;
-  options: Record<string, string>;
+  label: MessageKey;
+  help: MessageKey;
+  options: Record<string, MessageKey>;
 }[] = [
   {
     field: "window",
-    label: "Which part of the day counts",
-    help: "Technical terms: udaya (sunrise) or aparahna (afternoon).",
-    options: {
-      sunrise: "Follow printed calendar day",
-      aparahna: "Traditional shraddh timing (afternoon)",
-    },
+    label: "polWindow",
+    help: "polWindowHelp",
+    options: { sunrise: "polWindowSunrise", aparahna: "polWindowAparahna" },
   },
   {
     field: "vriddhiTithi",
-    label: "When the tithi spans two days",
-    help: "Technical term: vriddhi tithi.",
-    options: { "first-day": "First day", "second-day": "Second day" },
-  },
-  {
-    field: "kshayaTithi",
-    label: "When the tithi is skipped that year",
-    help: "Technical term: kshaya tithi.",
+    label: "polVriddhi",
+    help: "polVriddhiHelp",
     options: {
-      "same-day": "The day the tithi falls in the calendar",
-      "following-day": "The next day",
+      "first-day": "polVriddhiFirst",
+      "second-day": "polVriddhiSecond",
     },
   },
   {
+    field: "kshayaTithi",
+    label: "polKshaya",
+    help: "polKshayaHelp",
+    options: { "same-day": "polKshayaSame", "following-day": "polKshayaNext" },
+  },
+  {
     field: "adhikMonth",
-    label: "In a year with an extra month",
-    help: "Technical terms: adhik (extra) and nija (regular) month.",
+    label: "polAdhik",
+    help: "polAdhikHelp",
     options: {
-      nija: "Regular month",
-      adhik: "Extra month",
-      "match-origin": "Match the original month",
-      both: "Both",
+      nija: "polAdhikNija",
+      adhik: "polAdhikAdhik",
+      "match-origin": "polAdhikMatch",
+      both: "polAdhikBoth",
     },
   },
   {
     field: "tithiSource",
-    label: "When working out the tithi from a date",
-    help: "Used by “I know the date”.",
-    options: {
-      moment: "Tithi at the time of birth/passing",
-      "calendar-day": "Tithi shown on the calendar for that date",
-    },
+    label: "polSource",
+    help: "polSourceHelp",
+    options: { moment: "polSourceMoment", "calendar-day": "polSourceCalendar" },
   },
 ];
 
@@ -89,23 +85,29 @@ export function PolicySelect({
   field,
   value,
   inheritedValue,
-  inheritedLabel,
+  inheritedFrom,
   onChange,
 }: {
   field: (typeof FIELDS)[number];
   value: string | undefined;
   inheritedValue: string;
-  inheritedLabel: string;
+  /** Where the inherited value comes from. */
+  inheritedFrom: "built-in" | "family";
   onChange: (v: string | undefined) => void;
 }) {
   const id = useId();
   return (
     <div className="flex flex-col gap-1">
       <label htmlFor={id} className="text-body font-semibold">
-        {field.label}
+        {t(field.label)}
       </label>
       <span className="text-sm">
-        {inheritedLabel}: {field.options[inheritedValue]}
+        {t("inheritedValue", {
+          source: t(
+            inheritedFrom === "family" ? "familyDefault" : "usualDefault",
+          ),
+          value: t(field.options[inheritedValue]!),
+        })}
       </span>
       <select
         id={id}
@@ -113,14 +115,18 @@ export function PolicySelect({
         onChange={(e) => onChange(e.target.value || undefined)}
         className={inputClass}
       >
-        <option value="">Use the {inheritedLabel.toLowerCase()}</option>
+        <option value="">
+          {t(
+            inheritedFrom === "family" ? "useFamilyDefault" : "useUsualDefault",
+          )}
+        </option>
         {Object.entries(field.options).map(([v, label]) => (
           <option key={v} value={v}>
-            {label}
+            {t(label)}
           </option>
         ))}
       </select>
-      <span className="text-sm text-text-muted">{field.help}</span>
+      <span className="text-sm text-text-muted">{t(field.help)}</span>
     </div>
   );
 }
@@ -138,4 +144,4 @@ export const setOverride = (
 
 /** "Kartak Vad 5", with "Adhik" when the original date was in an extra month. */
 export const lunarLabel = (d: StoredEvent["lunarDate"]) =>
-  `${monthName(d.month, "en", d.adhik)} ${tithiLabel(d.paksha === "shukla" ? d.tithi : d.tithi + 15, "en")}`;
+  `${monthName(d.month, lang(), d.adhik)} ${tithiLabel(d.paksha === "shukla" ? d.tithi : d.tithi + 15, lang())}`;

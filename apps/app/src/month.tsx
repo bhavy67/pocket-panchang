@@ -13,12 +13,14 @@ import { DayDetail } from "@/day-detail";
 import { PersonalIcon } from "@/event-row";
 import { useOccurrenceRows, type UpcomingRow } from "@/events-data";
 import { useFestivals, useNow } from "@/day-data";
+import { lang, t } from "@/i18n";
 import { clockFor } from "@/lib/clock";
-import { dateLong, monthTitle } from "@/lib/format";
+import { dateLong, dayNumber, monthTitle, weekdayInitials } from "@/lib/format";
 import { firstDay, yearMonthOf, type YearMonth } from "@/lib/year-month";
 import { monthQuery } from "@/queries";
 import { useSettings } from "@/settings";
 import { btnOutline, card } from "@/ui";
+import { SHOW_UNVERIFIED } from "@/flags";
 import type { Festival } from "@/worker/api";
 
 const wide = window.matchMedia("(min-width: 1024px)");
@@ -36,8 +38,6 @@ export const shiftMonth = (m: YearMonth, by: number) => {
   const d = new Date(Date.UTC(y, mo - 1 + by, 1));
   return d.toISOString().slice(0, 7) as YearMonth;
 };
-
-const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 export function Month({ month, date }: { month: YearMonth; date?: CivilDate }) {
   const s = useSettings((st) => st.settings)!;
@@ -81,7 +81,7 @@ export function Month({ month, date }: { month: YearMonth; date?: CivilDate }) {
             <button
               type="button"
               onClick={() => go(-1)}
-              aria-label="Previous month"
+              aria-label={t("prevMonth")}
               className={`${btnOutline} w-12 px-0`}
             >
               ‹
@@ -89,7 +89,7 @@ export function Month({ month, date }: { month: YearMonth; date?: CivilDate }) {
             <button
               type="button"
               onClick={() => go(1)}
-              aria-label="Next month"
+              aria-label={t("nextMonth")}
               className={`${btnOutline} w-12 px-0`}
             >
               ›
@@ -112,7 +112,7 @@ export function Month({ month, date }: { month: YearMonth; date?: CivilDate }) {
             aria-hidden="true"
             className="grid grid-cols-7 pb-1 text-center text-[length:min(var(--text-caption),17px)] font-semibold text-text-muted"
           >
-            {WEEKDAYS.map((w) => (
+            {weekdayInitials().map((w) => (
               <span key={w}>{w}</span>
             ))}
           </div>
@@ -150,27 +150,25 @@ export function Month({ month, date }: { month: YearMonth; date?: CivilDate }) {
 
 /** "Bhadarvo – Aaso": the lunar months the Gregorian month spans. */
 function LunarSpan({ days }: { days: readonly MonthDay[] }) {
-  const names = [
-    ...new Set(
-      days.flatMap(({ day }) =>
-        day.kind === "day"
-          ? [monthName(day.month.name, "en", day.month.adhik)]
-          : [],
+  const span = (l: "en" | "gu") =>
+    [
+      ...new Set(
+        days.flatMap(({ day }) =>
+          day.kind === "day"
+            ? [monthName(day.month.name, l, day.month.adhik)]
+            : [],
+        ),
       ),
-    ),
-  ];
-  const gu = [
-    ...new Set(
-      days.flatMap(({ day }) =>
-        day.kind === "day"
-          ? [monthName(day.month.name, "gu", day.month.adhik)]
-          : [],
-      ),
-    ),
-  ];
+    ].join(" – ");
   return (
     <p className="text-sm text-text-muted">
-      {names.join(" – ")} · <span lang="gu">{gu.join(" – ")}</span>
+      {lang() === "gu" ? (
+        span("gu")
+      ) : (
+        <>
+          {span("en")} · <span lang="gu">{span("gu")}</span>
+        </>
+      )}
     </p>
   );
 }
@@ -182,11 +180,9 @@ function AdhikBanner({ days }: { days: readonly MonthDay[] }) {
   if (adhik?.kind !== "day") return null;
   return (
     <p role="note" className="mt-3 rounded-md bg-accent-subtle p-3 text-sm">
-      <strong className="font-semibold">
-        {monthName(adhik.month.name, "en", true)}
-      </strong>{" "}
-      is an extra lunar month. It comes about every three years to keep the
-      lunar calendar in step with the seasons.
+      {t("adhikBanner", {
+        month: monthName(adhik.month.name, lang(), true),
+      })}
     </p>
   );
 }
@@ -261,12 +257,12 @@ function Grid({
               >
                 <span className="[overflow-wrap:anywhere]">
                   {dates[from] === f.date
-                    ? `${f.names.en} · Day 1`
-                    : f.names.en}
+                    ? t("bandDay1", { name: f.names[lang()] })
+                    : f.names[lang()]}
                   {f.unverified && "*"}
                 </span>
                 {dates[to] === f.endDate && (
-                  <span className="flex-none">Last day</span>
+                  <span className="flex-none">{t("bandLastDay")}</span>
                 )}
               </div>
             ))}
@@ -305,14 +301,16 @@ function Cell({
   const label = [
     dateLong(c.date),
     day &&
-      `${monthName(day.month.name, "en", day.month.adhik)} ${tithiLabel(day.tithi.atSunrise, "en")}`,
-    today && "today",
-    selected && "selected",
-    twoDay && "two-day tithi",
-    ...skipped.map((k) => `${tithiLabel(k, "en")} skipped`),
-    ...family.map((r) => `${r.event.title} (family date)`),
-    ...[...festivals, ...inSpan].map(
-      (f) => f.names.en + (f.unverified ? " (not yet verified)" : ""),
+      `${monthName(day.month.name, lang(), day.month.adhik)} ${tithiLabel(day.tithi.atSunrise, lang())}`,
+    today && t("cellToday"),
+    selected && t("cellSelected"),
+    twoDay && t("cellTwoDay"),
+    ...skipped.map((k) => t("cellSkipped", { tithi: tithiLabel(k, lang()) })),
+    ...family.map((r) => t("cellFamily", { name: r.event.title })),
+    ...[...festivals, ...inSpan].map((f) =>
+      f.unverified
+        ? t("cellNotVerified", { name: f.names[lang()] })
+        : f.names[lang()],
     ),
   ]
     .filter(Boolean)
@@ -321,7 +319,6 @@ function Cell({
   return (
     <Link
       {...link}
-      aria-label={label}
       aria-current={today ? "date" : undefined}
       className={`flex min-h-18 min-w-0 flex-col items-start gap-0.5 rounded-md border-[1.5px] p-[4px] text-left focus-ring sm:p-[6px] ${
         selected
@@ -334,11 +331,11 @@ function Cell({
           today ? "border-2 border-(--now-marker) text-(--now-marker)" : ""
         }`}
       >
-        {Number(c.date.slice(8))}
+        {dayNumber(c.date)}
       </span>
       {day && (
         <span className="text-[length:min(var(--text-caption),18px)] leading-tight text-text-muted [overflow-wrap:anywhere]">
-          {tithiLabel(day.tithi.atSunrise, "en")}
+          {tithiLabel(day.tithi.atSunrise, lang())}
         </span>
       )}
       <span
@@ -347,12 +344,12 @@ function Cell({
       >
         {twoDay && (
           <span className="rounded-sm border border-border-strong px-0.5 font-semibold">
-            2×
+            {t("twoDayMark")}
           </span>
         )}
         {skipped.length > 0 && (
           <span className="rounded-sm border border-dashed border-border-strong px-0.5 font-semibold">
-            skip
+            {t("skipMark")}
           </span>
         )}
       </span>
@@ -378,12 +375,13 @@ function Cell({
         >
           <span className="block size-2 flex-none rotate-45 bg-festival" />
           <span className="hidden [overflow-wrap:anywhere] sm:inline">
-            {f.names.en}
-            {f.variant && ` (${f.variant.label.en})`}
+            {f.names[lang()]}
+            {f.variant && ` (${f.variant.label[lang()]})`}
             {f.unverified && "*"}
           </span>
         </span>
       ))}
+      <span className="sr-only">{label}</span>
     </Link>
   );
 }
@@ -392,39 +390,37 @@ function Legend() {
   const item = "flex items-center gap-1.5";
   return (
     <ul
-      aria-label="Key"
+      aria-label={t("key")}
       className="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-sm"
     >
       <li className={item}>
         <span className="flex size-6 items-center justify-center rounded-full border-2 border-(--now-marker) text-caption font-semibold text-(--now-marker)">
-          1
+          {dayNumber("2026-01-01" as CivilDate)}
         </span>
-        Today
+        {t("keyToday")}
       </li>
       <li className={item}>
         <span className="block size-2.5 rotate-45 bg-festival" />
-        Festival
+        {t("keyFestival")}
       </li>
       <li className={item}>
         <PersonalIcon small />
-        Family date
+        {t("keyFamily")}
       </li>
       <li className={item}>
         <span className="rounded-sm border border-border-strong px-0.5 text-caption font-semibold">
-          2×
+          {t("twoDayMark")}
         </span>
-        Two-day tithi
+        {t("keyTwoDay")}
       </li>
       <li className={item}>
         <span className="rounded-sm border border-dashed border-border-strong px-0.5 text-caption font-semibold">
-          skip
+          {t("skipMark")}
         </span>
-        Skipped tithi (see the day for details)
+        {t("keySkipped")}
       </li>
-      {import.meta.env.DEV && (
-        <li className="text-text-muted">
-          * not yet verified (dev builds only)
-        </li>
+      {SHOW_UNVERIFIED && (
+        <li className="text-text-muted">{t("keyUnverified")}</li>
       )}
     </ul>
   );

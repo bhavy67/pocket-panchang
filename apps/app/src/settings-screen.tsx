@@ -12,7 +12,8 @@ import {
 } from "@panchang/engine";
 import { useQuery } from "@tanstack/react-query";
 import { useId, useState, type ReactNode } from "react";
-import { parseBackup } from "@/backup";
+import { backupErrorKey, parseBackup } from "@/backup";
+import { loadLanguage, t } from "@/i18n";
 import { CityPicker } from "@/city-picker";
 import type { StoredEvent } from "@/db";
 import { btnPrimary } from "@/events";
@@ -40,7 +41,14 @@ import {
   useSettings,
   type Settings,
 } from "@/settings";
-import { btnOutline, card, Section, Sheet, type SheetContent } from "@/ui";
+import {
+  btnOutline,
+  card,
+  InstallCard,
+  Section,
+  Sheet,
+  type SheetContent,
+} from "@/ui";
 import { worker } from "@/worker/client";
 
 const radio =
@@ -94,9 +102,9 @@ function Choice<T extends string | number>({
 }
 
 const PALETTES = [
-  ["calm", "Calm"],
-  ["mandir", "Mandir"],
-  ["raat", "Raat"],
+  ["calm", "paletteCalm"],
+  ["mandir", "paletteMandir"],
+  ["raat", "paletteRaat"],
 ] as const;
 
 /** A live swatch: the palette's own tokens, applied by data attributes (ADR 0017). */
@@ -132,99 +140,86 @@ export function SettingsScreen() {
   return (
     <main className="mx-auto max-w-180">
       <h1 className="px-4 pt-4 text-headline leading-(--leading-heading) font-bold">
-        Settings
+        {t("settings")}
       </h1>
 
-      <Section title="Place">
+      <Section title={t("place")}>
         <div className={`flex flex-col gap-5 p-5 ${card}`}>
           <div className="flex flex-col gap-2">
             <p className="text-body">
-              Showing the panchang for{" "}
-              <strong className="font-semibold">{s.location.name}</strong>
+              {t("showingFor", { city: s.location.name })}
             </p>
             <CityPicker
-              label="Change city"
+              label={t("changeCity")}
               onPick={(c) => set({ location: c.location })}
             />
           </div>
           <div className="flex flex-col gap-2 border-t border-border pt-4">
             <p className="text-body">
-              Family dates use sunrise in{" "}
-              <strong className="font-semibold">
-                {s.observanceLocation.name}
-              </strong>
+              {t("familySunriseIn", { city: s.observanceLocation.name })}
             </p>
-            <p className="text-sm text-text-muted">
-              Usually where the family observes them. Living abroad but
-              following India's date? Choose the Indian city.
-            </p>
+            <p className="text-sm text-text-muted">{t("familySunriseHelp")}</p>
             <ObservanceCity s={s} events={events} />
           </div>
         </div>
       </Section>
 
-      <Section title="Display">
+      <Section title={t("display")}>
         <div className={`flex flex-col gap-6 p-5 ${card}`}>
           <Choice
-            legend="Year style"
+            legend={t("yearStyle")}
             min="100%"
             value={s.samvat}
             options={[
-              ["vikram-kartikadi", "Vikram Samvat (Gujarati, from Diwali)"],
-              ["vikram-chaitradi", "Vikram Samvat (from Chaitra)"],
-              ["shaka", "Shaka Samvat"],
+              ["vikram-kartikadi", t("yearKartikadi")],
+              ["vikram-chaitradi", t("yearChaitradi")],
+              ["shaka", t("yearShaka")],
             ]}
             onChange={(samvat) => set({ samvat })}
           />
           <Choice
-            legend="Language"
+            legend={t("language")}
             value={s.language}
             options={[
               ["gu", "ગુજરાતી"],
               ["en", "English"],
             ]}
-            onChange={(language) => set({ language })}
+            onChange={(language) =>
+              void loadLanguage(language).then(() => set({ language }))
+            }
           />
-          {s.language === "gu" && (
-            <p className="-mt-4 text-sm text-text-muted">
-              The Gujarati screens are coming soon; Gujarati names already show.
-            </p>
-          )}
           <Choice
-            legend="Text size"
+            legend={t("textSize")}
             value={s.textScale}
             options={[
-              [1, "Normal"],
-              [1.25, "Large"],
-              [1.5, "Larger"],
-              [2, "Largest"],
+              [1, t("sizeNormal")],
+              [1.25, t("sizeLarge")],
+              [1.5, t("sizeLarger")],
+              [2, t("sizeLargest")],
             ]}
             onChange={(textScale) => set({ textScale })}
           />
           <Choice
-            legend="Colours"
+            legend={t("colours")}
             value={s.palette}
-            options={PALETTES}
+            options={PALETTES.map(([v, k]) => [v, t(k)] as const)}
             onChange={(palette) => set({ palette })}
             render={(v, label) => <PaletteSwatch palette={v} label={label} />}
           />
           <Choice
-            legend="Light or dark"
+            legend={t("lightOrDark")}
             value={s.theme}
             options={[
-              ["system", "Same as phone"],
-              ["light", "Light"],
-              ["dark", "Dark"],
+              ["system", t("modeSystem")],
+              ["light", t("modeLight")],
+              ["dark", t("modeDark")],
             ]}
             onChange={(theme) => set({ theme })}
           />
         </div>
       </Section>
 
-      <Section
-        title="Family conventions"
-        sub="How your family places dates when the calendar is unclear. Each family date can still change these under Advanced."
-      >
+      <Section title={t("familyConventions")} sub={t("familyConventionsSub")}>
         <div className="flex flex-col gap-2">
           {EVENT_KINDS.map((k) => (
             <Conventions key={k} kind={k} s={s} events={events} />
@@ -232,39 +227,42 @@ export function SettingsScreen() {
         </div>
       </Section>
 
-      <Section
-        title="Backup"
-        sub="Family dates live only on this phone. Save a backup file to keep them safe or move them to another phone."
-      >
+      <Section title={t("backup")} sub={t("backupSub")}>
         <div id="backup" className={`flex flex-col gap-3 p-5 ${card}`}>
           <p className="text-body">
             {meta?.lastBackupAt
-              ? `Last backup: ${dateLong(clockFor(s.location.tz).localDate(meta.lastBackupAt as Instant))}`
-              : "No backup saved yet."}
+              ? t("lastBackup", {
+                  date: dateLong(
+                    clockFor(s.location.tz).localDate(
+                      meta.lastBackupAt as Instant,
+                    ),
+                  ),
+                })
+              : t("noBackupYet")}
           </p>
           <button
             type="button"
             className={btnPrimary}
             onClick={() =>
               void exportBackup(s, events).then(() =>
-                setStatus("Backup saved."),
+                setStatus(t("backupSaved")),
               )
             }
           >
-            Save a backup
+            {t("saveBackup")}
           </button>
-          <ImportBackup current={events} onStatus={setStatus} />
+          <ImportBackup s={s} onStatus={setStatus} />
           <button
             type="button"
             className={btnOutline}
             disabled={events.length === 0}
             onClick={() =>
               void exportIcs(s, events, today, addDays(today, 730)).then(() =>
-                setStatus("Calendar file saved."),
+                setStatus(t("icsSaved")),
               )
             }
           >
-            Save calendar file (.ics)
+            {t("saveIcs")}
           </button>
           <p aria-live="polite" className="text-sm text-text-muted">
             {status}
@@ -272,14 +270,18 @@ export function SettingsScreen() {
         </div>
       </Section>
 
-      <Section title="About">
+      <div className="px-4 pt-8 empty:hidden">
+        <InstallCard where="settings" />
+      </div>
+
+      <Section title={t("about")}>
         <div className={`flex flex-col gap-3 p-5 ${card}`}>
           <button
             type="button"
             className={btnOutline}
             onClick={() => setSheet(howSheet(s, today))}
           >
-            How this is calculated
+            {t("howCalculated")}
           </button>
           <a
             href={mismatchUrl(s, today)}
@@ -287,17 +289,15 @@ export function SettingsScreen() {
             rel="noreferrer"
             className={btnOutline}
           >
-            Report a mismatch
+            {t("reportMismatch")}
           </a>
           <p className="text-body">
-            <strong className="font-semibold">Private by design.</strong>{" "}
-            Everything stays on your phone. No account, no ads, no tracking.
+            <strong className="font-semibold">{t("privateTitle")}</strong>{" "}
+            {t("privateBody")}
           </p>
+          <p className="text-sm text-text-muted">{t("cityAttribution")}</p>
           <p className="text-sm text-text-muted">
-            City data: GeoNames (geonames.org), CC-BY 4.0.
-          </p>
-          <p className="text-sm text-text-muted">
-            Engine version {ENGINE_VERSION}
+            {t("engineVersion", { v: ENGINE_VERSION })}
           </p>
         </div>
       </Section>
@@ -341,7 +341,7 @@ async function applyHouseholdChange(
   if (
     n === 0 ||
     window.confirm(
-      `This changes the dates of ${n} family date${n === 1 ? "" : "s"}. Continue?`,
+      n === 1 ? t("confirmChangeOne") : t("confirmChangeMany", { n }),
     )
   )
     saveSettings(next);
@@ -356,7 +356,7 @@ function ObservanceCity({
 }) {
   return (
     <CityPicker
-      label="Change city for family dates"
+      label={t("changeFamilyCity")}
       onPick={(c) =>
         void applyHouseholdChange(
           s,
@@ -395,7 +395,7 @@ function Conventions({
   return (
     <details className={`p-4 ${card}`}>
       <summary className="flex min-h-(--tap-min) cursor-pointer items-center text-body font-semibold focus-ring">
-        {KIND_LABEL[kind]}
+        {t(KIND_LABEL[kind])}
       </summary>
       <div className="mt-3 flex flex-col gap-5">
         {FIELDS.map((f) => (
@@ -406,7 +406,7 @@ function Conventions({
             inheritedValue={String(
               inherited({ ...s, householdPolicy: {} }, kind, f.field).value,
             )}
-            inheritedLabel="Usual default"
+            inheritedFrom="built-in"
             onChange={(v) => update(f.field, v)}
           />
         ))}
@@ -422,9 +422,7 @@ function Conventions({
               onChange={(e) => update("pitruPaksha", e.target.checked)}
               className="size-5 accent-(--accent)"
             />
-            <span className="text-body">
-              Also remind during Pitru Paksha (Shraddh fortnight)
-            </span>
+            <span className="text-body">{t("alsoPitruShort")}</span>
           </label>
         )}
       </div>
@@ -433,10 +431,10 @@ function Conventions({
 }
 
 function ImportBackup({
-  current,
+  s,
   onStatus,
 }: {
-  current: readonly StoredEvent[];
+  s: Settings;
   onStatus: (s: string) => void;
 }) {
   const id = useId();
@@ -447,7 +445,7 @@ function ImportBackup({
         htmlFor={id}
         className={`${btnOutline} cursor-pointer has-focus-visible:outline-3 has-focus-visible:outline-focus-ring`}
       >
-        Restore from a backup file
+        {t("restoreBackup")}
         <input
           id={id}
           type="file"
@@ -459,20 +457,25 @@ function ImportBackup({
             if (!file) return;
             void file.text().then(async (text) => {
               const b = parseBackup(text);
-              if (isParseError(b)) return setError(b.message);
+              if (isParseError(b)) return setError(t(backupErrorKey(b)));
               setError("");
-              const when = new Date(b.exportedAt).toLocaleDateString("en-GB", {
-                dateStyle: "long",
-              });
+              const when = dateLong(
+                clockFor(s.location.tz).localDate(b.exportedAt as Instant),
+              );
               if (
                 !window.confirm(
-                  `Replace your ${current.length} family date${current.length === 1 ? "" : "s"} and settings with the backup from ${when} (${b.events.length} family date${b.events.length === 1 ? "" : "s"})?`,
+                  t(
+                    b.events.length === 1
+                      ? "confirmRestoreOne"
+                      : "confirmRestoreMany",
+                    { date: when, count: b.events.length },
+                  ),
                 )
               )
                 return;
               await replaceEvents(b.events);
               saveSettings(b.settings);
-              onStatus("Backup restored.");
+              onStatus(t("backupRestored"));
             });
           }}
         />

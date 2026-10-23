@@ -2,7 +2,16 @@
 // never colour alone: good = filled circle + tick, not good = diamond + bar, neutral = outlined
 // circle + bar.
 import { Link, Outlet } from "@tanstack/react-router";
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { t } from "@/i18n";
+import {
+  installCardState,
+  needsIosHint,
+  promptInstall,
+  saveInstallCardState,
+  usePwa,
+} from "@/pwa";
+import { useSettings } from "@/settings";
 
 export type Tone = "good" | "neutral" | "bad" | "rahu";
 
@@ -161,7 +170,7 @@ export function Sheet({
             onClick={onClose}
             className="min-h-13 rounded-md bg-accent text-body font-semibold text-text-on-accent focus-ring"
           >
-            Close
+            {t("close")}
           </button>
         </div>
       )}
@@ -201,7 +210,7 @@ export const card = "rounded-lg bg-surface shadow-(--elevation-1)";
 const NAV = [
   {
     to: "/",
-    label: "Today",
+    label: "navToday",
     icon: (
       <>
         <circle cx="11" cy="11" r="5" className="fill-current" />
@@ -216,7 +225,7 @@ const NAV = [
   },
   {
     to: "/month",
-    label: "Month",
+    label: "navMonth",
     icon: (
       <>
         <rect
@@ -240,7 +249,7 @@ const NAV = [
   },
   {
     to: "/events",
-    label: "Events",
+    label: "navEvents",
     icon: (
       <path
         d="M5 2h12v18l-6-4-6 4z"
@@ -253,7 +262,7 @@ const NAV = [
   },
   {
     to: "/settings",
-    label: "Settings",
+    label: "navSettings",
     icon: (
       <path
         d="M3 6h16M3 11h16M3 16h16"
@@ -279,29 +288,91 @@ function PreviewBanner() {
       role="note"
       className="flex flex-wrap items-center gap-x-3 gap-y-1 border-b border-warning bg-warning-subtle px-4 py-2 text-sm"
     >
-      <strong className="font-semibold">Family preview.</strong>
-      <span>
-        Before moving to the final app, save a backup in Settings → Backup and
-        restore it there.
-      </span>
+      <strong className="font-semibold">{t("previewTitle")}</strong>
+      <span>{t("previewBody")}</span>
       <Link
         to="/settings"
         hash="backup"
         className="font-semibold text-accent underline underline-offset-3 focus-ring"
       >
-        Go to Backup
+        {t("previewLink")}
       </Link>
     </p>
   );
 }
 
-export function Shell() {
+/** A waiting update: the user decides when to reload (never mid-task). */
+function UpdateBar() {
+  const update = usePwa((p) => p.update);
+  if (!update) return null;
   return (
-    <div className="min-h-dvh bg-bg text-text">
+    <div
+      role="status"
+      className="fixed inset-x-0 bottom-20 z-20 mx-auto flex max-w-xl flex-wrap items-center justify-between gap-3 rounded-lg border border-border bg-surface-raised p-4 shadow-(--elevation-3) lg:bottom-6"
+    >
+      <span className="text-body">{t("updateReady")}</span>
+      <button
+        type="button"
+        onClick={() => void update()}
+        className="flex min-h-(--tap-min) items-center rounded-md bg-accent px-4 text-body font-semibold text-text-on-accent focus-ring"
+      >
+        {t("updateReload")}
+      </button>
+    </div>
+  );
+}
+
+/**
+ * "Install the app": always in Settings; on Today only from the second visit and until
+ * dismissed. iPhone gets the Share → Add to Home Screen steps instead.
+ */
+export function InstallCard({ where }: { where: "today" | "settings" }) {
+  const install = usePwa((p) => p.install);
+  const [state, setState] = useState(installCardState);
+  const ios = needsIosHint();
+  if (!install && !ios) return null;
+  if (where === "today" && (state.dismissed || state.visits < 2)) return null;
+  return (
+    <div className={`flex flex-col gap-3 p-5 ${card}`}>
+      <p className="text-lg font-semibold">{t("installTitle")}</p>
+      <p className="text-body">{ios ? t("installIos") : t("installBody")}</p>
+      <div className="flex flex-wrap gap-2">
+        {install && (
+          <button
+            type="button"
+            onClick={() => void promptInstall()}
+            className="flex min-h-(--tap-min) items-center rounded-md bg-accent px-5 text-body font-semibold text-text-on-accent focus-ring"
+          >
+            {t("installButton")}
+          </button>
+        )}
+        {where === "today" && (
+          <button
+            type="button"
+            className={btnOutline}
+            onClick={() => {
+              const next = { ...state, dismissed: true };
+              saveInstallCardState(next);
+              setState(next);
+            }}
+          >
+            {t("notNow")}
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export function Shell() {
+  // Remount on a language change so every t() call re-runs (t is module-level).
+  const language = useSettings((st) => st.settings?.language);
+  return (
+    <div key={language} className="min-h-dvh bg-bg text-text">
       {import.meta.env.VITE_FAMILY_PREVIEW === "1" && <PreviewBanner />}
       <div className="lg:flex">
         <nav
-          aria-label="Main"
+          aria-label={t("navMain")}
           className="fixed inset-x-0 bottom-0 z-10 grid grid-cols-4 border-t border-border bg-surface px-2 pt-2 pb-[max(env(safe-area-inset-bottom),0.5rem)] lg:sticky lg:top-0 lg:h-dvh lg:w-28 lg:flex-none lg:grid-cols-1 lg:content-start lg:gap-2 lg:border-t-0 lg:border-r lg:pt-6"
         >
           {NAV.map((n) => (
@@ -321,13 +392,14 @@ export function Shell() {
                   {n.icon}
                 </svg>
               </span>
-              {n.label}
+              {t(n.label)}
             </Link>
           ))}
         </nav>
         <div className="min-w-0 flex-1 pb-24 lg:pb-8">
           <Outlet />
         </div>
+        <UpdateBar />
       </div>
     </div>
   );

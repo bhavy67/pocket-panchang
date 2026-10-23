@@ -7,3 +7,6 @@ docs/design/contrast/
 # Generated reference data (scripts and tools write it)
 fixtures/
 apps/app/public/data/
+dist-e2e/
+test-results/
+playwright-report/

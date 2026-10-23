@@ -18,7 +18,10 @@ export const monthQuery = (s: Settings, month: YearMonth) =>
   queryOptions({
     queryKey: ["month", cacheKey(s, month)],
     queryFn: async () => {
+      // §7 budget "month computation < 300 ms": measured round trip, read by the E2E budget check.
+      const started = performance.now();
       const days = await worker.month(s.location, month);
+      performance.measure(`month ${month}`, { start: started });
       // A failed cache write only costs the next cold start; never fail the query for it.
       await db.monthCache
         .put({ key: cacheKey(s, month), days, computedAt: Date.now() })

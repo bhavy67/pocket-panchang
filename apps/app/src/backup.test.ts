@@ -65,7 +65,9 @@ describe("backup", () => {
     expect(isParseError(parseBackup("not json"))).toBe(true);
     expect(isParseError(parseBackup("{}"))).toBe(true);
     const newer = parseBackup(JSON.stringify({ ...good, schemaVersion: 99 }));
-    expect(isParseError(newer) && newer.message).toMatch(/newer version/);
+    expect(isParseError(newer) && "reason" in newer && newer.reason).toBe(
+      "newer",
+    );
     good.events[0]!.lunarDate.tithi = 16;
     expect(isParseError(parseBackup(JSON.stringify(good)))).toBe(true);
   });

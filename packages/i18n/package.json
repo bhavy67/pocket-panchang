@@ -4,7 +4,9 @@
   "type": "module",
   "sideEffects": false,
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./en": "./src/messages/en.ts",
+    "./gu": "./src/messages/gu.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",

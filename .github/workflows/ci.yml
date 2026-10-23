@@ -32,3 +32,22 @@ jobs:
         with:
           name: accuracy-report
           path: accuracy-report.md
+
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @panchang/app exec playwright install --with-deps chromium
+      # Onboarding, Today, Month, family date + .ics, worker smoke, offline, axe, budgets.
+      - run: pnpm --filter @panchang/app e2e
+      - uses: actions/upload-artifact@v7
+        if: failure()
+        with:
+          name: playwright-traces
+          path: apps/app/test-results

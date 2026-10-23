@@ -6,19 +6,26 @@ import type { Choghadiya, DayMuhurta, Interval } from "@panchang/calendar";
 import type { Instant } from "@panchang/engine";
 import { useState } from "react";
 import type { DayView } from "@/day-data";
+import { choghadiyaName } from "@panchang/i18n";
+import { lang, t } from "@/i18n";
 import { range, time, timeShort } from "@/lib/format";
 import { card, QualityIcon, type SheetContent, type Tone } from "@/ui";
 
 // ---- Domain → display ----
 
 export const qualityLabel = (c: Choghadiya) =>
-  c.name === "Amrut"
-    ? "Best time"
-    : c.quality === "good"
-      ? "Good time"
-      : c.quality === "bad"
-        ? "Not good"
-        : "Neutral";
+  t(
+    c.name === "Amrut"
+      ? "qBest"
+      : c.quality === "good"
+        ? "qGood"
+        : c.quality === "bad"
+          ? "qBad"
+          : "qNeutral",
+  );
+
+/** Display name of a Choghadiya in the UI language. */
+export const chogName = (c: Choghadiya) => choghadiyaName(c.name, lang());
 
 export const toneOf = (c: Choghadiya): Tone => c.quality;
 
@@ -35,6 +42,7 @@ const qualityInk = (c: Choghadiya) =>
   c.quality === "good" ? "text-auspicious" : "text-text-muted";
 
 export type Avoid = Interval & {
+  /** Display name in the UI language. */
   readonly name: string;
   readonly kind: "rahu" | "soft" | "bhadra";
 };
@@ -42,25 +50,22 @@ export type Avoid = Interval & {
 /** Every avoid period of the day: Rahu Kaal (strong), Yamaganda and Gulika (soft), Bhadra. */
 export function avoidPeriods(m: DayMuhurta): Avoid[] {
   return [
-    { ...m.rahuKaal, name: "Rahu Kaal", kind: "rahu" as const },
-    { ...m.yamaganda, name: "Yamaganda", kind: "soft" as const },
-    { ...m.gulika, name: "Gulika", kind: "soft" as const },
-    ...m.bhadra.map((b) => ({ ...b, name: "Bhadra", kind: "bhadra" as const })),
+    rahuAvoid(m),
+    { ...m.yamaganda, name: t("yamaganda"), kind: "soft" as const },
+    { ...m.gulika, name: t("gulika"), kind: "soft" as const },
+    ...m.bhadra.map((b) => ({
+      ...b,
+      name: t("bhadra"),
+      kind: "bhadra" as const,
+    })),
   ];
 }
 
-const CHOG_BODY =
-  "The day from sunrise to sunset is split into 8 equal parts called Choghadiya (the night into 8 more). Each part is traditionally seen as good, neutral or not good for starting something new.";
-const AVOID_BODY: Record<string, string> = {
-  "Rahu Kaal":
-    "A daily period of about 1½ hours. Many families avoid starting new work now. Its time changes each day with sunrise and sunset.",
-  Yamaganda:
-    "A daily period of about 1½ hours that some families avoid for new work.",
-  Gulika:
-    "A daily period of about 1½ hours that some families avoid for new work.",
-  Bhadra:
-    "Bhadra is the Vishti karana, one half of a tithi. Many families avoid auspicious work, such as ceremonies or starting something new, during it.",
-};
+export const rahuAvoid = (m: DayMuhurta): Avoid => ({
+  ...m.rahuKaal,
+  name: t("rahuKaal"),
+  kind: "rahu",
+});
 
 export function chogSheet(
   c: Choghadiya,
@@ -70,14 +75,14 @@ export function chogSheet(
   const r = m.rahuKaal;
   const overlapsRahu = c.start < r.end && r.start < c.end;
   return {
-    kicker: `Choghadiya · ${qualityLabel(c)}`,
+    kicker: t("chogKicker", { quality: qualityLabel(c) }),
     tone: c.quality === "good" ? "good" : "muted",
-    title: c.name,
+    title: chogName(c),
     range: range(c.start, c.end, tz),
-    body: CHOG_BODY,
+    body: t("chogBody"),
     ...(overlapsRahu && c.quality === "good"
       ? {
-          note: `Rahu Kaal falls at the same time (${range(r.start, r.end, tz)}). Many families wait until it ends before starting new work.`,
+          note: t("chogRahuNote", { range: range(r.start, r.end, tz) }),
         }
       : {}),
   };
@@ -88,16 +93,25 @@ export function avoidSheet(a: Avoid, view: DayView, tz: string): SheetContent {
   const sunset = view.muhurta?.day.at(-1)?.end ?? view.day.nextSunrise;
   const when =
     a.start < sunrise
-      ? `Until ${time(a.end, tz)} (started before sunrise)`
+      ? t("avoidUntilBeforeSunrise", { time: time(a.end, tz) })
       : a.end > sunset
-        ? `From ${time(a.start, tz)} (continues after sunset, until ${time(a.end, tz)})`
+        ? t("avoidFromAfterSunset", {
+            time: time(a.start, tz),
+            end: time(a.end, tz),
+          })
         : range(a.start, a.end, tz);
   return {
-    kicker: "A time many avoid",
+    kicker: t("avoidKicker"),
     tone: "rahu",
-    title: a.kind === "bhadra" ? "Bhadra (Vishti karana)" : a.name,
+    title: a.kind === "bhadra" ? t("bhadraFull") : a.name,
     range: when,
-    body: AVOID_BODY[a.name] ?? "",
+    body: t(
+      a.kind === "rahu"
+        ? "rahuBody"
+        : a.kind === "bhadra"
+          ? "bhadraBody"
+          : "softAvoidBody",
+    ),
   };
 }
 
@@ -161,36 +175,43 @@ export function Timeline({
     ),
   );
   const avoidAria = (a: Avoid) =>
-    `${a.name}, ${a.start < view.day.sunrise ? "from before sunrise" : `from ${time(a.start, tz)}`} until ${time(a.end, tz)}, a time many families avoid`;
+    t("avoidAria", {
+      name: a.name,
+      from:
+        a.start < view.day.sunrise
+          ? t("fromBeforeSunrise")
+          : t("fromTime", { time: time(a.start, tz) }),
+      end: time(a.end, tz),
+    });
 
   return (
     <div>
       <ul
-        aria-label="Key"
+        aria-label={t("key")}
         className="mb-4 flex flex-wrap gap-x-4 gap-y-2 text-sm"
       >
         <li className="flex items-center gap-1.5">
           <QualityIcon tone="good" size={20} />
-          Good
+          {t("keyGood")}
         </li>
         <li className="flex items-center gap-1.5">
           <QualityIcon tone="neutral" size={20} />
-          Neutral
+          {t("keyNeutral")}
         </li>
         <li className="flex items-center gap-1.5">
           <QualityIcon tone="bad" size={20} />
-          Not good
+          {t("keyBad")}
         </li>
         <li className="flex items-center gap-1.5 font-semibold text-inauspicious">
           <QualityIcon tone="rahu" size={20} />
-          Rahu Kaal
+          {t("rahuKaal")}
         </li>
         <li className="flex items-center gap-1.5">
           <span
             aria-hidden="true"
             className="block h-5 w-2 rounded-b bg-border-strong"
           />
-          Bhadra
+          {t("bhadra")}
         </li>
       </ul>
 
@@ -198,8 +219,8 @@ export function Timeline({
         className={`${COLS} mb-2 text-caption font-semibold text-text-muted`}
       >
         <span />
-        <span>Choghadiya</span>
-        <span>Times many avoid</span>
+        <span>{t("choghadiya")}</span>
+        <span>{t("timesManyAvoid")}</span>
       </div>
 
       <div className="mb-2 flex items-center gap-1.5 text-sm tabular-nums">
@@ -207,7 +228,7 @@ export function Timeline({
           <span className="block size-3.5 rounded-full border-[2.5px] border-warning" />
         </span>
         <span>
-          <strong className="font-semibold">Sunrise</strong>{" "}
+          <strong className="font-semibold">{t("sunrise")}</strong>{" "}
           {time(view.day.sunrise, tz)}
         </span>
       </div>
@@ -226,7 +247,6 @@ export function Timeline({
               <button
                 type="button"
                 onClick={() => onOpen(chogSheet(c, m, tz))}
-                aria-label={`${c.name} Choghadiya, ${qualityLabel(c)}, ${range(c.start, c.end, tz)}${i === nowRow ? ", happening now" : ""}`}
                 className={`flex min-h-(--tap-min) min-w-0 items-center rounded-md border-[1.5px] px-3 py-2 text-left focus-ring ${rowStyle(c)}`}
               >
                 <span
@@ -237,7 +257,7 @@ export function Timeline({
                   </span>
                   <span className="flex min-w-0 flex-col">
                     <span className="text-body leading-tight">
-                      <strong className="font-semibold">{c.name}</strong>{" "}
+                      <strong className="font-semibold">{chogName(c)}</strong>{" "}
                       <span
                         className={`text-sm font-semibold ${qualityInk(c)}`}
                       >
@@ -247,6 +267,9 @@ export function Timeline({
                     <span className="text-caption leading-snug text-text-muted tabular-nums">
                       {range(c.start, c.end, tz)}
                     </span>
+                    {i === nowRow && (
+                      <span className="sr-only">{t("happeningNow")}</span>
+                    )}
                   </span>
                 </span>
               </button>
@@ -261,8 +284,13 @@ export function Timeline({
                         onClick={() => onOpen(avoidSheet(s, view, tz))}
                         aria-label={avoidAria(s)}
                         style={{ top: g.top, bottom: g.bottom }}
-                        className={`absolute left-0 w-[12px] bg-border-strong focus-ring ${g.endsHere ? "rounded-b-md" : ""} ${g.startsHere && s.start >= view.day.sunrise ? "rounded-t-md" : ""}`}
-                      />
+                        className="absolute left-0 w-[24px] focus-ring"
+                      >
+                        <span
+                          aria-hidden="true"
+                          className={`absolute inset-y-0 left-0 w-[12px] bg-border-strong ${g.endsHere ? "rounded-b-md" : ""} ${g.startsHere && s.start >= view.day.sunrise ? "rounded-t-md" : ""}`}
+                        />
+                      </button>
                     )
                   );
                 })}
@@ -277,7 +305,7 @@ export function Timeline({
                         onClick={() => onOpen(avoidSheet(b, view, tz))}
                         aria-label={avoidAria(b)}
                         style={{ top: g.top, bottom: g.bottom }}
-                        className={`absolute right-0 left-[16px] flex items-start overflow-hidden rounded-md p-[6px] text-left focus-ring ${strong ? "border-[1.5px] border-inauspicious bg-(--chip-inauspicious-bg)" : "border-[1.5px] border-dashed border-border-strong bg-surface-sunken"}`}
+                        className={`absolute right-0 left-[28px] flex items-start overflow-hidden rounded-md p-[6px] text-left focus-ring ${strong ? "border-[1.5px] border-inauspicious bg-(--chip-inauspicious-bg)" : "border-[1.5px] border-dashed border-border-strong bg-surface-sunken"}`}
                       >
                         {g.startsHere && (
                           <span
@@ -315,7 +343,7 @@ export function Timeline({
                           <span
                             className={`relative z-3 bg-surface-sunken text-text-muted tabular-nums ${laneText} font-normal`}
                           >
-                            until {time(s.end, tz)}
+                            {t("untilTime", { time: time(s.end, tz) })}
                           </span>
                         </button>
                       </div>
@@ -329,7 +357,9 @@ export function Timeline({
                   className="pointer-events-none absolute inset-x-0 z-2 flex -translate-y-1/2 items-center"
                 >
                   <span className="flex w-11 flex-none flex-col items-center rounded-sm bg-(--timeline-now) py-0.5 leading-tight text-text-on-accent">
-                    <span className="text-[length:13px] font-bold">Now</span>
+                    <span className="text-[length:13px] font-bold">
+                      {t("now")}
+                    </span>
                     <span className="text-[length:13px] tabular-nums">
                       {timeShort(now, tz)}
                     </span>
@@ -348,7 +378,7 @@ export function Timeline({
           <span className="block size-3.5 rounded-full bg-text-muted" />
         </span>
         <span>
-          <strong className="font-semibold">Sunset</strong>{" "}
+          <strong className="font-semibold">{t("sunset")}</strong>{" "}
           {time(rows.at(-1)!.end, tz)}
         </span>
       </div>
@@ -377,7 +407,7 @@ export function NightChoghadiya({
         onClick={() => setOpen(!open)}
         className="mt-4 flex min-h-(--tap-min) w-full items-center justify-between gap-2 rounded-md border-[1.5px] border-border-strong bg-surface px-4 py-3 text-body font-semibold text-accent hover:bg-accent-subtle focus-ring"
       >
-        <span>{open ? "Hide night Choghadiya" : "Show night Choghadiya"}</span>
+        <span>{open ? t("hideNight") : t("showNight")}</span>
         <svg
           width="20"
           height="20"
@@ -410,7 +440,7 @@ export function NightChoghadiya({
                 <QualityIcon tone={toneOf(c)} />
                 <span className="flex flex-1 flex-col">
                   <span className="text-body leading-tight font-semibold">
-                    {c.name}
+                    {chogName(c)}
                   </span>
                   <span className={`text-sm font-semibold ${qualityInk(c)}`}>
                     {qualityLabel(c)}

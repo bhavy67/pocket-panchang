@@ -128,35 +128,53 @@ export function parseEvent(v: unknown): StoredEvent | ParseError {
   };
 }
 
-export function parseBackup(text: string): Backup | ParseError {
+type BackupError = ParseError & {
+  readonly reason: "not-backup" | "newer" | "damaged";
+};
+const bad = (reason: BackupError["reason"], message: string): BackupError => ({
+  ...fail(message),
+  reason,
+});
+
+/** The UI message for a failed import. */
+export const backupErrorKey = (e: ParseError) =>
+  "reason" in e && e.reason === "newer"
+    ? ("backupNewer" as const)
+    : "reason" in e && e.reason === "not-backup"
+      ? ("backupNotBackup" as const)
+      : ("backupDamaged" as const);
+
+export function parseBackup(text: string): Backup | BackupError {
   let v: unknown;
   try {
     v = JSON.parse(text);
   } catch {
-    return fail("This file is not a backup (not valid JSON).");
+    return bad("not-backup", "Not valid JSON");
   }
-  if (!isObject(v)) return fail("This file is not a backup.");
+  if (!isObject(v)) return bad("not-backup", "Not a backup object");
   const { schemaVersion, exportedAt } = v;
   if (typeof schemaVersion !== "number")
-    return fail("This file is not a backup.");
+    return bad("not-backup", "Not a backup object");
   if (schemaVersion > BACKUP_SCHEMA_VERSION)
-    return fail(
-      "This backup was made by a newer version of the app. Please update the app first.",
+    return bad(
+      "newer",
+      `Backup schema ${schemaVersion} is newer than ${BACKUP_SCHEMA_VERSION}`,
     );
-  if (schemaVersion < 1) return fail("Unknown backup version.");
+  if (schemaVersion < 1) return bad("damaged", "Unknown backup version.");
   if (typeof exportedAt !== "number")
-    return fail("Backup is missing its date.");
+    return bad("damaged", "Backup is missing its date.");
   const settings = parseSettings(v.settings);
-  if (isParseError(settings)) return settings;
-  if (!Array.isArray(v.events)) return fail("Backup has no events list.");
+  if (isParseError(settings)) return bad("damaged", settings.message);
+  if (!Array.isArray(v.events))
+    return bad("damaged", "Backup has no events list.");
   const events: StoredEvent[] = [];
   for (const raw of v.events) {
     const e = parseEvent(raw);
     if (isParseError(e))
-      return fail(`An event in the backup is damaged: ${e.message}`);
+      return bad("damaged", `An event in the backup is damaged: ${e.message}`);
     events.push(e);
   }
   if (new Set(events.map((e) => e.id)).size !== events.length)
-    return fail("Backup has duplicate events.");
+    return bad("damaged", "Backup has duplicate events.");
   return { schemaVersion, exportedAt, settings, events };
 }

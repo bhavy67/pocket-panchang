@@ -5,6 +5,7 @@ import { weekdayName } from "@panchang/i18n";
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useDay, useFestivals, useNow } from "@/day-data";
+import { lang, t } from "@/i18n";
 import { clockFor } from "@/lib/clock";
 import { dateLong, daysBetween, monthTitle } from "@/lib/format";
 import { yearMonthOf } from "@/lib/year-month";
@@ -64,14 +65,14 @@ export function DayDetail({
           <span className="ml-auto flex gap-2">
             <Link
               {...dayLink(addDays(date, -1))}
-              aria-label="Previous day"
+              aria-label={t("prevDay")}
               className={`${btnOutline} w-12 px-0`}
             >
               ‹
             </Link>
             <Link
               {...dayLink(addDays(date, 1))}
-              aria-label="Next day"
+              aria-label={t("nextDay")}
               className={`${btnOutline} w-12 px-0`}
             >
               ›
@@ -82,22 +83,30 @@ export function DayDetail({
           {dateLong(date)}
           {isToday && (
             <span className="ml-2 align-middle text-sm font-semibold text-(--now-marker)">
-              Today
+              {t("today")}
             </span>
           )}
         </h1>
         {title && view && (
           <p className="text-lg">
-            {title.en} · <span lang="gu">{title.gu}</span> ·{" "}
-            <span lang="gu" className="text-text-muted">
-              {weekdayName(view.day.vara, "gu")}
-            </span>
+            {lang() === "gu" ? (
+              <>
+                {title.gu} · <span lang="en">{title.en}</span>
+              </>
+            ) : (
+              <>
+                {title.en} · <span lang="gu">{title.gu}</span> ·{" "}
+                <span lang="gu" className="text-text-muted">
+                  {weekdayName(view.day.vara, "gu")}
+                </span>
+              </>
+            )}
           </p>
         )}
       </header>
 
       {family && family.length > 0 && (
-        <Section title="Family dates">
+        <Section title={t("familyDates")}>
           <ul className="flex flex-col gap-2">
             {family.map((r) => (
               <li key={r.event.id}>
@@ -109,20 +118,17 @@ export function DayDetail({
       )}
 
       {festivals.length > 0 && (
-        <Section title="Festivals">
+        <Section title={t("festivals")}>
           <FestivalList festivals={festivals} date={date} tz={tz} />
         </Section>
       )}
 
       {view?.muhurta ? (
         <>
-          <Section title="Panchang">
+          <Section title={t("panchang")}>
             <ElementsCard view={view} tz={tz} />
           </Section>
-          <Section
-            title="Hour by hour"
-            sub="Sunrise to sunset, split into 8 Choghadiya. Tap any part for details."
-          >
+          <Section title={t("hourByHourShort")} sub={t("hourByHourSub")}>
             <Timeline
               view={view}
               tz={tz}
@@ -136,7 +142,7 @@ export function DayDetail({
               onOpen={setSheet}
             />
           </Section>
-          <Section title="Sun and Moon">
+          <Section title={t("sunAndMoon")}>
             <SunMoonCard view={view} s={s} />
           </Section>
           <footer className="flex flex-col items-center gap-2 px-4 py-8 text-center">
@@ -149,22 +155,19 @@ export function DayDetail({
               rel="noreferrer"
               className={btnOutline}
             >
-              Report a mismatch
+              {t("reportMismatch")}
             </a>
             <button
               type="button"
               onClick={() => setSheet(howSheet(s, date))}
               className="min-h-(--tap-min) px-4 text-body font-semibold text-accent underline underline-offset-3 focus-ring"
             >
-              How this is calculated
+              {t("howCalculated")}
             </button>
           </footer>
         </>
       ) : view ? (
-        <p className="px-4 pt-6 text-body">
-          There is no sunrise or sunset here on this date, so the panchang can't
-          be worked out.
-        </p>
+        <p className="px-4 pt-6 text-body">{t("noCivilDayDate")}</p>
       ) : (
         <div
           aria-hidden="true"
@@ -200,17 +203,25 @@ function FestivalList({
           </span>
           <span className="flex min-w-0 flex-1 flex-col">
             <span className="text-caption font-semibold text-festival">
-              Festival{f.unverified && " · Not yet verified"}
+              {t("festival")}
+              {f.unverified && t("notVerified")}
             </span>
             <span className="text-lg leading-tight font-semibold">
-              {f.names.en}
-              {f.variant && ` (${f.variant.label.en})`} ·{" "}
-              <span lang="gu">{f.names.gu}</span>
+              {f.names[lang()]}
+              {f.variant && ` (${f.variant.label[lang()]})`}
+              {lang() === "en" && (
+                <>
+                  {" · "}
+                  <span lang="gu">{f.names.gu}</span>
+                </>
+              )}
             </span>
             {f.endDate && (
               <span className="text-sm text-text-muted">
-                Day {daysBetween(f.date, date) + 1} of{" "}
-                {daysBetween(f.date, f.endDate) + 1}
+                {t("festivalDayOf", {
+                  n: daysBetween(f.date, date) + 1,
+                  total: daysBetween(f.date, f.endDate) + 1,
+                })}
               </span>
             )}
             {festivalTiming(f, tz) && (
@@ -218,7 +229,7 @@ function FestivalList({
             )}
             {f.fallback && (
               <span className="text-sm text-text-muted">
-                Provisional date: please check a printed calendar.
+                {t("provisionalDate")}
               </span>
             )}
           </span>

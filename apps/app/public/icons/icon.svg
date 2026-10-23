@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Placeholder icon (brief §9 Q2): a sun arc meeting a crescent, the Sun–Moon angle that
+       defines a tithi. Replace when the public name and identity are chosen (ADR 0016). -->
+  <rect width="512" height="512" fill="#0B6E79"/>
+  <circle cx="256" cy="300" r="150" fill="none" stroke="#F7F6F2" stroke-width="28" stroke-dasharray="471 1000" transform="rotate(180 256 300)"/>
+  <path d="M332 150a86 86 0 1 0 0 150a104 104 0 1 1 0-150z" fill="#F2B65A"/>
+  <rect x="96" y="378" width="320" height="28" rx="14" fill="#F7F6F2"/>
+</svg>

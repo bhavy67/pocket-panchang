@@ -12,13 +12,14 @@ import {
   parseCivilDate,
   type CivilDate,
 } from "@panchang/engine";
-import { monthName } from "@panchang/i18n";
+import { monthName, tithiLabel } from "@panchang/i18n";
 import { useNavigate } from "@tanstack/react-router";
 import { useId, useState, type ReactNode } from "react";
 import { CityPicker, inputClass } from "@/city-picker";
 import type { StoredEvent } from "@/db";
 import { deleteEvent, saveEvent, useEvents } from "@/events-data";
 import { btnPrimary } from "@/events";
+import { lang, t } from "@/i18n";
 import { dateShort } from "@/lib/format";
 import {
   FIELDS,
@@ -33,6 +34,10 @@ import { btnOutline, card } from "@/ui";
 import { worker } from "@/worker/client";
 import type { TithiProposal } from "@/worker/api";
 
+/** "Bhadarvo Vad 5" for a Bhadrapada tithi 1–30. */
+const bhadarvo = (n: number) =>
+  `${monthName("Bhadrapada", lang())} ${tithiLabel(n, lang())}`;
+
 /** Gujarati year order: Kartak first. */
 const MONTHS = [...LUNAR_MONTHS.slice(7), ...LUNAR_MONTHS.slice(0, 7)];
 const KINDS: EventKind[] = ["birthday", "shraddh", "anniversary", "custom"];
@@ -42,7 +47,7 @@ export function EventFormRoute({ id }: { id: string }) {
   if (!events) return null;
   const existing = events.find((e) => e.id === id);
   if (id !== "new" && !existing)
-    return <p className="p-4 text-body">This family date no longer exists.</p>;
+    return <p className="p-4 text-body">{t("thisDateMissing")}</p>;
   return <EventForm key={id} existing={existing} />;
 }
 
@@ -100,9 +105,8 @@ function EventForm({ existing }: { existing: StoredEvent | undefined }) {
     overrides.pitruPaksha ?? inherited(s, kind, "pitruPaksha").value;
 
   const save = async () => {
-    if (!title.trim()) return setError("Please give this date a name.");
-    if (!confirmed)
-      return setError("Please work out and confirm the tithi first.");
+    if (!title.trim()) return setError(t("errName"));
+    if (!confirmed) return setError(t("errConfirm"));
     const now = Date.now();
     await saveEvent({
       id: existing?.id ?? crypto.randomUUID(),
@@ -130,20 +134,20 @@ function EventForm({ existing }: { existing: StoredEvent | undefined }) {
           className={btnOutline}
           onClick={() => void navigate({ to: "/events" })}
         >
-          ‹ Family dates
+          {t("backToDates")}
         </button>
       </header>
       <h1 className="text-headline leading-(--leading-heading) font-bold">
-        {existing ? "Edit family date" : "Add a family date"}
+        {existing ? t("editDate") : t("addFamilyDate")}
       </h1>
 
-      <Field label="Name">
+      <Field label={t("name")}>
         {(id) => (
           <input
             id={id}
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="e.g. Ba's varsi"
+            placeholder={t("namePlaceholder")}
             maxLength={200}
             className={inputClass}
           />
@@ -152,7 +156,7 @@ function EventForm({ existing }: { existing: StoredEvent | undefined }) {
 
       <fieldset className="flex flex-col gap-2">
         <legend className="mb-2 text-body font-semibold">
-          What kind of date?
+          {t("whatKind")}
         </legend>
         {KINDS.map((k) => (
           <label key={k} className={radio}>
@@ -163,18 +167,18 @@ function EventForm({ existing }: { existing: StoredEvent | undefined }) {
               onChange={() => setKind(k)}
               className="size-5 accent-(--accent)"
             />
-            <span className="text-body">{KIND_LABEL[k]}</span>
+            <span className="text-body">{t(KIND_LABEL[k])}</span>
           </label>
         ))}
       </fieldset>
 
       <fieldset className="flex flex-col gap-3">
-        <legend className="mb-2 text-body font-semibold">The date</legend>
+        <legend className="mb-2 text-body font-semibold">{t("theDate")}</legend>
         <div className="grid grid-cols-[repeat(auto-fit,minmax(min(12rem,100%),1fr))] gap-2">
           {(
             [
-              ["date", "I know the date"],
-              ["tithi", "I know the tithi"],
+              ["date", "knowDate"],
+              ["tithi", "knowTithi"],
             ] as const
           ).map(([m, label]) => (
             <label key={m} className={radio}>
@@ -185,7 +189,7 @@ function EventForm({ existing }: { existing: StoredEvent | undefined }) {
                 onChange={() => setMode(m)}
                 className="size-5 accent-(--accent)"
               />
-              <span className="text-body">{label}</span>
+              <span className="text-body">{t(label)}</span>
             </label>
           ))}
         </div>
@@ -213,13 +217,15 @@ function EventForm({ existing }: { existing: StoredEvent | undefined }) {
         )}
         {confirmed && mode === "tithi" && (
           <p className="text-body">
-            Tithi:{" "}
+            {t("tithiIs")}{" "}
             <strong className="font-semibold">{lunarLabel(lunar)}</strong>
             {origin && (
               <span className="block text-sm text-text-muted">
-                Worked out from {dateShort(origin.date)}{" "}
-                {origin.date.slice(0, 4)}
-                {origin.time && `, ${origin.time}`}, {origin.place.name}
+                {t("workedOutFrom", {
+                  date: `${dateShort(origin.date)} ${Number(origin.date.slice(0, 4))}`,
+                  time: origin.time ? `, ${origin.time}` : "",
+                  place: origin.place.name,
+                })}
               </span>
             )}
           </p>
@@ -227,11 +233,13 @@ function EventForm({ existing }: { existing: StoredEvent | undefined }) {
       </fieldset>
 
       <fieldset className="flex flex-col gap-2">
-        <legend className="mb-2 text-body font-semibold">Remind me</legend>
+        <legend className="mb-2 text-body font-semibold">
+          {t("remindMe")}
+        </legend>
         {(
           [
-            [0, "On the day"],
-            [1, "1 day before"],
+            [0, "onTheDay"],
+            [1, "dayBefore"],
           ] as const
         ).map(([n, label]) => (
           <label key={n} className={radio}>
@@ -247,18 +255,17 @@ function EventForm({ existing }: { existing: StoredEvent | undefined }) {
               }
               className="size-5 accent-(--accent)"
             />
-            <span className="text-body">{label}</span>
+            <span className="text-body">{t(label)}</span>
           </label>
         ))}
-        <span className="text-sm text-text-muted">
-          On the web, reminders come through the calendar file (Family dates →
-          Save calendar file).
-        </span>
+        <span className="text-sm text-text-muted">{t("webReminders")}</span>
       </fieldset>
 
       {kind === "shraddh" && (
         <fieldset className="flex flex-col gap-3">
-          <legend className="mb-2 text-body font-semibold">Pitru Paksha</legend>
+          <legend className="mb-2 text-body font-semibold">
+            {t("pitruPaksha")}
+          </legend>
           <label className={radio}>
             <input
               type="checkbox"
@@ -270,15 +277,10 @@ function EventForm({ existing }: { existing: StoredEvent | undefined }) {
               }
               className="size-5 accent-(--accent)"
             />
-            <span className="text-body">
-              Also remind me during Pitru Paksha (Shraddh fortnight)
-            </span>
+            <span className="text-body">{t("alsoPitru")}</span>
           </label>
           {pitru && (
-            <Field
-              label="Which Pitru Paksha day"
-              hint="Technical term: Mahalaya."
-            >
+            <Field label={t("whichPitruDay")} hint={t("mahalayaHelp")}>
               {(id) => (
                 <select
                   id={id}
@@ -295,13 +297,13 @@ function EventForm({ existing }: { existing: StoredEvent | undefined }) {
                   }}
                   className={inputClass}
                 >
-                  <option value="">Same tithi (usual)</option>
-                  <option value="bhadrapada-purnima">Bhadarvo Punam</option>
+                  <option value="">{t("sameTithiUsual")}</option>
+                  <option value="bhadrapada-purnima">{bhadarvo(15)}</option>
                   {Array.from({ length: 15 }, (_, i) => i + 1).map((n) => (
                     <option key={n} value={n}>
                       {n === 15
-                        ? "Bhadarvo Vad Amas (Sarva Pitru Amas)"
-                        : `Bhadarvo Vad ${n}`}
+                        ? t("sarvaPitru", { tithi: bhadarvo(30) })
+                        : bhadarvo(15 + n)}
                     </option>
                   ))}
                 </select>
@@ -311,7 +313,7 @@ function EventForm({ existing }: { existing: StoredEvent | undefined }) {
         </fieldset>
       )}
 
-      <Field label="Notes (optional)">
+      <Field label={t("notes")}>
         {(id) => (
           <textarea
             id={id}
@@ -325,14 +327,10 @@ function EventForm({ existing }: { existing: StoredEvent | undefined }) {
 
       <details className={`group p-4 ${card}`}>
         <summary className="flex min-h-(--tap-min) cursor-pointer items-center text-body font-semibold text-accent focus-ring">
-          Advanced: how this date is placed
+          {t("advanced")}
         </summary>
         <div className="mt-3 flex flex-col gap-5">
-          <p className="text-sm text-text-muted">
-            Leave these on the family default unless this date follows a
-            different custom. Family defaults are in Settings → Family
-            conventions.
-          </p>
+          <p className="text-sm text-text-muted">{t("advancedIntro")}</p>
           {FIELDS.map((f) => {
             const inh = inherited(s, kind, f.field);
             return (
@@ -341,9 +339,7 @@ function EventForm({ existing }: { existing: StoredEvent | undefined }) {
                 field={f}
                 value={overrides[f.field]}
                 inheritedValue={String(inh.value)}
-                inheritedLabel={
-                  inh.source === "family" ? "Family default" : "Usual default"
-                }
+                inheritedFrom={inh.source}
                 onChange={(v) =>
                   setOverrides(setOverride(overrides, f.field, v))
                 }
@@ -351,11 +347,11 @@ function EventForm({ existing }: { existing: StoredEvent | undefined }) {
             );
           })}
           <div className="flex flex-col gap-2">
-            <span className="text-body font-semibold">Use sunrise in</span>
+            <span className="text-body font-semibold">{t("useSunriseIn")}</span>
             <p className="text-body">
               {(observance ?? s.observanceLocation).name}{" "}
               <span className="text-sm text-text-muted">
-                {observance ? "(this date only)" : "(family default)"}
+                {observance ? t("thisDateOnly") : t("familyDefaultParen")}
               </span>
             </p>
             {observance && (
@@ -364,11 +360,11 @@ function EventForm({ existing }: { existing: StoredEvent | undefined }) {
                 className={btnOutline}
                 onClick={() => setObservance(undefined)}
               >
-                Use family default ({s.observanceLocation.name})
+                {t("useFamilyDefaultCity", { city: s.observanceLocation.name })}
               </button>
             )}
             <CityPicker
-              label="Change city for this date"
+              label={t("changeCityForDate")}
               onPick={(c) => setObservance(c.location)}
             />
           </div>
@@ -384,7 +380,7 @@ function EventForm({ existing }: { existing: StoredEvent | undefined }) {
                 )
               }
             >
-              Use family defaults for all of these
+              {t("resetAll")}
             </button>
           )}
         </div>
@@ -404,24 +400,20 @@ function EventForm({ existing }: { existing: StoredEvent | undefined }) {
           className={btnPrimary}
           onClick={() => void save()}
         >
-          Save
+          {t("save")}
         </button>
         {existing && (
           <button
             type="button"
             className="flex min-h-(--tap-min) items-center rounded-md border-[1.5px] border-danger px-5 text-body font-semibold text-danger focus-ring"
             onClick={() => {
-              if (
-                window.confirm(
-                  `Delete “${existing.title}”? This can't be undone.`,
-                )
-              )
+              if (window.confirm(t("confirmDelete", { title: existing.title })))
                 void deleteEvent(existing.id).then(() =>
                   navigate({ to: "/events" }),
                 );
             }}
           >
-            Delete
+            {t("delete")}
           </button>
         )}
       </div>
@@ -438,7 +430,7 @@ function TithiPicker({
 }) {
   return (
     <div className="grid grid-cols-[repeat(auto-fit,minmax(min(10rem,100%),1fr))] gap-3">
-      <Field label="Month">
+      <Field label={t("month")}>
         {(id) => (
           <select
             id={id}
@@ -453,13 +445,15 @@ function TithiPicker({
           >
             {MONTHS.map((m) => (
               <option key={m} value={m}>
-                {monthName(m, "en")} ({monthName(m, "gu")})
+                {lang() === "gu"
+                  ? monthName(m, "gu")
+                  : `${monthName(m, "en")} (${monthName(m, "gu")})`}
               </option>
             ))}
           </select>
         )}
       </Field>
-      <Field label="Sud / Vad">
+      <Field label={t("sudVad")}>
         {(id) => (
           <select
             id={id}
@@ -472,12 +466,12 @@ function TithiPicker({
             }
             className={inputClass}
           >
-            <option value="shukla">Sud (bright half)</option>
-            <option value="krishna">Vad (dark half)</option>
+            <option value="shukla">{t("sudBright")}</option>
+            <option value="krishna">{t("vadDark")}</option>
           </select>
         )}
       </Field>
-      <Field label="Tithi">
+      <Field label={t("tithi")}>
         {(id) => (
           <select
             id={id}
@@ -489,11 +483,10 @@ function TithiPicker({
           >
             {Array.from({ length: 15 }, (_, i) => i + 1).map((n) => (
               <option key={n} value={n}>
-                {n === 15
-                  ? value.paksha === "shukla"
-                    ? "Punam (15)"
-                    : "Amas (15)"
-                  : n}
+                {tithiLabel(value.paksha === "shukla" ? n : n + 15, lang())
+                  .split(" ")
+                  .slice(1)
+                  .join(" ")}
               </option>
             ))}
           </select>
@@ -510,7 +503,7 @@ function TithiPicker({
           }}
           className="size-5 accent-(--accent)"
         />
-        <span className="text-body">It was in an extra month (adhik)</span>
+        <span className="text-body">{t("extraMonthCheck")}</span>
       </label>
     </div>
   );
@@ -519,7 +512,7 @@ function TithiPicker({
 /** Before 1955 much of India kept local time (Bombay, Calcutta) that tz data doesn't model (ADR 0006). */
 const historicalZoneWarning = (place: Location, date: string, time: string) =>
   place.tz === "Asia/Kolkata" && time && date < "1955-01-01"
-    ? "Before 1955, many places in India kept their own local time (such as Bombay time), so the time you entered may be off by up to 40 minutes. Please check the tithi with a printed calendar from that year."
+    ? t("histZoneWarning")
     : null;
 
 function DateHelper({
@@ -550,14 +543,14 @@ function DateHelper({
 
   const workOut = async () => {
     const parsed = parseCivilDate(date);
-    if (isParseError(parsed)) return setError("Please enter a full date.");
+    if (isParseError(parsed)) return setError(t("errFullDate"));
     setError("");
     try {
       setProposal(
         await worker.tithiFromDate(place, parsed, time || undefined, source),
       );
     } catch {
-      setError("The tithi couldn't be worked out for that place and date.");
+      setError(t("errWorkOut"));
     }
   };
 
@@ -566,21 +559,16 @@ function DateHelper({
     return (
       <div className={`flex flex-col gap-3 p-4 ${card}`}>
         <p className="text-lg">
-          This works out to{" "}
-          <strong className="font-semibold">
-            {lunarLabel(proposal.lunarDate)}
-          </strong>
-          . Is that right?
+          {t("worksOutTo", { tithi: lunarLabel(proposal.lunarDate) })}
         </p>
         {proposal.civilDate !== date && (
           <p className="text-sm">
-            The time is before sunrise, so it counts as the day of{" "}
-            {dateShort(proposal.civilDate)}.
+            {t("beforeSunriseDay", { date: dateShort(proposal.civilDate) })}
           </p>
         )}
         {proposal.nearChange && (
           <p className="rounded-md bg-warning-subtle p-3 text-body text-warning">
-            Close to a tithi change. Please check with a printed calendar.
+            {t("nearChangeWarning")}
           </p>
         )}
         {warning && (
@@ -600,14 +588,14 @@ function DateHelper({
               })
             }
           >
-            Yes, use this
+            {t("yesUseThis")}
           </button>
           <button
             type="button"
             className={btnOutline}
             onClick={() => setProposal(null)}
           >
-            Change the date
+            {t("changeTheDate")}
           </button>
         </div>
       </div>
@@ -617,7 +605,7 @@ function DateHelper({
   return (
     <div className="flex flex-col gap-3">
       <div className="grid grid-cols-[repeat(auto-fit,minmax(min(12rem,100%),1fr))] gap-3">
-        <Field label="Date">
+        <Field label={t("date")}>
           {(id) => (
             <input
               id={id}
@@ -630,7 +618,7 @@ function DateHelper({
             />
           )}
         </Field>
-        <Field label="Time (optional)" hint="Local time where it happened.">
+        <Field label={t("timeOptional")} hint={t("timeHint")}>
           {(id) => (
             <input
               id={id}
@@ -643,10 +631,13 @@ function DateHelper({
         </Field>
       </div>
       <p className="text-body">
-        Where it happened:{" "}
+        {t("whereItHappened")}{" "}
         <strong className="font-semibold">{place.name}</strong>
       </p>
-      <CityPicker label="Change place" onPick={(c) => setPlace(c.location)} />
+      <CityPicker
+        label={t("changePlace")}
+        onPick={(c) => setPlace(c.location)}
+      />
       {error && (
         <p role="alert" className="text-body text-warning">
           {error}
@@ -657,7 +648,7 @@ function DateHelper({
         className={btnOutline}
         onClick={() => void workOut()}
       >
-        Work out the tithi
+        {t("workOut")}
       </button>
     </div>
   );

@@ -1,13 +1,17 @@
 // Offline city search (§8): onboarding, Settings, and the event form's places.
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useId, useState } from "react";
+import { lang, t } from "@/i18n";
 import { citySearchQuery } from "@/queries";
 import { card } from "@/ui";
 import type { City } from "@/worker/cities";
 
-const countryNames = new Intl.DisplayNames(["en"], { type: "region" });
 export const cityLabel = ({ location, admin }: City) =>
-  [location.name, admin, countryNames.of(location.country)]
+  [
+    location.name,
+    admin,
+    new Intl.DisplayNames([lang()], { type: "region" }).of(location.country),
+  ]
     .filter(Boolean)
     .join(", ");
 
@@ -39,15 +43,15 @@ export function CityPicker({
         type="search"
         autoComplete="off"
         value={query}
-        placeholder="e.g. Ahmedabad, Nadiad, Edison"
+        placeholder={t("cityPlaceholder")}
         onChange={(e) => setQuery(e.target.value)}
         className={inputClass}
       />
       <p className="text-sm text-text-muted" aria-live="polite">
         {isError
-          ? "City list could not be loaded. Try again."
+          ? t("cityLoadError")
           : query.trim().length >= 2 && !isFetching && results.length === 0
-            ? "No city found. Try a nearby larger town."
+            ? t("cityNotFound")
             : ""}
       </p>
       {results.length > 0 && (

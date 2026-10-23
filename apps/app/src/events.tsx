@@ -12,6 +12,7 @@ import {
   type UpcomingRow,
 } from "@/events-data";
 import { useNow } from "@/day-data";
+import { t } from "@/i18n";
 import { clockFor } from "@/lib/clock";
 import { useSettings, type Settings } from "@/settings";
 import { btnOutline, card, Section } from "@/ui";
@@ -34,10 +35,10 @@ export function Events() {
     <main className="mx-auto max-w-180">
       <header className="flex flex-wrap items-center justify-between gap-3 px-4 pt-4">
         <h1 className="text-headline leading-(--leading-heading) font-bold">
-          Family dates
+          {t("familyDates")}
         </h1>
         <Link to="/events/$id" params={{ id: "new" }} className={btnPrimary}>
-          + Add a date
+          {t("addDate")}
         </Link>
       </header>
 
@@ -47,36 +48,30 @@ export function Events() {
           className="mx-4 mt-4 flex flex-col gap-3 rounded-md border-[1.5px] border-warning bg-warning-subtle p-4"
         >
           <p className="text-body">
-            <strong className="font-semibold">
-              Save a backup of your family dates.
-            </strong>{" "}
-            They live only on this phone; a backup file lets you restore them on
-            a new phone.
+            <strong className="font-semibold">{t("nudgeTitle")}</strong>{" "}
+            {t("nudgeBody")}
           </p>
           <button
             type="button"
             className={btnOutline}
             onClick={() =>
               void exportBackup(s, events ?? []).then(() =>
-                setStatus("Backup saved."),
+                setStatus(t("backupSaved")),
               )
             }
           >
-            Save a backup
+            {t("saveBackup")}
           </button>
         </div>
       )}
 
       {events?.length === 0 ? (
         <div className={`mx-4 mt-6 flex flex-col gap-3 p-5 ${card}`}>
-          <p className="text-lg font-semibold">No family dates yet</p>
-          <p className="text-body text-text-muted">
-            Add a birthday by tithi, a varsi or an anniversary. The app works
-            out its date every year, by the lunar calendar.
-          </p>
+          <p className="text-lg font-semibold">{t("noDatesTitle")}</p>
+          <p className="text-body text-text-muted">{t("noDatesBody")}</p>
         </div>
       ) : (
-        <Section title="Coming up">
+        <Section title={t("comingUp")}>
           {rows ? (
             <UpcomingList rows={rows} today={today} s={s} />
           ) : (
@@ -86,20 +81,17 @@ export function Events() {
       )}
 
       {!!events?.length && (
-        <Section
-          title="Add to your calendar"
-          sub="A calendar file with every family date for the next two years, with reminders."
-        >
+        <Section title={t("addToCalendar")} sub={t("addToCalendarSub")}>
           <button
             type="button"
             className={btnOutline}
             onClick={() =>
               void exportIcs(s, events, today, addDays(today, 730)).then(() =>
-                setStatus("Calendar file saved."),
+                setStatus(t("icsSaved")),
               )
             }
           >
-            Save calendar file (.ics)
+            {t("saveIcs")}
           </button>
         </Section>
       )}

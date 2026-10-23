@@ -1,14 +1,14 @@
 // Display names for panchang elements (GLOSSARY "Gujarati display terms"). Code and data use
 // canonical names; these tables turn them into UI text. Gujarati strings are DRAFTS pending a
-// native reader's review (brief §2). Full UI-string catalogues arrive in Phase 10.
+// native reader's review (docs/i18n/gu-review.md). UI strings live in messages/{en,gu}.ts.
 import type { LunarMonth } from "@panchang/engine";
+import { guDigits } from "./digits";
 
 export type DisplayLang = "en" | "gu";
 
-const GU_DIGITS = "૦૧૨૩૪૫૬૭૮૯";
-/** Latin digits → Gujarati digits (brief §9 Q4: provisional until family testers answer). */
-export const guDigits = (s: string) =>
-  s.replace(/\d/g, (d) => GU_DIGITS[Number(d)]!);
+export { guDigits } from "./digits";
+export { interpolate } from "./interpolate";
+export type { MessageKey, Messages } from "./messages/en";
 const num = (n: number, lang: DisplayLang) =>
   lang === "gu" ? guDigits(String(n)) : String(n);
 
@@ -133,3 +133,35 @@ const WEEKDAYS = [
 /** Vara 0–6, 0 = Sunday. */
 export const weekdayName = (vara: number, lang: DisplayLang) =>
   WEEKDAYS[vara]![lang === "gu" ? 1 : 0];
+
+const CHOGHADIYA: Record<string, string> = {
+  Amrut: "અમૃત",
+  Shubh: "શુભ",
+  Labh: "લાભ",
+  Char: "ચલ",
+  Udveg: "ઉદ્વેગ",
+  Kaal: "કાળ",
+  Rog: "રોગ",
+};
+
+/** Choghadiya name (calendar's canonical "Amrut" … "Rog"). */
+export const choghadiyaName = (name: string, lang: DisplayLang) =>
+  lang === "gu" ? (CHOGHADIYA[name] ?? name) : name;
+
+const KARANAS: Record<string, string> = {
+  Bava: "બવ",
+  Balava: "બાલવ",
+  Kaulava: "કૌલવ",
+  Taitila: "તૈતિલ",
+  Garaja: "ગર",
+  Vanija: "વણિજ",
+  Vishti: "વિષ્ટિ",
+  Kimstughna: "કિંસ્તુઘ્ન",
+  Shakuni: "શકુનિ",
+  Chatushpada: "ચતુષ્પાદ",
+  Naga: "નાગ",
+};
+
+/** Karana name (engine's canonical "Bava" … "Naga"). */
+export const karanaDisplay = (name: string, lang: DisplayLang) =>
+  lang === "gu" ? (KARANAS[name] ?? name) : name;
