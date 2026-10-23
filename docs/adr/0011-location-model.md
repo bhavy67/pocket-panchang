@@ -24,5 +24,5 @@ Users pick a location by **offline city search**, or optionally by **GPS**. GPS 
 
 ## Consequences
 
-- The city dataset choice (GeoNames `cities1000` vs `cities5000`, density vs bundle size) is made in Phase 7.
+- The city dataset choice (GeoNames `cities1000` vs `cities5000`, density vs bundle size) is made in Phase 7. **Resolved 2026-10-23:** `cities1000` for India + `cities5000` for diaspora countries (sizes in PROJECT_PLAN.md §8). Location ids are the GeoNames id, parsed by `parseLocationId` (ADR 0014).
 - Required tests: snap within threshold; custom location beyond it; rounding; device-tz adoption; implausible-device-tz fallback; manual tz override.

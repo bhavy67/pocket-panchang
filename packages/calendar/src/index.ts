@@ -4,9 +4,10 @@ export type {
   ClockFor,
   Interval,
   Location,
+  LocationId,
   LunarDate,
 } from "./types";
-export { tithiNumber } from "./types";
+export { parseLocationId, tithiNumber } from "./types";
 export { civilDay, civilDayContaining, civilDaysOverlapping } from "./days";
 export type { ObservanceWindow } from "./windows";
 export { coverage, subtract, windowInterval } from "./windows";

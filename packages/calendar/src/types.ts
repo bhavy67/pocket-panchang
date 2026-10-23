@@ -1,8 +1,25 @@
-import type { CivilDate, Instant, LunarMonth } from "@panchang/engine";
+import type {
+  CivilDate,
+  Instant,
+  LunarMonth,
+  ParseError,
+} from "@panchang/engine";
+
+declare const locationIdBrand: unique symbol;
+
+/** A bundled-city id: the GeoNames id as a decimal string (ADR 0011, ADR 0014). */
+export type LocationId = string & { readonly [locationIdBrand]: true };
+
+/** v1 accepts bundled-city ids only; `custom:<lat>,<lng>` arrives with v2 custom locations. */
+export function parseLocationId(input: string): LocationId | ParseError {
+  return /^[1-9]\d{0,9}$/.test(input)
+    ? (input as LocationId)
+    : { kind: "parse-error", message: `Not a location id: "${input}"` };
+}
 
 /** A place snapshot (§6, ADR 0007). */
 export type Location = {
-  readonly id: string;
+  readonly id: LocationId;
   readonly name: string;
   readonly lat: number;
   readonly lng: number;

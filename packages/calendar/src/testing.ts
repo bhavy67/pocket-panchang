@@ -1,6 +1,6 @@
 // Test/tool-only helpers: an Intl-backed CivilClock (the app will provide the real one).
 import { parseCivilDate, type CivilDate, type Instant } from "@panchang/engine";
-import type { CivilClock, Location } from "./types";
+import type { CivilClock, Location, LocationId } from "./types";
 
 function offsetMinutes(ms: number, timeZone: string): number {
   const name = new Intl.DateTimeFormat("en-US", {
@@ -38,7 +38,7 @@ export const date = (s: string): CivilDate => {
 };
 
 export const AHMEDABAD: Location = {
-  id: "1279233",
+  id: "1279233" as LocationId,
   name: "Ahmedabad",
   lat: 23.025556,
   lng: 72.587222,
@@ -46,7 +46,7 @@ export const AHMEDABAD: Location = {
   country: "IN",
 };
 export const NEW_YORK: Location = {
-  id: "5128581",
+  id: "5128581" as LocationId,
   name: "New York",
   lat: 40.71427,
   lng: -74.00597,
@@ -54,7 +54,7 @@ export const NEW_YORK: Location = {
   country: "US",
 };
 export const DELHI: Location = {
-  id: "1273294",
+  id: "1273294" as LocationId,
   name: "Delhi",
   lat: 28.65195,
   lng: 77.23149,
@@ -62,7 +62,7 @@ export const DELHI: Location = {
   country: "IN",
 };
 export const CHENNAI: Location = {
-  id: "1264527",
+  id: "1264527" as LocationId,
   name: "Chennai",
   lat: 13.08784,
   lng: 80.27847,
@@ -70,7 +70,7 @@ export const CHENNAI: Location = {
   country: "IN",
 };
 export const LONDON: Location = {
-  id: "2643743",
+  id: "2643743" as LocationId,
   name: "London",
   lat: 51.50853,
   lng: -0.12574,

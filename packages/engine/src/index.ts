@@ -1,3 +1,6 @@
+/** Bump on any calculation change: it keys the app's month cache (§7). */
+export const ENGINE_VERSION = 1;
+
 export type { ParseError } from "./parse";
 export { isParseError } from "./parse";
 export type { CrossingOptions } from "./crossing";

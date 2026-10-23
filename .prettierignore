@@ -6,3 +6,4 @@ docs/design/contrast/
 *.md
 # Generated reference data (scripts and tools write it)
 fixtures/
+apps/app/public/data/
