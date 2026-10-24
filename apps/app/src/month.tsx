@@ -4,7 +4,7 @@
 // and two-day / skipped tithi markers (icon + text, never colour alone). Grid + Day detail side
 // by side from 1024 px.
 import { addDays, type CivilDate } from "@panchang/engine";
-import { monthName, tithiLabel } from "@panchang/i18n";
+import { festivalShortName, monthName, tithiLabel } from "@panchang/i18n";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
@@ -74,7 +74,7 @@ export function Month({ month, date }: { month: YearMonth; date?: CivilDate }) {
 
   return (
     <main className="lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,32rem)] lg:items-start lg:gap-6">
-      <div className="mx-auto w-full max-w-180 px-4 pt-4">
+      <div className="mx-auto w-full max-w-180 px-[min(1rem,16px)] pt-4">
         <header className="flex flex-wrap items-center justify-between gap-2">
           <div className="flex min-w-[min(12rem,100%)] flex-1 flex-col">
             <h1 className="text-headline leading-(--leading-heading) font-extrabold">
@@ -332,7 +332,7 @@ function Cell({
     <Link
       {...link}
       aria-current={today ? "date" : undefined}
-      className={`flex min-h-[4.125rem] min-w-0 flex-col items-start gap-0.5 rounded-[var(--radius-cell)] p-1.5 text-left focus-ring ${
+      className={`flex min-h-[4.125rem] min-w-0 flex-col items-start gap-0.5 rounded-[var(--radius-cell)] px-[min(0.25rem,4px)] py-[min(0.375rem,6px)] text-left focus-ring ${
         today ? "border-2 border-accent" : "border border-transparent"
       } ${selected ? "bg-accent-subtle" : festive ? "bg-festival-subtle" : "bg-surface hover:bg-surface-sunken"}`}
     >
@@ -350,7 +350,8 @@ function Cell({
       {day && (
         <span
           aria-hidden="true"
-          className="flex flex-wrap items-center gap-x-1 text-[length:min(var(--text-tiny),15px)] leading-tight text-text-muted [overflow-wrap:anywhere]"
+          data-cell-label
+          className="flex flex-wrap items-center gap-x-1 text-[length:min(var(--text-tiny),11px)] leading-tight text-text-muted"
         >
           {(day.tithi.atSunrise === 15 || day.tithi.atSunrise === 30) && (
             <MoonDot full={day.tithi.atSunrise === 15} />
@@ -360,7 +361,7 @@ function Cell({
       )}
       <span
         aria-hidden="true"
-        className="flex flex-wrap items-center gap-1 text-[length:min(var(--text-tiny),15px)] leading-tight font-bold"
+        className="flex flex-wrap items-center gap-1 text-[length:min(var(--text-tiny),11px)] leading-tight font-bold"
       >
         {twoDay && <span className="text-text">{t("twoDayMark")}</span>}
         {skipped.length > 0 && (
@@ -373,10 +374,16 @@ function Cell({
         <span
           key={f.id}
           aria-hidden="true"
-          className="max-w-full text-[length:min(var(--text-tiny),15px)] leading-tight font-bold text-festival hyphens-auto [overflow-wrap:anywhere]"
+          data-cell-label
+          className="max-w-full text-[length:min(var(--text-tiny),10.5px)] leading-tight font-bold text-festival"
         >
-          {f.names[lang()]}
-          {f.unverified && "*"}
+          {festivalShortName(f.id, lang()) ?? f.names[lang()]}
+          {/* The dev-only marker may wrap on its own rather than break the name. */}
+          {f.unverified && (
+            <>
+              <wbr />*
+            </>
+          )}
         </span>
       ))}
       <span className="sr-only">{label}</span>

@@ -128,6 +128,14 @@ const sections: [string, Row[]][] = [
       f.names.gu + (f.variant ? ` (${f.variant.label.gu})` : ""),
     ]),
   ],
+  [
+    "Festival short names (Month grid cells)",
+    FESTIVALS.map((f) => [
+      `festivalShort.${f.id}`,
+      names.festivalShortName(f.id, "en") ?? "",
+      names.festivalShortName(f.id, "gu") ?? "",
+    ]),
+  ],
 ];
 
 const doc = `# Gujarati strings: native review checklist

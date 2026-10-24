@@ -180,7 +180,7 @@ const TITHI_NAMES = [
   ["Agiyaras", "અગિયારસ"],
   ["Baras", "બારસ"],
   ["Teras", "તેરસ"],
-  ["Chaudas", "ચૌદસ"],
+  ["Kali", "કાળી ચૌદસ"],
 ] as const;
 
 /** Everyday Gujarati name of tithi 1–30: "Agiyaras", "Punam", "Amas". */
@@ -195,4 +195,31 @@ export function tithiName(tithi: number, lang: DisplayLang): string {
         ? "અમાસ"
         : "Amas";
   return TITHI_NAMES[n - 1]![lang === "gu" ? 1 : 0];
+}
+
+// Month grid cells only (≤ 7 characters, whole words): everyday short forms. Full names elsewhere.
+const FESTIVAL_SHORT: Record<string, [en: string, gu: string]> = {
+  "maha-shivaratri": ["Shiv R.", "શિવરાત"],
+  "holika-dahan": ["Holi", "હોળી"],
+  dhuleti: ["Dhuleti", "ધૂળેટી"],
+  "raksha-bandhan": ["Rakhi", "રાખી"],
+  "janmashtami-smarta": ["Atham", "આઠમ"],
+  "janmashtami-vaishnava": ["Atham", "આઠમ"],
+  navratri: ["Norta", "નોરતાં"],
+  dussehra: ["Dasara", "દશેરા"],
+  dhanteras: ["Teras", "તેરસ"],
+  "kali-chaudas": ["Kali", "કાળી ચૌદસ"],
+  diwali: ["Diwali", "દિવાળી"],
+  "bestu-varas": ["Bestu", "બેસતું વર્ષ"],
+  "bhai-bij": ["Bhai B.", "ભાઈ બીજ"],
+  uttarayan: ["Utran", "ઉતરાણ"],
+};
+
+/** Short festival name for a Month grid cell, or undefined for an unknown id. */
+export function festivalShortName(
+  id: string,
+  lang: DisplayLang,
+): string | undefined {
+  const n = FESTIVAL_SHORT[id];
+  return n && (lang === "gu" ? n[1] : n[0]);
 }
