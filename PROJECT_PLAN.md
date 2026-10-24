@@ -704,14 +704,30 @@ Each phase ends with a **STOP**: summary, files changed, open questions, suggest
 **Exit criteria:** reminders fire reliably on device; offline works; APK/AAB builds.
 
 ### Phase 12: Release
-> **Status (2026-10-24): release-ready, launch steps with Bhavy.** Public name applied (ADR 0016); pre-sunrise "Panchang day" line on Today; `/how` and `/privacy` pages (public, bilingual); README with screenshots, architecture and the CI accuracy report; Vercel project `panchang` (Git-connected, root `apps/app`) with the domain added; signed-AAB pipeline reading the upload key from `~/.gradle/gradle.properties`; Play listing kit, data safety, exact-alarm declaration and screenshots in `docs/release/`. Festivals stay hidden until `docs/release/festival-gate.md` is complete. **Pending (Bhavy):** DNS CNAME, push to `main`, upload key + first AAB to closed testing, Play Console forms, trademark search.
-- README with screenshots, architecture overview, and the **measured accuracy report**.
+> **Status (2026-10-24): reduced scope complete (scope change, Bhavy 2026-10-24).** Done: public name applied (ADR 0016); pre-sunrise "Panchang day" line on Today; public bilingual `/how` and `/privacy` pages; README with architecture and the CI accuracy report; Vercel project `panchang` (Git-connected, root `apps/app`, domain attached, **auto-assign custom domains off** so nothing is promoted); release-AAB signing from `~/.gradle/gradle.properties` for a **closed testing** track; Play listing copy (en, gu), data safety, USE_EXACT_ALARM declaration (`docs/release/`). Festivals stay hidden until `docs/release/festival-gate.md` is complete.
+> **Moved to "Release finalization" (after Phase 11.5 UI revamp):** README screenshots, store screenshots and feature graphic, the DNS record, and promoting web and Android to production.
+- README with architecture overview and the **measured accuracy report**. *(Screenshots: after Phase 11.5 UI revamp.)*
 - "How this is calculated" page; privacy policy page.
-- Deploy web to `panchang.bhavyladani.in`.
-- Play Store listing; data safety form ("no data collected"); closed testing → production.
+- Web deploy pipeline for `panchang.bhavyladani.in`. *(DNS and production promotion: after Phase 11.5 UI revamp.)*
+- Play Store listing copy; data safety form ("no data collected"); exact-alarm declaration; AAB to **closed testing**. *(Store screenshots and production: after Phase 11.5 UI revamp.)*
 
-**Exit criteria:** live on the web and the Play Store (testing track at minimum).
+**Exit criteria (reduced):** signed AAB uploaded to a closed testing track; web builds deploy without reaching the custom domain; listing copy and policy pages ready.
 
+### Phase 11.5: UI revamp
+Follows Phase 12's reduced scope (numbered 11.5 because it reworks Phase 8–11 screens before launch). Scope to be set by Bhavy at its start; constraints that carry over:
+- Tokens only (ADR 0017): palettes, modes and contrast checks stay green; components never use raw values.
+- Approved behaviours stay unless explicitly changed: proportional timelines, shape + label (never colour alone), plain labels, ≥ 48 dp targets, 200% text, Gujarati and English.
+- No engine or calendar changes; budgets (§7) and E2E/axe stay green; regenerate `docs/i18n/gu-review.md` for new strings.
+- Each revamp build ships to the closed testing track (new `versionCode`).
+
+**Exit criteria:** revamped screens approved and recorded in `docs/design/screens.md`; CI and E2E green.
+
+### Release finalization (after Phase 11.5)
+- README screenshots and Play store screenshots (8 phone shots, 1080 × 1920) plus the 1024 × 500 feature graphic, from the revamped UI.
+- Web: add the Cloudflare CNAME (`docs/release/web.md`), then promote the latest `main` deployment to production.
+- Android: closed testing → production once eligible (12 testers × 14 days for new personal accounts) and the formal trademark search is done.
+
+**Exit criteria:** live on `panchang.bhavyladani.in` and on Google Play production.
 ---
 
 ## 16. Interview Story Checklist (fill in as you go)

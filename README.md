@@ -2,20 +2,9 @@
 
 A calm, private, offline Hindu panchang that's Gujarati-first and diaspora-aware, built around **personal tithi reminders**: family birthdays by tithi, varsi/shraddh, and anniversaries that follow the lunar calendar.
 
-**Web:** [panchang.bhavyladani.in](https://panchang.bhavyladani.in) · **Android:** Google Play (closed testing) · No account, no server, no analytics, no ads.
+**Web:** panchang.bhavyladani.in (goes live at release finalization, after the Phase 11.5 UI revamp) · **Android:** Google Play closed testing · No account, no server, no analytics, no ads.
 
-<p>
-  <img src="docs/screenshots/1-today.png" width="200" alt="Today: Aaso Sud 11, Choghadiya Amrut, many avoid now: Bhadra and Rahu Kaal, next good time Shubh">
-  <img src="docs/screenshots/2-hour-by-hour.png" width="200" alt="Hour by hour: Choghadiya timeline with Rahu Kaal, Yamaganda, Gulika and Bhadra on a proportional time axis">
-  <img src="docs/screenshots/3-month.png" width="200" alt="Month: November 2026 with tithi per day and two-day and skipped tithi markers">
-  <img src="docs/screenshots/4-family-dates.png" width="200" alt="Family dates: Ba's varsi, Dad's janma tithi, with next dates">
-</p>
-<p>
-  <img src="docs/screenshots/5-add-date.png" width="200" alt="Add a family date by tithi or by date">
-  <img src="docs/screenshots/8-today-gujarati.png" width="200" alt="Today in Gujarati">
-  <img src="docs/screenshots/7-today-dark.png" width="200" alt="Today in dark mode">
-  <img src="docs/screenshots/6-settings.png" width="200" alt="Settings: reminders and appearance">
-</p>
+> Screenshots will be added after the Phase 11.5 UI revamp.
 
 ## What it does
 

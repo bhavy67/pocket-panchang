@@ -37,11 +37,11 @@ Package `in.bhavyladani.panchang`, label "Parivar Panchang" (Gujarati phones: "�
 
    Output: `apps/app/android/app/build/outputs/bundle/release/app-release.aab`.
 3. Check the signature: `jarsigner -verify -verbose -certs apps/app/android/app/build/outputs/bundle/release/app-release.aab | grep -m1 "CN="` should show your upload key's name, not "Android Debug".
-4. Play Console → Testing → **Closed testing** (start here; production after testers confirm reminders) → Create release → upload the AAB → release notes → review → roll out.
+4. Play Console → Testing → **Closed testing** → Create release → upload the AAB → release notes → review → roll out to the testers' list. **Do not promote to production** until release finalization (after the Phase 11.5 UI revamp); each revamp build is a new closed-testing release with a higher `versionCode`.
 
 ## First upload checklist (Play Console)
 
 - App content: privacy policy URL `https://panchang.bhavyladani.in/privacy`; Data safety (see `play-store.md`); Ads: no; Target audience: 18+ is simplest (the app is for all ages but makes no child-directed claims); Content rating questionnaire: reference/utility, no objectionable content.
 - **Exact alarm declaration** for `USE_EXACT_ALARM` (text in `play-store.md`). If rejected, switch the manifest to `SCHEDULE_EXACT_ALARM` only (ADR 0023); no code change.
-- Store listing text and screenshots: `play-store.md`, `docs/screenshots/`.
+- Store listing text: `play-store.md`. Screenshots and feature graphic come at release finalization (after Phase 11.5); see the open question in the Phase 12 STOP report about interim assets for closed testing.
 - If your Play developer account is a **personal account created after 13 Nov 2023**, production access needs a closed test with **at least 12 testers opted in for the last 14 days** ([Play Console Help](https://support.google.com/googleplay/android-developer/answer/14151465)). Plan the family testers accordingly; organisation accounts are exempt.

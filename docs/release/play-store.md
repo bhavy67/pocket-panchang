@@ -1,5 +1,7 @@
 # Play Store listing kit: Parivar Panchang
 
+Track for now: **closed testing only**. Production promotion happens at release finalization, after the Phase 11.5 UI revamp.
+
 Limits: title ≤ 30 characters, short description ≤ 80, full description ≤ 4,000. Gujarati text is a **draft** for the native review (`docs/i18n/gu-review.md` covers the in-app strings; review these too). Do not mention festivals until at least one is verified (`festival-gate.md`).
 
 ## English (en-IN, default)
@@ -87,17 +89,6 @@ Play Console → App content → **Exact alarm permission** → core functionali
 
 > Parivar Panchang is a Hindu lunar calendar (panchang). Its core feature is reminding users of their own family events that follow the lunar calendar: birthdays by tithi, varsi/shraddh death anniversaries and wedding anniversaries. Each event's date is recalculated every year, and the app shows a notification at the time the user chooses on the day before and on the day itself. These are user-facing calendar event notifications, which must arrive at that time even when the phone is idle; inexact alarms can be deferred by hours in Doze, which would make a day-of reminder arrive too late. The app schedules at most one alarm per event per lead day (a rolling 12-month window, capped at 400) and uses no other background work.
 
-## Screenshots (phone, 1080 × 1920, in `docs/screenshots/`)
+## Screenshots and feature graphic: after the Phase 11.5 UI revamp
 
-Upload in this order (Play shows the first 3 most prominently):
-
-1. `1-today.png`: Today at 2:10 PM: tithi, current Choghadiya, "Many avoid now", next good time
-2. `4-family-dates.png`: Family dates with next occurrences and "in N days"
-3. `8-today-gujarati.png`: Today in Gujarati
-4. `2-hour-by-hour.png`: proportional Choghadiya timeline with Rahu Kaal and Bhadra
-5. `3-month.png`: month with tithis, two-day and skipped markers
-6. `5-add-date.png`: adding a family date ("I know the date" / "I know the tithi")
-7. `7-today-dark.png`: dark mode
-8. `6-settings.png`: reminders and appearance settings
-
-For the Gujarati listing, reuse the same set with `8-today-gujarati.png` first. Also needed: **feature graphic** 1024 × 500 (not yet made; placeholder icon and name on Calm teal) and the **512 × 512 icon** (`apps/app/public/icons/icon-512.png`).
+Taken at **release finalization** (PROJECT_PLAN.md §15), from the revamped UI: 8 phone screenshots at 1080 × 1920 (Today, Family dates, Today in Gujarati, hour by hour, Month, adding a family date, dark mode, Settings), the 1024 × 500 feature graphic, and the 512 × 512 icon. Closed testing does not require final screenshots; use the placeholder icon until then.
