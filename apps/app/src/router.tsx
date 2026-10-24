@@ -101,6 +101,19 @@ const notificationsRoute = createRoute({
   component: lazyRouteComponent(() => import("@/routes"), "NotificationsRoute"),
 });
 
+// Trust pages: public (no onboarding gate), so /how and /privacy work as plain web links.
+const howRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/how",
+  component: lazyRouteComponent(() => import("@/trust-pages"), "HowPage"),
+});
+
+const privacyRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/privacy",
+  component: lazyRouteComponent(() => import("@/trust-pages"), "PrivacyPage"),
+});
+
 const onboardingRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/onboarding",
@@ -119,6 +132,8 @@ export const routeTree = rootRoute.addChildren([
     notificationsRoute,
   ]),
   onboardingRoute,
+  howRoute,
+  privacyRoute,
 ]);
 
 export const createAppRouter = (history?: RouterHistory) =>

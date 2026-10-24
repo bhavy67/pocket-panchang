@@ -28,7 +28,7 @@ import { exportBackup, exportIcs } from "@/exports";
 import { useNow } from "@/day-data";
 import { clockFor } from "@/lib/clock";
 import { dateLong } from "@/lib/format";
-import { howSheet, mismatchUrl } from "@/panchang";
+import { mismatchUrl } from "@/panchang";
 import {
   FIELDS,
   inherited,
@@ -42,14 +42,7 @@ import {
   useSettings,
   type Settings,
 } from "@/settings";
-import {
-  btnOutline,
-  card,
-  InstallCard,
-  Section,
-  Sheet,
-  type SheetContent,
-} from "@/ui";
+import { btnOutline, card, InstallCard, Section } from "@/ui";
 import { worker } from "@/worker/client";
 
 const radio =
@@ -134,7 +127,6 @@ export function SettingsScreen() {
   const set = (patch: Partial<Settings>) => saveSettings({ ...s, ...patch });
   const events = useEvents() ?? [];
   const { data: meta } = useQuery(metaQuery);
-  const [sheet, setSheet] = useState<SheetContent | null>(null);
   const [status, setStatus] = useState("");
   const today = clockFor(s.location.tz).localDate(useNow());
 
@@ -286,13 +278,18 @@ export function SettingsScreen() {
 
       <Section title={t("about")}>
         <div className={`flex flex-col gap-3 p-5 ${card}`}>
-          <button
-            type="button"
-            className={btnOutline}
-            onClick={() => setSheet(howSheet(s, today))}
-          >
+          <p className="text-lg font-semibold">
+            {t("appName")}{" "}
+            <span className="text-sm font-normal text-text-muted">
+              {t("appVersion", { v: __APP_VERSION__ })}
+            </span>
+          </p>
+          <Link to="/how" className={btnOutline}>
             {t("howCalculated")}
-          </button>
+          </Link>
+          <Link to="/privacy" className={btnOutline}>
+            {t("privacyPolicy")}
+          </Link>
           <a
             href={mismatchUrl(s, today)}
             target="_blank"
@@ -312,7 +309,6 @@ export function SettingsScreen() {
         </div>
       </Section>
       <div className="h-8" />
-      <Sheet content={sheet} onClose={() => setSheet(null)} />
     </main>
   );
 }

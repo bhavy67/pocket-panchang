@@ -215,7 +215,7 @@ export const howSheet = (s: Settings, date: DayView["date"]): SheetContent => ({
   range: `${s.location.name} · ${dateLong(date)}`,
   body: t("howBody", { city: s.location.name }),
   note: t("howNote"),
-  action: { label: t("reportMismatch"), href: mismatchUrl(s, date) },
+  action: { label: t("readMore"), href: "/how", internal: true },
 });
 
 /** Pre-filled GitHub issue (§9 trust surfaces): date, city, settings, engine version. */

@@ -1,4 +1,4 @@
-# Pocket Panchang
+# Pocket Panchang (public name: Parivar Panchang)
 
 A beautiful, private, offline Hindu panchang that's Gujarati-first and diaspora-aware, built around **personal tithi reminders** (janma tithi birthdays, varsi/shraddh, anniversaries). React + Vite PWA and Capacitor Android app over a pure TypeScript astronomy engine. No accounts, no server, no analytics, no ads.
 

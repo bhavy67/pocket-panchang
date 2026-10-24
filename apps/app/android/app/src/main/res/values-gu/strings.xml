@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <!-- Launcher label on phones set to Gujarati (ADR 0016: brand in UI strings only). -->
+    <string name="app_name">પરિવાર પંચાંગ</string>
+    <string name="title_activity_main">પરિવાર પંચાંગ</string>
+</resources>

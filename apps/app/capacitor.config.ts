@@ -3,8 +3,8 @@ import type { CapacitorConfig } from "@capacitor/cli";
 
 const config: CapacitorConfig = {
   appId: "in.bhavyladani.panchang",
-  // ponytail: working name until the public name is chosen (§13, ADR 0016); UI label only.
-  appName: "Pocket Panchang",
+  // Public name (ADR 0016): UI label only; ids stay brand-neutral.
+  appName: "Parivar Panchang",
   webDir: "dist",
   // WebView debugging follows the build type (on in debug, off in release): Capacitor default.
   plugins: {

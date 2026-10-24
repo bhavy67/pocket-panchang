@@ -12,6 +12,8 @@ const ROUTES = [
   "/events/seed-1",
   "/events/new",
   "/settings",
+  "/how",
+  "/privacy",
 ];
 
 /** Seed one family date and set the palette straight in IndexedDB (settings row "current"). */

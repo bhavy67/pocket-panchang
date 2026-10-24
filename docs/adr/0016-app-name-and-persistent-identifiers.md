@@ -1,11 +1,13 @@
 ---
-status: accepted; public name pending (before Phase 11)
+status: accepted; public name decided 2026-10-24
 date: 2026-10-22
 ---
 
 # 0016. Working name, neutral package id, and brand-neutral persistent identifiers (§13 #8)
 
 "Pocket Panchang" is **taken**: a same-category Google Play app (`com.dailyapps.pocketpanchangapp`, released 2026-04-13, 1,000+ installs) and an Apple App Store app (id 6754751035) use that exact name (checked 2026-10-22). It stays our **working name** for the repo and docs only. A distinct **public name** is chosen **before Phase 11** (Play listing), checked for Play and App Store availability, a basic trademark search, and how it reads and sounds in Gujarati.
+
+**Decided 2026-10-24 (Bhavy): "Parivar Panchang" (Gujarati: "પરિવાર પંચાંગ").** Checks on 2026-10-24: no app with that exact name on Google Play (search for the exact phrase) or in a web search; the nearest is "Parivaar Pro", a family app that includes a panchang (some similarity risk, different name). "Parivar" (family) states the app's purpose and reads naturally in Gujarati. A formal trademark search (IP India; USPTO for diaspora markets) is Bhavy's step before production. Where it appears: UI strings (`appName` in `packages/i18n`), the PWA manifest (`name` "Parivar Panchang", `short_name` "Parivar"), the page title, Capacitor `appName`, and Android `app_name` (with a Gujarati label in `values-gu`). The repo, packages and docs keep the working name.
 
 ## Persistent identifiers are brand-neutral
 

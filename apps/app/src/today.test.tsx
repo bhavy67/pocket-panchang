@@ -61,3 +61,25 @@ it("renders Today in Gujarati, with Gujarati digits and time words", async () =>
   expect(screen.getByText(/^શુભ, ૪:૪[૦-૯] – ૬:[૦-૯]{2}\sસાંજે$/)).toBeTruthy();
   await loadLanguage("en");
 });
+
+it("before sunrise, names the panchang day still running and when it ends", async () => {
+  vi.setSystemTime(new Date("2026-10-22T00:30:00Z")); // 6:00 AM IST Thu, before 6:39 sunrise
+  saveSettings(defaultSettings(AHMEDABAD, "en"));
+  render(
+    <QueryClientProvider client={new QueryClient()}>
+      <RouterProvider
+        router={createAppRouter(createMemoryHistory({ initialEntries: ["/"] }))}
+      />
+    </QueryClientProvider>,
+  );
+  expect(
+    await screen.findByText(
+      /^Panchang day: Wednesday · until sunrise 6:3\d\sAM$/,
+    ),
+  ).toBeTruthy();
+  // The glance is still Wednesday's tithi (Aaso Sud 10 at Wednesday's sunrise → Sud 11 now).
+  expect(
+    await screen.findByRole("heading", { level: 1, name: /^Aaso Sud 1[01]$/ }),
+  ).toBeTruthy();
+  vi.setSystemTime(new Date("2026-10-22T08:40:00Z"));
+});

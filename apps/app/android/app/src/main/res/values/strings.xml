@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Pocket Panchang</string>
-    <string name="title_activity_main">Pocket Panchang</string>
+    <string name="app_name">Parivar Panchang</string>
+    <string name="title_activity_main">Parivar Panchang</string>
     <string name="package_name">in.bhavyladani.panchang</string>
     <string name="custom_url_scheme">in.bhavyladani.panchang</string>
 </resources>

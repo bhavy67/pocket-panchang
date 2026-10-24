@@ -47,6 +47,7 @@ export function Today() {
   const [sheet, setSheet] = useState<SheetContent | null>(null);
   const tz = s.location.tz;
   const date = clockFor(tz).localDate(now);
+  const beforeSunrise = !!view && view.date !== date;
 
   return (
     <main className="mx-auto max-w-180">
@@ -58,13 +59,22 @@ export function Today() {
           <span className="text-sm text-text-muted">
             {dateShort(date)}
             {/* Gujarati dates already name the weekday. */}
-            {view && lang() === "en" && (
+            {view && !beforeSunrise && lang() === "en" && (
               <>
                 {" · "}
                 <span lang="gu">{weekdayName(view.day.vara, "gu")}</span>
               </>
             )}
           </span>
+          {/* Before sunrise the panchang day is still yesterday's (sunrise to sunrise, §4.5). */}
+          {view && beforeSunrise && (
+            <span className="text-sm font-semibold">
+              {t("panchangDayUntil", {
+                weekday: weekdayName(view.day.vara, lang()),
+                time: time(view.day.nextSunrise, tz),
+              })}
+            </span>
+          )}
         </div>
         <button
           type="button"

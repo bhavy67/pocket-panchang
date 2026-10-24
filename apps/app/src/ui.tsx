@@ -96,7 +96,12 @@ export type SheetContent = {
   readonly note?: string;
   /** Kicker colour. */
   readonly tone?: "accent" | "good" | "muted" | "rahu";
-  readonly action?: { readonly label: string; readonly href: string };
+  readonly action?: {
+    readonly label: string;
+    readonly href: string;
+    /** An in-app page (same tab) rather than an external site. */
+    readonly internal?: boolean;
+  };
 };
 
 const kickerInk = {
@@ -155,16 +160,25 @@ export function Sheet({
               {content.note}
             </p>
           )}
-          {content.action && (
-            <a
-              href={content.action.href}
-              target="_blank"
-              rel="noreferrer"
-              className={`${btnOutline} text-center`}
-            >
-              {content.action.label}
-            </a>
-          )}
+          {content.action &&
+            (content.action.internal ? (
+              <Link
+                to={content.action.href}
+                onClick={onClose}
+                className={`${btnOutline} text-center`}
+              >
+                {content.action.label}
+              </Link>
+            ) : (
+              <a
+                href={content.action.href}
+                target="_blank"
+                rel="noreferrer"
+                className={`${btnOutline} text-center`}
+              >
+                {content.action.label}
+              </a>
+            ))}
           <button
             type="button"
             onClick={onClose}

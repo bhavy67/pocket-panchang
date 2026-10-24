@@ -1,6 +1,10 @@
 {
   "name": "@panchang/app",
   "private": true,
+  "version": "1.0.0",
+  "engines": {
+    "node": "24.x"
+  },
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -12,7 +16,8 @@
     "build:preview": "VITE_FAMILY_PREVIEW=1 vite build && cp vercel.preview.json dist/vercel.json",
     "e2e": "playwright test",
     "android:sync": "vite build && cap sync android",
-    "android:debug": "pnpm android:sync && cd android && ./gradlew assembleDebug"
+    "android:debug": "pnpm android:sync && cd android && ./gradlew assembleDebug",
+    "android:bundle": "pnpm android:sync && cd android && ./gradlew bundleRelease"
   },
   "dependencies": {
     "@capacitor/android": "8.5.3",

@@ -524,7 +524,7 @@ type CachedMonth = {
 
 ### Pending before Phase 11
 
-- [ ] **Public app name** (ADR 0016): distinct from "Pocket Panchang"; checked on Play and App Store, basic trademark search, reads well in Gujarati.
+- [x] **Public app name** (ADR 0016): **Parivar Panchang / પરિવાર પંચાંગ** (decided 2026-10-24). Formal trademark search before production: Bhavy.
 
 ### Pending family confirmations
 
@@ -704,6 +704,7 @@ Each phase ends with a **STOP**: summary, files changed, open questions, suggest
 **Exit criteria:** reminders fire reliably on device; offline works; APK/AAB builds.
 
 ### Phase 12: Release
+> **Status (2026-10-24): release-ready, launch steps with Bhavy.** Public name applied (ADR 0016); pre-sunrise "Panchang day" line on Today; `/how` and `/privacy` pages (public, bilingual); README with screenshots, architecture and the CI accuracy report; Vercel project `panchang` (Git-connected, root `apps/app`) with the domain added; signed-AAB pipeline reading the upload key from `~/.gradle/gradle.properties`; Play listing kit, data safety, exact-alarm declaration and screenshots in `docs/release/`. Festivals stay hidden until `docs/release/festival-gate.md` is complete. **Pending (Bhavy):** DNS CNAME, push to `main`, upload key + first AAB to closed testing, Play Console forms, trademark search.
 - README with screenshots, architecture overview, and the **measured accuracy report**.
 - "How this is calculated" page; privacy policy page.
 - Deploy web to `panchang.bhavyladani.in`.

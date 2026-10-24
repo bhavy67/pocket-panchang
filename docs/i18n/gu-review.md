@@ -12,7 +12,7 @@
 - [ ] **Month-grid markers:** "૨×" (two-day tithi) and "છૂટી" (skipped tithi).
 - [ ] **Event kinds:** વરસી / શ્રાદ્ધ, લગ્નતિથિ, જન્મદિવસ (તિથિ મુજબ).
 
-### UI strings (339)
+### UI strings (378)
 
 | OK | Key | English | ગુજરાતી (draft) |
 |---|---|---|---|
@@ -348,13 +348,52 @@
 | [ ] | `healthOk` | OK | બરાબર |
 | [ ] | `healthNeedsAttention` | Needs attention | ધ્યાન આપો |
 | [ ] | `healthSamsungTitle` | On Samsung phones | સેમસંગ ફોન પર |
-| [ ] | `healthSamsung` | Open Settings → Apps → Pocket Panchang → Battery, and choose “Unrestricted”. Open Settings → Battery → Background usage limits → Never sleeping apps, and add Pocket Panchang. If “Put unused apps to sleep” is on, make sure Pocket Panchang is not in “Sleeping apps”. | સેટિંગ્સ → Apps → Pocket Panchang → Battery ખોલો અને “Unrestricted” પસંદ કરો. સેટિંગ્સ → Battery → Background usage limits → Never sleeping apps ખોલો અને Pocket Panchang ઉમેરો. “Put unused apps to sleep” ચાલુ હોય તો Pocket Panchang “Sleeping apps”માં ન હોય તે જુઓ. |
+| [ ] | `healthSamsung` | Open Settings → Apps → Parivar Panchang → Battery, and choose “Unrestricted”. Open Settings → Battery → Background usage limits → Never sleeping apps, and add Parivar Panchang. If “Put unused apps to sleep” is on, make sure Parivar Panchang is not in “Sleeping apps”. | સેટિંગ્સ → Apps → Parivar Panchang (પરિવાર પંચાંગ) → Battery ખોલો અને “Unrestricted” પસંદ કરો. સેટિંગ્સ → Battery → Background usage limits → Never sleeping apps ખોલો અને Parivar Panchang (પરિવાર પંચાંગ) ઉમેરો. “Put unused apps to sleep” ચાલુ હોય તો Parivar Panchang (પરિવાર પંચાંગ) “Sleeping apps”માં ન હોય તે જુઓ. |
 | [ ] | `healthXiaomiTitle` | On Xiaomi, Redmi and POCO phones | શાઓમી, રેડમી અને પોકો ફોન પર |
-| [ ] | `healthXiaomi` | Open Settings → Apps → Manage apps → Pocket Panchang. Turn on “Autostart”. Open “Battery saver” and choose “No restrictions”. In the recent-apps screen, press and hold Pocket Panchang and tap the lock icon. | સેટિંગ્સ → Apps → Manage apps → Pocket Panchang ખોલો. “Autostart” ચાલુ કરો. “Battery saver” ખોલો અને “No restrictions” પસંદ કરો. તાજેતરની ઍપની સ્ક્રીનમાં Pocket Panchang દબાવી રાખો અને તાળાનું ચિહ્ન દબાવો. |
+| [ ] | `healthXiaomi` | Open Settings → Apps → Manage apps → Parivar Panchang. Turn on “Autostart”. Open “Battery saver” and choose “No restrictions”. In the recent-apps screen, press and hold Parivar Panchang and tap the lock icon. | સેટિંગ્સ → Apps → Manage apps → Parivar Panchang (પરિવાર પંચાંગ) ખોલો. “Autostart” ચાલુ કરો. “Battery saver” ખોલો અને “No restrictions” પસંદ કરો. તાજેતરની ઍપની સ્ક્રીનમાં Parivar Panchang (પરિવાર પંચાંગ) દબાવી રાખો અને તાળાનું ચિહ્ન દબાવો. |
 | [ ] | `healthTestTitle` | Test it | ચકાસો |
 | [ ] | `healthTestBody` | Tap the button, lock the phone, and wait one minute. A test reminder should appear. | બટન દબાવો, ફોન લૉક કરો અને એક મિનિટ રાહ જુઓ. ચકાસણીની યાદ દેખાવી જોઈએ. |
 | [ ] | `healthTestButton` | Send a test reminder in 1 minute | ૧ મિનિટમાં ચકાસણીની યાદ મોકલો |
 | [ ] | `healthTestSent` | Test reminder set for one minute from now. | હવેથી એક મિનિટ પછી ચકાસણીની યાદ ગોઠવી. |
+| [ ] | `appName` | Parivar Panchang | પરિવાર પંચાંગ |
+| [ ] | `panchangDayUntil` | Panchang day: {weekday} · until sunrise {time} | પંચાંગ દિવસ: {weekday} · સૂર્યોદય {time} સુધી |
+| [ ] | `appVersion` | Version {v} | સંસ્કરણ {v} |
+| [ ] | `privacyPolicy` | Privacy policy | ગોપનીયતા નીતિ |
+| [ ] | `readMore` | Read the full explanation | પૂરી સમજૂતી વાંચો |
+| [ ] | `backHome` | ‹ Back to the app | ‹ ઍપ પર પાછા |
+| [ ] | `howDayTitle` | A day runs from sunrise to sunrise | દિવસ એક સૂર્યોદયથી બીજા સૂર્યોદય સુધી |
+| [ ] | `howDayBody` | As in a printed panchang, each day starts at sunrise. Sunrise is the moment the top edge of the Sun appears on a flat horizon, with the usual allowance for the air bending light. Times are worked out for your city, so they can differ by a minute or two from a calendar printed for a nearby city. | છાપેલા પંચાંગની જેમ, દરેક દિવસ સૂર્યોદયથી શરૂ થાય છે. સૂર્યોદય એટલે સપાટ ક્ષિતિજ પર સૂર્યની ઉપરની કિનાર દેખાય તે ક્ષણ, હવાથી પ્રકાશ વળે તેની સામાન્ય ગણતરી સાથે. સમય તમારા શહેર માટે ગણાય છે, તેથી નજીકના શહેર માટે છપાયેલા પંચાંગથી એક-બે મિનિટ જુદો હોઈ શકે. |
+| [ ] | `howTithiTitle` | Tithi | તિથિ |
+| [ ] | `howTithiBody` | A tithi is the time the Moon takes to move 12° further ahead of the Sun. The tithi at sunrise gives the day its name. If one tithi is present at two sunrises, it is a two-day tithi; if a tithi begins and ends between two sunrises, it is skipped and no day is named after it. | તિથિ એટલે ચંદ્રને સૂર્યથી ૧૨° વધુ આગળ જતાં લાગતો સમય. સૂર્યોદય વખતની તિથિ દિવસનું નામ આપે છે. એક તિથિ બે સૂર્યોદયે હોય તો તે બે દિવસની તિથિ; બે સૂર્યોદય વચ્ચે જ શરૂ થઈને પૂરી થાય તો તે છૂટી તિથિ, અને કોઈ દિવસ તેના નામે નથી. |
+| [ ] | `howStarsTitle` | Nakshatra, yoga and karana | નક્ષત્ર, યોગ અને કરણ |
+| [ ] | `howStarsBody` | Nakshatra and yoga use the Moon’s and Sun’s positions among the stars, measured with the Lahiri ayanamsa that Indian calendars use. A karana is half a tithi; Vishti karana is also called Bhadra. | નક્ષત્ર અને યોગ તારાઓ વચ્ચે ચંદ્ર અને સૂર્યની સ્થિતિ પરથી ગણાય છે, ભારતીય પંચાંગો વાપરે છે તે લાહિરી અયનાંશ સાથે. કરણ એટલે અડધી તિથિ; વિષ્ટિ કરણને ભદ્રા પણ કહે છે. |
+| [ ] | `howMonthsTitle` | Months and years | મહિના અને વર્ષ |
+| [ ] | `howMonthsBody` | Months follow the Gujarati style: a month ends on Amas. When a lunar month has no change of solar sign, it is an extra (adhik) month. The Vikram Samvat year changes the day after Diwali, at Bestu Varas. | મહિના ગુજરાતી પદ્ધતિએ ગણાય છે: મહિનો અમાસે પૂરો થાય છે. જે ચાંદ્ર મહિનામાં સૂર્યની રાશિ ન બદલાય, તે અધિક મહિનો. વિક્રમ સંવતનું વર્ષ દિવાળી પછીના દિવસે, બેસતા વર્ષે બદલાય છે. |
+| [ ] | `howTimesTitle` | Choghadiya and times many avoid | ચોઘડિયાં અને ઘણા ટાળે તે સમય |
+| [ ] | `howTimesBody` | Daylight and night are each split into 8 equal Choghadiya. Rahu Kaal, Yamaganda and Gulika are one-eighth of daylight each, chosen by the weekday. Bhadra is shown from its real start to its real end. | દિવસ અને રાત્રિ દરેક ૮ સરખાં ચોઘડિયાંમાં વહેંચાય છે. રાહુ કાળ, યમઘંટ અને ગુલિક વાર મુજબ દિવસના આઠમા ભાગ જેટલા હોય છે. ભદ્રા તેની સાચી શરૂઆતથી સાચા અંત સુધી બતાવાય છે. |
+| [ ] | `howFamilyTitle` | Family dates | પરિવારની તારીખો |
+| [ ] | `howFamilyBody` | A family date is saved as a lunar date, such as Kartak Vad 5, and its day is worked out again every year using sunrise in the city you chose and your family conventions (for example, afternoon timing for a varsi). Reminders on Android come at your chosen time, and never later than that time in the family’s city. | પરિવારની તારીખ ચાંદ્ર તારીખ (જેમ કે કારતક વદ ૫) તરીકે સચવાય છે, અને દર વર્ષે તમે પસંદ કરેલા શહેરના સૂર્યોદય અને તમારા પરિવારના રિવાજ (જેમ કે વરસી માટે બપોર પછીનો સમય) મુજબ તેનો દિવસ ફરી ગણાય છે. Android પર યાદ તમે પસંદ કરેલા સમયે આવે છે, અને પરિવારના શહેરના એ સમયથી મોડી ક્યારેય નહીં. |
+| [ ] | `howAccuracyTitle` | How accurate it is | કેટલું ચોક્કસ છે |
+| [ ] | `howAccuracyBody` | Checked against Drik Panchang for Ahmedabad on 82 days in 2026–27: sunrise and sunset within 33 seconds; tithi and karana end times within about 1½ minutes; nakshatra and yoga within 1 minute. On every day checked, the tithi, nakshatra, yoga, karana, month and year matched. | ૨૦૨૬–૨૭ના ૮૨ દિવસ માટે અમદાવાદનું દૃક પંચાંગ સાથે સરખાવ્યું: સૂર્યોદય અને સૂર્યાસ્ત ૩૩ સેકન્ડની અંદર; તિથિ અને કરણ પૂરા થવાનો સમય આશરે દોઢ મિનિટની અંદર; નક્ષત્ર અને યોગ ૧ મિનિટની અંદર. તપાસેલા દરેક દિવસે તિથિ, નક્ષત્ર, યોગ, કરણ, મહિનો અને વર્ષ મળતાં આવ્યાં. |
+| [ ] | `howFestivalsTitle` | Festivals | તહેવારો |
+| [ ] | `howFestivalsBody` | Festival dates depend on traditions as well as astronomy. A festival appears in the app only after its dates have been checked against printed calendars for several years. | તહેવારોની તારીખ ખગોળ સાથે પરંપરા પર પણ આધાર રાખે છે. કોઈ તહેવાર ઍપમાં ત્યારે જ દેખાય છે જ્યારે તેની તારીખો ઘણાં વર્ષો માટે છાપેલાં પંચાંગ સાથે ચકાસાઈ હોય. |
+| [ ] | `howPhoneTitle` | All on your phone | બધું તમારા ફોનમાં |
+| [ ] | `howPhoneBody` | Every calculation runs on your phone, with the open-source astronomy-engine library. Nothing is sent anywhere. If something differs from your printed calendar, please tell us. | દરેક ગણતરી તમારા ફોનમાં જ, ખુલ્લા સ્રોતની astronomy-engine લાઇબ્રેરીથી થાય છે. કંઈ ક્યાંય મોકલાતું નથી. છાપેલા પંચાંગથી કંઈ જુદું લાગે તો અમને જણાવો. |
+| [ ] | `privacyUpdated` | Last updated: 24 October 2026 | છેલ્લો સુધારો: ૨૪ ઑક્ટોબર ૨૦૨૬ |
+| [ ] | `privacyShortTitle` | In short | ટૂંકમાં |
+| [ ] | `privacyShort` | Parivar Panchang collects no data. There is no account, no analytics, no advertising and no tracking. Everything you enter stays on your device. | પરિવાર પંચાંગ કોઈ માહિતી એકઠી કરતું નથી. ન ખાતું, ન ઍનાલિટિક્સ, ન જાહેરાત, ન ટ્રૅકિંગ. તમે લખો તે બધું તમારા ઉપકરણમાં જ રહે છે. |
+| [ ] | `privacyStoredTitle` | What is stored, and where | શું સચવાય છે, અને ક્યાં |
+| [ ] | `privacyStored` | Your city, settings, family dates and notes, and saved calculations are stored only on your device (in the app’s or browser’s own storage). They are never sent to us or anyone else. Uninstalling the app, or clearing the website’s data in your browser, deletes them. | તમારું શહેર, સેટિંગ્સ, પરિવારની તારીખો અને નોંધ, અને સાચવેલી ગણતરીઓ ફક્ત તમારા ઉપકરણમાં (ઍપ કે બ્રાઉઝરના પોતાના સંગ્રહમાં) રહે છે. તે ક્યારેય અમને કે બીજા કોઈને મોકલાતી નથી. ઍપ કાઢી નાખવાથી, કે બ્રાઉઝરમાં વેબસાઇટની માહિતી સાફ કરવાથી, તે ભૂંસાઈ જાય છે. |
+| [ ] | `privacyFilesTitle` | Backup and calendar files | બૅકઅપ અને કેલેન્ડર ફાઇલ |
+| [ ] | `privacyFiles` | A backup or calendar file is created only when you tap to save it, and goes only where you choose to save or share it. | બૅકઅપ કે કેલેન્ડર ફાઇલ ત્યારે જ બને છે જ્યારે તમે સાચવવા દબાવો, અને ફક્ત તમે પસંદ કરો ત્યાં જ સચવાય કે મોકલાય છે. |
+| [ ] | `privacyNetworkTitle` | Internet use | ઇન્ટરનેટનો ઉપયોગ |
+| [ ] | `privacyNetwork` | The Android app does not use the internet. The website downloads the app’s files from our host, Vercel, whose servers keep standard technical logs (such as IP address and browser type) to run and protect the service; we do not use them to identify you. “Report a mismatch” opens a pre-filled page on GitHub in your browser, and nothing is sent unless you submit it there. | Android ઍપ ઇન્ટરનેટ વાપરતી નથી. વેબસાઇટ ઍપની ફાઇલો અમારા હોસ્ટ Vercel પરથી ડાઉનલોડ કરે છે, જેના સર્વર સેવા ચલાવવા અને સુરક્ષિત રાખવા સામાન્ય તકનીકી લૉગ (જેમ કે IP સરનામું અને બ્રાઉઝરનો પ્રકાર) રાખે છે; અમે તેનાથી તમારી ઓળખ કરતા નથી. “તફાવત જણાવો” તમારા બ્રાઉઝરમાં GitHub પર ભરેલું પાનું ખોલે છે, અને તમે ત્યાં મોકલો નહીં ત્યાં સુધી કંઈ જતું નથી. |
+| [ ] | `privacyPermissionsTitle` | Android permissions | Android પરવાનગીઓ |
+| [ ] | `privacyPermissions` | Notifications, to show family-date reminders. Alarms and reminders (exact alarms), so reminders arrive on time. Run at startup, so reminders survive a restart. Internet is declared by the app framework but not used. | સૂચનાઓ: પરિવારની તારીખોની યાદ બતાવવા. Alarms & reminders (ચોક્કસ સમય): યાદ સમયસર આવે તે માટે. ફોન શરૂ થતાં ચાલવું: ફોન ફરી શરૂ થયા પછી પણ યાદ રહે તે માટે. ઇન્ટરનેટની પરવાનગી ઍપના માળખામાં જાહેર છે પણ વપરાતી નથી. |
+| [ ] | `privacyChildrenTitle` | Children | બાળકો |
+| [ ] | `privacyChildren` | The app collects no data from anyone, including children. | ઍપ કોઈની પણ, બાળકો સહિત, માહિતી એકઠી કરતી નથી. |
+| [ ] | `privacyChangesTitle` | Changes and contact | ફેરફાર અને સંપર્ક |
+| [ ] | `privacyChanges` | If this policy changes, the new version will appear on this page with a new date. Questions: open an issue at github.com/bhavy67/pocket-panchang. | આ નીતિ બદલાય તો નવી આવૃત્તિ નવી તારીખ સાથે આ પાના પર દેખાશે. પ્રશ્નો: github.com/bhavy67/pocket-panchang પર issue ખોલો. |
 
 ### Months (Gujarati year order) (12)
 

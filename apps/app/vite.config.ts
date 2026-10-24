@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { fileURLToPath, URL } from "node:url";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
@@ -5,7 +6,12 @@ import { visualizer } from "rollup-plugin-visualizer";
 import { VitePWA } from "vite-plugin-pwa";
 import { defineConfig } from "vitest/config";
 
+const { version } = JSON.parse(
+  readFileSync(new URL("./package.json", import.meta.url), "utf8"),
+) as { version: string };
+
 export default defineConfig({
+  define: { __APP_VERSION__: JSON.stringify(version) },
   plugins: [
     react(),
     tailwindcss(),
@@ -17,8 +23,8 @@ export default defineConfig({
       includeAssets: ["icons/apple-touch-icon.png", "icons/icon.svg"],
       manifest: {
         id: "/",
-        name: "Pocket Panchang",
-        short_name: "Panchang",
+        name: "Parivar Panchang",
+        short_name: "Parivar",
         description:
           "A private, offline Hindu panchang with your family's tithi dates.",
         lang: "gu",

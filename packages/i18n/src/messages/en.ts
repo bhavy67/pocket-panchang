@@ -384,15 +384,71 @@ export const en = {
   healthNeedsAttention: "Needs attention",
   healthSamsungTitle: "On Samsung phones",
   healthSamsung:
-    "Open Settings → Apps → Pocket Panchang → Battery, and choose “Unrestricted”.\nOpen Settings → Battery → Background usage limits → Never sleeping apps, and add Pocket Panchang.\nIf “Put unused apps to sleep” is on, make sure Pocket Panchang is not in “Sleeping apps”.",
+    "Open Settings → Apps → Parivar Panchang → Battery, and choose “Unrestricted”.\nOpen Settings → Battery → Background usage limits → Never sleeping apps, and add Parivar Panchang.\nIf “Put unused apps to sleep” is on, make sure Parivar Panchang is not in “Sleeping apps”.",
   healthXiaomiTitle: "On Xiaomi, Redmi and POCO phones",
   healthXiaomi:
-    "Open Settings → Apps → Manage apps → Pocket Panchang.\nTurn on “Autostart”.\nOpen “Battery saver” and choose “No restrictions”.\nIn the recent-apps screen, press and hold Pocket Panchang and tap the lock icon.",
+    "Open Settings → Apps → Manage apps → Parivar Panchang.\nTurn on “Autostart”.\nOpen “Battery saver” and choose “No restrictions”.\nIn the recent-apps screen, press and hold Parivar Panchang and tap the lock icon.",
   healthTestTitle: "Test it",
   healthTestBody:
     "Tap the button, lock the phone, and wait one minute. A test reminder should appear.",
   healthTestButton: "Send a test reminder in 1 minute",
   healthTestSent: "Test reminder set for one minute from now.",
+  // Brand and pre-sunrise
+  appName: "Parivar Panchang",
+  panchangDayUntil: "Panchang day: {weekday} · until sunrise {time}",
+  appVersion: "Version {v}",
+  privacyPolicy: "Privacy policy",
+  readMore: "Read the full explanation",
+  // Trust pages
+  backHome: "‹ Back to the app",
+  howDayTitle: "A day runs from sunrise to sunrise",
+  howDayBody:
+    "As in a printed panchang, each day starts at sunrise. Sunrise is the moment the top edge of the Sun appears on a flat horizon, with the usual allowance for the air bending light. Times are worked out for your city, so they can differ by a minute or two from a calendar printed for a nearby city.",
+  howTithiTitle: "Tithi",
+  howTithiBody:
+    "A tithi is the time the Moon takes to move 12° further ahead of the Sun. The tithi at sunrise gives the day its name. If one tithi is present at two sunrises, it is a two-day tithi; if a tithi begins and ends between two sunrises, it is skipped and no day is named after it.",
+  howStarsTitle: "Nakshatra, yoga and karana",
+  howStarsBody:
+    "Nakshatra and yoga use the Moon’s and Sun’s positions among the stars, measured with the Lahiri ayanamsa that Indian calendars use. A karana is half a tithi; Vishti karana is also called Bhadra.",
+  howMonthsTitle: "Months and years",
+  howMonthsBody:
+    "Months follow the Gujarati style: a month ends on Amas. When a lunar month has no change of solar sign, it is an extra (adhik) month. The Vikram Samvat year changes the day after Diwali, at Bestu Varas.",
+  howTimesTitle: "Choghadiya and times many avoid",
+  howTimesBody:
+    "Daylight and night are each split into 8 equal Choghadiya. Rahu Kaal, Yamaganda and Gulika are one-eighth of daylight each, chosen by the weekday. Bhadra is shown from its real start to its real end.",
+  howFamilyTitle: "Family dates",
+  howFamilyBody:
+    "A family date is saved as a lunar date, such as Kartak Vad 5, and its day is worked out again every year using sunrise in the city you chose and your family conventions (for example, afternoon timing for a varsi). Reminders on Android come at your chosen time, and never later than that time in the family’s city.",
+  howAccuracyTitle: "How accurate it is",
+  howAccuracyBody:
+    "Checked against Drik Panchang for Ahmedabad on 82 days in 2026–27: sunrise and sunset within 33 seconds; tithi and karana end times within about 1½ minutes; nakshatra and yoga within 1 minute. On every day checked, the tithi, nakshatra, yoga, karana, month and year matched.",
+  howFestivalsTitle: "Festivals",
+  howFestivalsBody:
+    "Festival dates depend on traditions as well as astronomy. A festival appears in the app only after its dates have been checked against printed calendars for several years.",
+  howPhoneTitle: "All on your phone",
+  howPhoneBody:
+    "Every calculation runs on your phone, with the open-source astronomy-engine library. Nothing is sent anywhere. If something differs from your printed calendar, please tell us.",
+  privacyUpdated: "Last updated: 24 October 2026",
+  privacyShortTitle: "In short",
+  privacyShort:
+    "Parivar Panchang collects no data. There is no account, no analytics, no advertising and no tracking. Everything you enter stays on your device.",
+  privacyStoredTitle: "What is stored, and where",
+  privacyStored:
+    "Your city, settings, family dates and notes, and saved calculations are stored only on your device (in the app’s or browser’s own storage). They are never sent to us or anyone else. Uninstalling the app, or clearing the website’s data in your browser, deletes them.",
+  privacyFilesTitle: "Backup and calendar files",
+  privacyFiles:
+    "A backup or calendar file is created only when you tap to save it, and goes only where you choose to save or share it.",
+  privacyNetworkTitle: "Internet use",
+  privacyNetwork:
+    "The Android app does not use the internet. The website downloads the app’s files from our host, Vercel, whose servers keep standard technical logs (such as IP address and browser type) to run and protect the service; we do not use them to identify you. “Report a mismatch” opens a pre-filled page on GitHub in your browser, and nothing is sent unless you submit it there.",
+  privacyPermissionsTitle: "Android permissions",
+  privacyPermissions:
+    "Notifications, to show family-date reminders. Alarms and reminders (exact alarms), so reminders arrive on time. Run at startup, so reminders survive a restart. Internet is declared by the app framework but not used.",
+  privacyChildrenTitle: "Children",
+  privacyChildren: "The app collects no data from anyone, including children.",
+  privacyChangesTitle: "Changes and contact",
+  privacyChanges:
+    "If this policy changes, the new version will appear on this page with a new date. Questions: open an issue at github.com/bhavy67/pocket-panchang.",
   // @@KEYS@@
 } as const;
 

@@ -137,7 +137,12 @@ export function Month({ month, date }: { month: YearMonth; date?: CivilDate }) {
             />
           )}
         </div>
-        <Legend />
+        <Legend
+          hasFestivals={festivals.some(
+            (f) =>
+              f.date.startsWith(month) || (f.endDate ?? "").startsWith(month),
+          )}
+        />
       </div>
       {isWide && selected && (
         <div className="sticky top-0 max-h-dvh overflow-y-auto border-l border-border">
@@ -335,7 +340,7 @@ function Cell({
       </span>
       {day && (
         <span className="text-[length:min(var(--text-caption),18px)] leading-tight text-text-muted [overflow-wrap:anywhere]">
-          {tithiLabel(day.tithi.atSunrise, lang())}
+          {cellTithi(day.tithi.atSunrise)}
         </span>
       )}
       <span
@@ -386,7 +391,13 @@ function Cell({
   );
 }
 
-function Legend() {
+/** Grid label: printed calendars write Punam and Amas without Sud/Vad (saves cell width). */
+const cellTithi = (n: number) => {
+  const label = tithiLabel(n, lang());
+  return n === 15 || n === 30 ? label.split(" ").slice(1).join(" ") : label;
+};
+
+function Legend({ hasFestivals }: { hasFestivals: boolean }) {
   const item = "flex items-center gap-1.5";
   return (
     <ul
@@ -399,10 +410,12 @@ function Legend() {
         </span>
         {t("keyToday")}
       </li>
-      <li className={item}>
-        <span className="block size-2.5 rotate-45 bg-festival" />
-        {t("keyFestival")}
-      </li>
+      {hasFestivals && (
+        <li className={item}>
+          <span className="block size-2.5 rotate-45 bg-festival" />
+          {t("keyFestival")}
+        </li>
+      )}
       <li className={item}>
         <PersonalIcon small />
         {t("keyFamily")}
