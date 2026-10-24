@@ -1,5 +1,9 @@
 # Screen designs
 
+**Current direction: "Quiet Sky" (approved 2026-10-24, Phase 11.5, [ADR 0024](../adr/0024-quiet-sky-ui.md)).** It supersedes the Phase 8 look recorded below; Phase 8 behaviours not changed by ADR 0024 (shape + label coding, proportional time axis, plain labels, 200% text, Help with a text label, detail sheets) still apply. Screenshots of Today, Month and Family in every palette (Calm, Raat, Kagaz, Mandir, Utsav) × light/dark: [`screens/`](screens/) (1080 × 1920, Ahmedabad, Thu 22 Oct 2026 2:10 PM). Approval: self-checked at 412 px in all 10 themes, at 200% text and in Gujarati, plus axe in CI.
+
+## Phase 8 designs (superseded look)
+
 Status of each v1 screen design. Approved designs are the visual reference for implementation; `docs/design/brief.md` and ADR 0017 (tokens) govern everything not shown in them.
 
 | Screen | Status | Palette / mode | Link |

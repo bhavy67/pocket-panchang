@@ -11,12 +11,16 @@ import { isParseError, type ParseError } from "@panchang/engine";
 import { create } from "zustand";
 import { db } from "@/db";
 
+/** Colour palettes (ADR 0024); each has light and dark. */
+export const PALETTES = ["calm", "raat", "kagaz", "mandir", "utsav"] as const;
+export type Palette = (typeof PALETTES)[number];
+
 export type Settings = {
   readonly location: Location;
   readonly tradition: "amanta" | "purnimanta"; // v1: always "amanta"
   readonly samvat: "vikram-kartikadi" | "vikram-chaitradi" | "shaka";
   readonly language: Lang;
-  readonly palette: "calm" | "mandir" | "raat";
+  readonly palette: Palette;
   readonly theme: "system" | "light" | "dark";
   readonly textScale: number;
   readonly householdPolicy: Partial<Record<EventKind, PolicyOverrides>>;
@@ -142,8 +146,7 @@ export function parseSettings(v: unknown): Settings | ParseError {
     return fail(`Bad samvat: ${String(samvat)}`);
   if (!oneOf(language, ["gu", "en", "hi"] as const))
     return fail(`Bad language: ${String(language)}`);
-  if (!oneOf(palette, ["calm", "mandir", "raat"] as const))
-    return fail(`Bad palette: ${String(palette)}`);
+  if (!oneOf(palette, PALETTES)) return fail(`Bad palette: ${String(palette)}`);
   if (!oneOf(theme, ["system", "light", "dark"] as const))
     return fail(`Bad theme: ${String(theme)}`);
   if (typeof textScale !== "number" || !(textScale >= 0.5 && textScale <= 3))

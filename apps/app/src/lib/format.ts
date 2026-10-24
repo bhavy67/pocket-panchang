@@ -81,6 +81,10 @@ export const dateLong = (d: CivilDate) => {
   return lang() === "gu" ? s : s.replace(",", "");
 };
 
+/** "Thursday, 22 October" (Today's header). */
+export const dateHeader = (d: CivilDate) =>
+  civil(d, { weekday: "long", day: "numeric", month: "long" });
+
 /** "October 2026" */
 export const monthTitle = (d: CivilDate) =>
   civil(d, { month: "long", year: "numeric" });

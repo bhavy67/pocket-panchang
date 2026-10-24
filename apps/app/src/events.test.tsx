@@ -46,6 +46,12 @@ it("creates a varsi by tithi and lists its next occurrence", async () => {
   const [annual, pitru] = await screen.findAllByRole("link", {
     name: /Ba's varsi/,
   });
-  expect(annual!.textContent).toMatch(/Kartak Vad 5 · \w{3} \d{1,2} Nov/);
-  expect(pitru!.textContent).toMatch(/Pitru Paksha.*\w{3} \d{1,2} (Sep|Oct)/);
+  // Next card: this year's date and next Pitru Paksha shraddh; the Later list repeats the latter.
+  expect(annual!.textContent).toMatch(
+    /Kartak Vad 5.*This year\w{3} \d{1,2} Nov/,
+  );
+  expect(annual!.textContent).toMatch(
+    /Pitru Paksha shraddh\w{3} \d{1,2} (Sept|Oct)/,
+  );
+  expect(pitru!.textContent).toMatch(/Pitru Paksha.*\w{3} \d{1,2} (Sept|Oct)/);
 });

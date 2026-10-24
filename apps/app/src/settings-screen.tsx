@@ -28,6 +28,7 @@ import { exportBackup, exportIcs } from "@/exports";
 import { useNow } from "@/day-data";
 import { clockFor } from "@/lib/clock";
 import { dateLong } from "@/lib/format";
+import { MoonDisc } from "@/moon-disc";
 import { mismatchUrl } from "@/panchang";
 import {
   FIELDS,
@@ -97,27 +98,72 @@ function Choice<T extends string | number>({
 
 const PALETTES = [
   ["calm", "paletteCalm"],
-  ["mandir", "paletteMandir"],
   ["raat", "paletteRaat"],
+  ["kagaz", "paletteKagaz"],
+  ["mandir", "paletteMandir"],
+  ["utsav", "paletteUtsav"],
 ] as const;
 
-/** A live swatch: the palette's own tokens, applied by data attributes (ADR 0017). */
-function PaletteSwatch({ palette, label }: { palette: string; label: string }) {
+/** Thursday's day Choghadiya, for the preview ribbon. */
+const SAMPLE = [
+  "good",
+  "bad",
+  "bad",
+  "neutral",
+  "good",
+  "best",
+  "bad",
+  "good",
+] as const;
+const sampleStyle = (q: (typeof SAMPLE)[number]) =>
+  q === "best"
+    ? "bg-auspicious"
+    : q === "good"
+      ? "bg-auspicious-subtle"
+      : q === "bad"
+        ? "bg-inauspicious-subtle"
+        : "bg-surface-sunken";
+
+/**
+ * A live preview of the hero and ribbon in the palette's own tokens and the current mode
+ * (data attributes scope the tokens, ADR 0017).
+ */
+function PalettePreview({
+  palette,
+  label,
+}: {
+  palette: string;
+  label: string;
+}) {
   const mode = document.documentElement.dataset.mode ?? "light";
   return (
     <span
       data-palette={palette}
       data-mode={mode}
-      className="flex flex-1 items-center gap-2 rounded-md bg-bg p-2"
+      className="flex flex-1 flex-col gap-2 rounded-md border border-border bg-bg p-3 text-text"
+      style={{ fontFamily: "var(--font-ui)" }}
     >
-      <span className="flex flex-1 flex-col rounded-sm bg-surface px-2 py-1 text-text">
-        <span className="text-body font-semibold">{label}</span>
-        <span className="flex gap-1" aria-hidden="true">
-          <span className="block size-3 rounded-full bg-accent" />
-          <span className="block size-3 rounded-full bg-auspicious" />
-          <span className="block size-3 rotate-45 bg-festival" />
+      <span className="flex items-center gap-2">
+        <MoonDisc elongation={130} size="2.25rem" decorative />
+        <span className="flex min-w-0 flex-col leading-tight">
+          <span className="text-body font-extrabold">{label}</span>
+          <span className="text-caption text-text-muted">
+            {t("previewTithi")}
+          </span>
         </span>
       </span>
+      <span aria-hidden="true" className="flex h-3 gap-px">
+        {SAMPLE.map((q, i) => (
+          <span
+            key={i}
+            className={`flex-1 ${sampleStyle(q)} ${i === 0 ? "rounded-l-full" : i === 7 ? "rounded-r-full" : ""}`}
+          />
+        ))}
+      </span>
+      <span
+        aria-hidden="true"
+        className="block h-1.5 w-1/3 rounded-full bg-accent"
+      />
     </span>
   );
 }
@@ -136,7 +182,7 @@ export function SettingsScreen() {
         {t("settings")}
       </h1>
 
-      <Section title={t("place")}>
+      <Section id="place" title={t("place")}>
         <div className={`flex flex-col gap-5 p-5 ${card}`}>
           <div className="flex flex-col gap-2">
             <p className="text-body">
@@ -197,7 +243,8 @@ export function SettingsScreen() {
             value={s.palette}
             options={PALETTES.map(([v, k]) => [v, t(k)] as const)}
             onChange={(palette) => set({ palette })}
-            render={(v, label) => <PaletteSwatch palette={v} label={label} />}
+            min="11rem"
+            render={(v, label) => <PalettePreview palette={v} label={label} />}
           />
           <Choice
             legend={t("lightOrDark")}
@@ -212,7 +259,11 @@ export function SettingsScreen() {
         </div>
       </Section>
 
-      <Section title={t("familyConventions")} sub={t("familyConventionsSub")}>
+      <Section
+        id="conventions"
+        title={t("familyConventions")}
+        sub={t("familyConventionsSub")}
+      >
         <div className="flex flex-col gap-2">
           {EVENT_KINDS.map((k) => (
             <Conventions key={k} kind={k} s={s} events={events} />

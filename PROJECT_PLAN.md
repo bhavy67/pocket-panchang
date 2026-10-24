@@ -434,7 +434,7 @@ type CachedMonth = {
 - **Measured in Phase 11 (2026-10-24, Android 16 emulator, 4 cores / 4 GB, on an Apple-silicon host, so faster than a budget phone):** cold process start to first frame 0.62–1.0 s, Today glance 430–610 ms after WebView navigation start; hot start (app in memory) 50–188 ms; month in a fresh worker 219–320 ms (first computation, JIT-cold; borderline vs 300 ms), 50–152 ms once warm. With 2 GB RAM the same emulator swapped and took 6–9 s, so 2 GB Android 16 is not a supported budget target. Re-measure on the S24 and a real budget phone.
 - **Measured at end of Phase 10 (2026-10-24, `pnpm --filter @panchang/app e2e budgets`, production build, CPU ×4 + slow 4G via CDP):** initial JS **158.0 KB gzip** by Vite's report (152.8 KB by the E2E check's zlib) plus the active language catalogue loaded at boot (en 5.1 / gu 6.1 KB); worker **32.1 KB**; Today glance visible **139–262 ms** after a warm (service-worker + IndexedDB) reload; a never-computed month **55–133 ms** worker round trip. All budgets met. Caveat: a throttled laptop CPU is still faster than a real mid-range Android; re-measure on a device in Phase 11. Precache: 26 files, 2.58 MB (1.86 MB is the city list, for offline onboarding and city changes); Devanagari fonts are cached on first use only.
 - **Measured at end of Phase 9 (2026-10-24):** initial JS 156.8 KB gzip; worker 32.0 KB gzip (moon, occurrences, .ics, date helper); all non-Today routes in one lazy chunk (11.7 KB gzip).
-- **Fonts:** self-host Noto Sans Gujarati / Devanagari, subset to used glyphs.
+- **Fonts:** self-hosted script subsets: Manrope + Hind Vadodara; Noto Serif (+ Gujarati) for the Kagaz palette; Noto Sans Devanagari for Hindi (ADR 0024).
 
 ---
 
@@ -721,6 +721,8 @@ Follows Phase 12's reduced scope (numbered 11.5 because it reworks Phase 8–11 
 - Each revamp build ships to the closed testing track (new `versionCode`).
 
 **Exit criteria:** revamped screens approved and recorded in `docs/design/screens.md`; CI and E2E green.
+
+> **Status (2026-10-24): complete.** "Quiet Sky" (ADR 0024): Manrope + Hind Vadodara (Kagaz: Noto Serif), 5 palettes × light/dark (Calm, Raat, Kagaz, Mandir, Utsav) with all contrast pairs passing, live moon from real elongation, new Today (hero, Right now, Your day ribbon, Panchang tiles), Month cells + "This month", Family Next card, Settings palette previews. Self-checked in 10 themes, 200% text and Gujarati; 22 E2E incl. axe on 10 themes; budgets: initial JS 159.8 KB gzip, worker 32.1 KB, Today warm 242 ms, month 127 ms (throttled). Screenshots in `docs/design/screens/`. `versionCode` 2 for closed testing.
 
 ### Release finalization (after Phase 11.5)
 - README screenshots and Play store screenshots (8 phone shots, 1080 × 1920) plus the 1024 × 500 feature graphic, from the revamped UI.

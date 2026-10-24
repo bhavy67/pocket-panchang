@@ -10,7 +10,7 @@ const STYLES_DIR = import.meta.dirname;
 const SRC_DIR = join(STYLES_DIR, "..");
 const css = readFileSync(join(STYLES_DIR, "tokens.css"), "utf8");
 
-const PALETTES = ["calm", "mandir", "raat"] as const;
+const PALETTES = ["calm", "raat", "kagaz", "mandir", "utsav"] as const;
 const MODES = ["light", "dark"] as const;
 const SEMANTIC = [
   "bg",
@@ -37,6 +37,8 @@ const SEMANTIC = [
   "personal-event",
   "personal-event-subtle",
   "now-marker",
+  "moon-lit",
+  "moon-dark",
 ] as const;
 type Semantic = (typeof SEMANTIC)[number];
 
@@ -122,6 +124,8 @@ const PAIRS: [Semantic, Semantic, number][] = [
     ...NON_TEXT_ON_BG.map((fg): [Semantic, Semantic, number] => [fg, bg, 3]),
   ]),
   ["text-on-accent", "accent", 4.5],
+  // Labels on solid "good" fills (Amrut in the ribbon) use the surface colour (ADR 0024).
+  ["surface", "auspicious", 4.5],
   ...WITH_SUBTLE.flatMap((d): [Semantic, Semantic, number][] => [
     ["text", `${d}-subtle`, 4.5],
     [d, `${d}-subtle`, 4.5],

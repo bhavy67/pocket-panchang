@@ -165,3 +165,34 @@ const KARANAS: Record<string, string> = {
 /** Karana name (engine's canonical "Bava" … "Naga"). */
 export const karanaDisplay = (name: string, lang: DisplayLang) =>
   lang === "gu" ? (KARANAS[name] ?? name) : name;
+
+const TITHI_NAMES = [
+  ["Ekam", "એકમ"],
+  ["Bij", "બીજ"],
+  ["Trij", "ત્રીજ"],
+  ["Choth", "ચોથ"],
+  ["Pancham", "પાંચમ"],
+  ["Chhath", "છઠ"],
+  ["Satam", "સાતમ"],
+  ["Atham", "આઠમ"],
+  ["Nom", "નોમ"],
+  ["Dasham", "દશમ"],
+  ["Agiyaras", "અગિયારસ"],
+  ["Baras", "બારસ"],
+  ["Teras", "તેરસ"],
+  ["Chaudas", "ચૌદસ"],
+] as const;
+
+/** Everyday Gujarati name of tithi 1–30: "Agiyaras", "Punam", "Amas". */
+export function tithiName(tithi: number, lang: DisplayLang): string {
+  const n = tithi <= 15 ? tithi : tithi - 15;
+  if (n === 15)
+    return tithi === 15
+      ? lang === "gu"
+        ? "પૂનમ"
+        : "Punam"
+      : lang === "gu"
+        ? "અમાસ"
+        : "Amas";
+  return TITHI_NAMES[n - 1]![lang === "gu" ? 1 : 0];
+}

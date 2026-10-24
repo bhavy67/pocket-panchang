@@ -11,15 +11,21 @@ test("onboarding persists across a reload and Today computes in the real worker"
   await onboard(page);
   // No month cache on a fresh install: the glance can only come from the worker.
   expect(workers.some((u) => /worker-.*\.js/.test(u))).toBe(true);
-  const glance = page.getByRole("region", { name: /^Aaso Sud 11\./ });
-  await expect(glance).toBeVisible();
-  await expect(glance.getByText("Choghadiya: Amrut")).toBeVisible();
-  await expect(glance.getByText("Many avoid now")).toBeVisible();
+  const hero = page.getByRole("region", { name: "Today's tithi" });
+  await expect(
+    hero.getByRole("heading", { level: 1, name: "Aaso Sud 11" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: /^Good time starts at 4:4\d\sPM$/ }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: /^Amrut · good until/ }),
+  ).toBeVisible();
 
   await page.reload();
   await expect(page).toHaveURL(/\/$/);
   await expect(
-    page.getByRole("region", { name: /^Aaso Sud 11\./ }),
+    page.getByRole("heading", { level: 1, name: "Aaso Sud 11" }),
   ).toBeVisible();
 });
 
@@ -27,7 +33,7 @@ test("Today: tapping a time opens its sheet; Escape closes it", async ({
   page,
 }) => {
   await onboard(page);
-  await page.getByRole("button", { name: /^Rahu Kaal until/ }).click();
+  await page.getByRole("button", { name: /^Rahu Kaal · avoid until/ }).click();
   const sheet = page.getByRole("dialog", { name: "Rahu Kaal" });
   await expect(sheet).toBeVisible();
   await page.keyboard.press("Escape");
@@ -61,8 +67,8 @@ test("create a family date, see it upcoming, and export the .ics", async ({
 }) => {
   await forceDownloads(page);
   await onboard(page);
-  await page.getByRole("link", { name: "Events" }).click();
-  await page.getByRole("link", { name: "+ Add a date" }).click();
+  await page.getByRole("link", { name: "Family" }).click();
+  await page.getByRole("link", { name: "+ Add" }).click();
   await page.getByLabel("Name").fill("Ba's varsi");
   await page.getByText("Varsi / Shraddh").click();
   await page.getByText("I know the tithi").click();
@@ -73,7 +79,7 @@ test("create a family date, see it upcoming, and export the .ics", async ({
 
   await expect(page).toHaveURL(/\/events$/);
   const row = page.getByRole("link", { name: /Ba's varsi/ }).first();
-  await expect(row).toContainText(/Kartak Vad 5 · \w{3} \d{1,2} Nov/);
+  await expect(row).toContainText(/Kartak Vad 5.*This year\w{3} \d{1,2} Nov/);
 
   const download = page.waitForEvent("download");
   await page.getByRole("button", { name: "Save calendar file (.ics)" }).click();
@@ -94,12 +100,14 @@ test("Gujarati: page language, Gujarati digits and time words", async ({
   await expect(
     page.getByRole("heading", { level: 1, name: "આસો સુદ ૧૧" }),
   ).toBeVisible();
-  await expect(page.getByText("ચોઘડિયું: અમૃત")).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: /^અમૃત · સારો/ }),
+  ).toBeVisible();
   // The self-hosted Gujarati font is the one in use.
   const loaded = await page.evaluate(async () => {
     await document.fonts.ready;
     return [...document.fonts].some(
-      (f) => f.family.includes("Noto Sans Gujarati") && f.status === "loaded",
+      (f) => f.family.includes("Hind Vadodara") && f.status === "loaded",
     );
   });
   expect(loaded).toBe(true);

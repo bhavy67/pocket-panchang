@@ -27,12 +27,12 @@ Source of truth: `PROJECT_PLAN.md` §9. Approved designs are listed in `docs/des
 - [ ] No meaning conveyed by color alone (pair with text or icon, e.g. vriddhi/kshaya/festival markers, Choghadiya quality)
 - [ ] `prefers-reduced-motion` respected
 - [ ] Keyboard navigable with a visible focus ring; correct semantics/labels for screen readers
-- [ ] Gujarati and Devanagari text render correctly (Noto Sans Gujarati/Devanagari, self-hosted, subset) and line-height fits the script
+- [ ] Gujarati and Devanagari text render correctly (Hind Vadodara / Noto Serif Gujarati / Noto Sans Devanagari, self-hosted, subset) and line-height fits the script
 
 ## Design tokens
 
 - Use tokens (CSS variables consumed via Tailwind) for color, type scale, spacing, radius, and motion. **No raw hex, px font sizes, or ad-hoc durations in components.**
-- Three token layers (primitive → semantic → component); components use semantic/component tokens only (ADR 0017). Theme = `palette` (calm | mandir | raat) × mode (system | light | dark); switching swaps token values, never per-component overrides. Values and contrast pairs: `docs/design/brief.md` §8.
+- Three token layers (primitive → semantic → component); components use semantic/component tokens only (ADR 0017). Theme = `palette` (calm | raat | kagaz | mandir | utsav, ADR 0024) × mode (system | light | dark); switching swaps token values, never per-component overrides. Values and contrast pairs: `docs/design/brief.md` §8.
 - Need a value that isn't a token? Ask; don't add one silently.
 
 ## Data and time display

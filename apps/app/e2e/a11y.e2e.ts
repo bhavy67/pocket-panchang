@@ -80,7 +80,7 @@ async function audit(page: Page, label: string) {
   }
 }
 
-for (const palette of ["calm", "mandir", "raat"])
+for (const palette of ["calm", "raat", "kagaz", "mandir", "utsav"])
   for (const scheme of ["light", "dark"] as const)
     test(`axe: ${palette} ${scheme}`, async ({ page }) => {
       await page.emulateMedia({ colorScheme: scheme });

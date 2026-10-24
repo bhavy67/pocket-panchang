@@ -199,15 +199,21 @@ export function Section({
   title,
   children,
   sub,
+  id,
+  flush = false,
 }: {
   title: string;
   sub?: string;
   children: ReactNode;
+  /** Anchor for in-app links (e.g. /settings#place). */
+  id?: string;
+  /** The parent already pads and spaces its sections. */
+  flush?: boolean;
 }) {
   return (
-    <section className="px-4 pt-8">
+    <section id={id} className={`scroll-mt-4 ${flush ? "" : "px-4 pt-8"}`}>
       <h2
-        className={`text-title leading-(--leading-heading) font-bold ${sub ? "" : "mb-3"}`}
+        className={`text-title leading-(--leading-heading) font-extrabold ${sub ? "" : "mb-3"}`}
       >
         {title}
       </h2>

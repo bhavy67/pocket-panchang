@@ -9,3 +9,11 @@ it("labels tithis the Gujarati way", () => {
   expect(tithiLabel(30, "gu")).toBe("વદ અમાસ");
   expect(monthName("Shravana", "en", true)).toBe("Adhik Shravan");
 });
+
+it("names tithis the everyday Gujarati way", async () => {
+  const { tithiName } = await import("./index");
+  expect(tithiName(11, "en")).toBe("Agiyaras");
+  expect(tithiName(26, "gu")).toBe("અગિયારસ");
+  expect(tithiName(15, "en")).toBe("Punam");
+  expect(tithiName(30, "gu")).toBe("અમાસ");
+});

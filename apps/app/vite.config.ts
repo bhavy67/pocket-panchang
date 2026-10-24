@@ -51,14 +51,19 @@ export default defineConfig({
       workbox: {
         globPatterns: ["**/*.{js,css,html,woff2,png,svg,json}"],
         // Devanagari (v2 Hindi) is cached on first use instead; analyzer output never ships.
-        globIgnores: ["**/noto-sans-devanagari-*", "stats.*", "vercel.json"],
+        globIgnores: [
+          "**/noto-sans-devanagari-*",
+          "**/noto-serif-*", // Kagaz palette only: cached on first use
+          "stats.*",
+          "vercel.json",
+        ],
         maximumFileSizeToCacheInBytes: 3 * 1024 * 1024,
         navigateFallback: "index.html",
         runtimeCaching: [
           {
-            urlPattern: /noto-sans-devanagari-.*\.woff2$/,
+            urlPattern: /noto-(sans-devanagari|serif)-.*\.woff2$/,
             handler: "CacheFirst",
-            options: { cacheName: "fonts-devanagari" },
+            options: { cacheName: "fonts-on-demand" },
           },
         ],
       },

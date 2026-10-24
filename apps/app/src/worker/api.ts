@@ -17,6 +17,7 @@ import {
 import {
   addDays,
   assembleDay,
+  elongation,
   lunationAt,
   nextMoonrise,
   nextMoonset,
@@ -102,6 +103,11 @@ export const api = {
     const rise = inDay(nextMoonrise(first.at, at));
     const set = inDay(nextMoonset(first.at, at));
     return { ...(rise && { rise }), ...(set && { set }) };
+  },
+
+  /** Moon–Sun elongation in degrees [0, 360) at an instant (the moon-phase drawing, ADR 0024). */
+  moonPhase(at: Instant): number {
+    return elongation(at);
   },
 
   /** Every occurrence of every event with a date in [from, to], date-sorted (§4.9). */

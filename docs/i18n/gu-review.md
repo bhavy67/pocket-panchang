@@ -12,13 +12,13 @@
 - [ ] **Month-grid markers:** "૨×" (two-day tithi) and "છૂટી" (skipped tithi).
 - [ ] **Event kinds:** વરસી / શ્રાદ્ધ, લગ્નતિથિ, જન્મદિવસ (તિથિ મુજબ).
 
-### UI strings (378)
+### UI strings (426)
 
 | OK | Key | English | ગુજરાતી (draft) |
 |---|---|---|---|
 | [ ] | `navToday` | Today | આજે |
 | [ ] | `navMonth` | Month | મહિનો |
-| [ ] | `navEvents` | Events | તારીખો |
+| [ ] | `navEvents` | Family | પરિવાર |
 | [ ] | `navSettings` | Settings | સેટિંગ્સ |
 | [ ] | `navMain` | Main | મુખ્ય |
 | [ ] | `close` | Close | બંધ કરો |
@@ -394,6 +394,54 @@
 | [ ] | `privacyChildren` | The app collects no data from anyone, including children. | ઍપ કોઈની પણ, બાળકો સહિત, માહિતી એકઠી કરતી નથી. |
 | [ ] | `privacyChangesTitle` | Changes and contact | ફેરફાર અને સંપર્ક |
 | [ ] | `privacyChanges` | If this policy changes, the new version will appear on this page with a new date. Questions: open an issue at github.com/bhavy67/pocket-panchang. | આ નીતિ બદલાય તો નવી આવૃત્તિ નવી તારીખ સાથે આ પાના પર દેખાશે. પ્રશ્નો: github.com/bhavy67/pocket-panchang પર issue ખોલો. |
+| [ ] | `changeCityAria` | Change city, now {city} | શહેર બદલો, હાલ {city} |
+| [ ] | `todaysTithi` | Today's tithi | આજની તિથિ |
+| [ ] | `rightNow` | Right now · {time} | અત્યારે · {time} |
+| [ ] | `goodNowUntil` | Good time now, until {time} | અત્યારે સારો સમય, {time} સુધી |
+| [ ] | `goodStartsAt` | Good time starts at {time} | સારો સમય {time} એ શરૂ થાય છે |
+| [ ] | `goodStartsTonight` | Good time starts at {time} tonight | સારો સમય આજે રાત્રે {time} એ શરૂ થાય છે |
+| [ ] | `noGoodLeftShort` | No good time left before sunrise | સૂર્યોદય સુધી હવે સારો સમય નથી |
+| [ ] | `whyOverlapOne` | {cur} is a good time, but {avoid} is on, so many families wait. | {cur} સારો સમય છે, પણ {avoid} ચાલુ છે, તેથી ઘણા પરિવારો રાહ જુએ છે. |
+| [ ] | `whyOverlapMany` | {cur} is a good time, but {avoid} are on, so many families wait. | {cur} સારો સમય છે, પણ {avoid} ચાલુ છે, તેથી ઘણા પરિવારો રાહ જુએ છે. |
+| [ ] | `whyClean` | {cur} is a good time, and nothing many avoid is on. | {cur} સારો સમય છે, અને ઘણા ટાળે તેવું કંઈ ચાલુ નથી. |
+| [ ] | `whyBad` | {cur} is a time many avoid for new work. | {cur} એ સમય છે જેમાં ઘણા નવું કામ ટાળે છે. |
+| [ ] | `whyNeutral` | {cur} is a neutral time: fine for routine work. | {cur} સામાન્ય સમય છે: રોજનાં કામ માટે બરાબર. |
+| [ ] | `qShortGood` | good | સારો |
+| [ ] | `qShortAvoid` | avoid | ટાળો |
+| [ ] | `qShortNeutral` | neutral | સામાન્ય |
+| [ ] | `yourDay` | Your day | તમારો દિવસ |
+| [ ] | `noon` | Noon | બપોર |
+| [ ] | `seeAllPeriods` | See all periods, day and night → | દિવસ અને રાતના બધા સમય જુઓ → |
+| [ ] | `paksha` | Paksha | પક્ષ |
+| [ ] | `pakshaShukla` | Sud (waxing) | સુદ (અજવાળિયું) |
+| [ ] | `pakshaKrishna` | Vad (waning) | વદ (અંધારિયું) |
+| [ ] | `pakshaDay` | Day {n} of 15 | ૧૫માંથી {n}મો દિવસ |
+| [ ] | `daysCount` | {n} days | {n} દિવસ |
+| [ ] | `moonAria` | Moon, {pct}% lit, {phase} | ચંદ્ર, {pct}% પ્રકાશિત, {phase} |
+| [ ] | `waxing` | waxing | વધતો |
+| [ ] | `waning` | waning | ઘટતો |
+| [ ] | `thisMonth` | This month | આ મહિને |
+| [ ] | `punam` | Punam | પૂનમ |
+| [ ] | `amas` | Amas | અમાસ |
+| [ ] | `keyPunam` | Punam (full moon) | પૂનમ |
+| [ ] | `keyAmas` | Amas (new moon) | અમાસ |
+| [ ] | `noFestivalsMonth` | No festivals this month. | આ મહિને કોઈ તહેવાર નથી. |
+| [ ] | `add` | Add | ઉમેરો |
+| [ ] | `next` | Next | હવે પછી |
+| [ ] | `thisYear` | This year | આ વર્ષે |
+| [ ] | `pitruShraddh` | Pitru Paksha shraddh | પિતૃ પક્ષ શ્રાદ્ધ |
+| [ ] | `reminder` | Reminder | યાદ |
+| [ ] | `reminderBoth` | On the day and 1 day before, {time} | તે દિવસે અને ૧ દિવસ પહેલાં, {time} |
+| [ ] | `reminderDay` | On the day, {time} | તે દિવસે, {time} |
+| [ ] | `reminderBefore` | 1 day before, {time} | ૧ દિવસ પહેલાં, {time} |
+| [ ] | `reminderNone` | No reminder | યાદ નથી |
+| [ ] | `later` | Later | પછી |
+| [ ] | `familyKeeps` | How your family keeps dates | તમારો પરિવાર તારીખો કેવી રીતે પાળે છે |
+| [ ] | `familyKeepsSummary` | Varsi: {varsi}. Birthdays: {birthday}. When a tithi spans two days: {vriddhi}. | વરસી: {varsi}. જન્મદિવસ: {birthday}. તિથિ બે દિવસ હોય ત્યારે: {vriddhi}. |
+| [ ] | `change` | Change | બદલો |
+| [ ] | `previewTithi` | Aaso Sud 11 | આસો સુદ ૧૧ |
+| [ ] | `paletteKagaz` | Kagaz | કાગળ |
+| [ ] | `paletteUtsav` | Utsav | ઉત્સવ |
 
 ### Months (Gujarati year order) (12)
 

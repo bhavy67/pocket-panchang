@@ -128,7 +128,11 @@ export function DayDetail({
           <Section title={t("panchang")}>
             <ElementsCard view={view} tz={tz} />
           </Section>
-          <Section title={t("hourByHourShort")} sub={t("hourByHourSub")}>
+          <Section
+            id="hours"
+            title={t("hourByHourShort")}
+            sub={t("hourByHourSub")}
+          >
             <Timeline
               view={view}
               tz={tz}

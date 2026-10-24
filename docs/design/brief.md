@@ -256,6 +256,8 @@ Neutral Choghadiya (Char) uses `--text-muted` with a neutral icon.
 
 ### 8.3 Proposed v1 palettes
 
+> Superseded by ADR 0024 (Quiet Sky): palettes are now Calm, Raat, Kagaz, Mandir, Utsav; values live in `apps/app/src/styles/tokens.css`.
+
 - **Calm** (default): soft warm-white / deep slate, teal accent. Quiet and modern.
 - **Mandir** (warm traditional): ivory and turmeric tones, saffron-brown accent, maroon festival colour. Feels like a printed panchang.
 - **Raat** ("night"): deep indigo with moonlight-gold accent; dark mode is its signature, light mode is lavender-white.
@@ -290,6 +292,8 @@ Neutral Choghadiya (Char) uses `--text-muted` with a neutral icon.
 **Measured contrast:** all six variants pass AA for every checked pair: `--text`, `--text-muted`, `--accent`, `--danger`, `--warning`, and every domain token as text on `--bg`, `--surface`, `--surface-raised`, `--surface-sunken` (≥ 4.5:1); `--text` and each domain colour on its own `-subtle` fill (≥ 4.5:1); `--text-on-accent` on `--accent` (≥ 4.5:1); `--border-strong`, `--focus-ring`, `--now-marker` on all backgrounds (≥ 3:1). 366 pairs, 0 failures; lowest ratio 3.11 (a 3:1 non-text pair). Designers may adjust values but must keep these pairs passing.
 
 ### 8.4 Typography
+
+> Superseded by ADR 0024: Manrope + Hind Vadodara (Kagaz: Noto Serif + Noto Serif Gujarati).
 
 - **Latin:** system UI font stack (Roboto on Android, San Francisco on Apple, Segoe on Windows). No extra font download.
 - **Gujarati:** Noto Sans Gujarati. **Devanagari** (Hindi, v2): Noto Sans Devanagari. Self-hosted, subset to used glyphs; weights **400 and 600 only**.

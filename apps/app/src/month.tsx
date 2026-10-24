@@ -10,16 +10,21 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import type { MonthDay } from "@/db";
 import { DayDetail } from "@/day-detail";
-import { PersonalIcon } from "@/event-row";
 import { useOccurrenceRows, type UpcomingRow } from "@/events-data";
 import { useFestivals, useNow } from "@/day-data";
 import { lang, t } from "@/i18n";
 import { clockFor } from "@/lib/clock";
-import { dateLong, dayNumber, monthTitle, weekdayInitials } from "@/lib/format";
+import {
+  dateLong,
+  dateShort,
+  dayNumber,
+  monthTitle,
+  weekdayInitials,
+} from "@/lib/format";
 import { firstDay, yearMonthOf, type YearMonth } from "@/lib/year-month";
 import { monthQuery } from "@/queries";
 import { useSettings } from "@/settings";
-import { btnOutline, card } from "@/ui";
+import { card } from "@/ui";
 import { SHOW_UNVERIFIED } from "@/flags";
 import type { Festival } from "@/worker/api";
 
@@ -72,7 +77,7 @@ export function Month({ month, date }: { month: YearMonth; date?: CivilDate }) {
       <div className="mx-auto w-full max-w-180 px-4 pt-4">
         <header className="flex flex-wrap items-center justify-between gap-2">
           <div className="flex min-w-[min(12rem,100%)] flex-1 flex-col">
-            <h1 className="text-title leading-(--leading-heading) font-bold">
+            <h1 className="text-headline leading-(--leading-heading) font-extrabold">
               {monthTitle(firstDay(month))}
             </h1>
             {days && <LunarSpan days={days} />}
@@ -82,7 +87,7 @@ export function Month({ month, date }: { month: YearMonth; date?: CivilDate }) {
               type="button"
               onClick={() => go(-1)}
               aria-label={t("prevMonth")}
-              className={`${btnOutline} w-12 px-0`}
+              className={roundBtn}
             >
               ‹
             </button>
@@ -90,7 +95,7 @@ export function Month({ month, date }: { month: YearMonth; date?: CivilDate }) {
               type="button"
               onClick={() => go(1)}
               aria-label={t("nextMonth")}
-              className={`${btnOutline} w-12 px-0`}
+              className={roundBtn}
             >
               ›
             </button>
@@ -143,6 +148,7 @@ export function Month({ month, date }: { month: YearMonth; date?: CivilDate }) {
               f.date.startsWith(month) || (f.endDate ?? "").startsWith(month),
           )}
         />
+        <ThisMonth month={month} festivals={festivals} family={family} />
       </div>
       {isWide && selected && (
         <div className="sticky top-0 max-h-dvh overflow-y-auto border-l border-border">
@@ -321,75 +327,72 @@ function Cell({
     .filter(Boolean)
     .join(", ");
 
+  const festive = festivals.length > 0 || inSpan.length > 0;
   return (
     <Link
       {...link}
       aria-current={today ? "date" : undefined}
-      className={`flex min-h-18 min-w-0 flex-col items-start gap-0.5 rounded-md border-[1.5px] p-[4px] text-left focus-ring sm:p-[6px] ${
-        selected
-          ? "border-accent bg-accent-subtle"
-          : "border-transparent bg-surface hover:bg-surface-sunken"
-      }`}
+      className={`flex min-h-[4.125rem] min-w-0 flex-col items-start gap-0.5 rounded-[var(--radius-cell)] p-1.5 text-left focus-ring ${
+        today ? "border-2 border-accent" : "border border-transparent"
+      } ${selected ? "bg-accent-subtle" : festive ? "bg-festival-subtle" : "bg-surface hover:bg-surface-sunken"}`}
     >
       <span
-        className={`flex size-[min(2rem,36px)] items-center justify-center rounded-full text-[length:min(var(--text-lg),24px)] leading-none font-semibold tabular-nums ${
-          today ? "border-2 border-(--now-marker) text-(--now-marker)" : ""
-        }`}
+        aria-hidden="true"
+        className="flex w-full items-center justify-between gap-0.5"
       >
-        {dayNumber(c.date)}
+        <span className="text-[length:min(var(--text-cell-date),22px)] leading-none font-extrabold">
+          {dayNumber(c.date)}
+        </span>
+        {family.length > 0 && (
+          <span className="block size-2 flex-none rounded-full bg-accent" />
+        )}
       </span>
       {day && (
-        <span className="text-[length:min(var(--text-caption),18px)] leading-tight text-text-muted [overflow-wrap:anywhere]">
+        <span
+          aria-hidden="true"
+          className="flex flex-wrap items-center gap-x-1 text-[length:min(var(--text-tiny),15px)] leading-tight text-text-muted [overflow-wrap:anywhere]"
+        >
+          {(day.tithi.atSunrise === 15 || day.tithi.atSunrise === 30) && (
+            <MoonDot full={day.tithi.atSunrise === 15} />
+          )}
           {cellTithi(day.tithi.atSunrise)}
         </span>
       )}
       <span
         aria-hidden="true"
-        className="flex flex-wrap items-center gap-1 text-[length:min(var(--text-caption),16px)] leading-tight"
+        className="flex flex-wrap items-center gap-1 text-[length:min(var(--text-tiny),15px)] leading-tight font-bold"
       >
-        {twoDay && (
-          <span className="rounded-sm border border-border-strong px-0.5 font-semibold">
-            {t("twoDayMark")}
-          </span>
-        )}
+        {twoDay && <span className="text-text">{t("twoDayMark")}</span>}
         {skipped.length > 0 && (
-          <span className="rounded-sm border border-dashed border-border-strong px-0.5 font-semibold">
+          <span className="rounded-sm border border-dashed border-border-strong px-0.5">
             {t("skipMark")}
           </span>
         )}
       </span>
-      {family.map((r) => (
-        <span
-          key={r.event.id}
-          aria-hidden="true"
-          className="flex max-w-full min-w-0 items-start gap-1 text-[length:min(var(--text-caption),16px)] leading-tight font-semibold text-personal-event"
-        >
-          <span className="mt-0.5">
-            <PersonalIcon small />
-          </span>
-          <span className="hidden [overflow-wrap:anywhere] sm:inline">
-            {r.event.title}
-          </span>
-        </span>
-      ))}
       {festivals.map((f) => (
         <span
           key={f.id}
           aria-hidden="true"
-          className="flex max-w-full min-w-0 items-start gap-1 text-[length:min(var(--text-caption),18px)] leading-tight font-semibold text-festival"
+          className="max-w-full text-[length:min(var(--text-tiny),15px)] leading-tight font-bold text-festival hyphens-auto [overflow-wrap:anywhere]"
         >
-          <span className="block size-2 flex-none rotate-45 bg-festival" />
-          <span className="hidden [overflow-wrap:anywhere] sm:inline">
-            {f.names[lang()]}
-            {f.variant && ` (${f.variant.label[lang()]})`}
-            {f.unverified && "*"}
-          </span>
+          {f.names[lang()]}
+          {f.unverified && "*"}
         </span>
       ))}
       <span className="sr-only">{label}</span>
     </Link>
   );
 }
+
+/** Punam: a pale full moon; Amas: a dark new moon (each also named in text). */
+const MoonDot = ({ full }: { full: boolean }) => (
+  <span
+    className={`block size-2.5 flex-none rounded-full border border-border-strong ${full ? "bg-moon-lit" : "bg-moon-dark"}`}
+  />
+);
+
+const roundBtn =
+  "flex size-12 items-center justify-center rounded-full border border-border bg-surface text-title text-accent hover:bg-accent-subtle focus-ring";
 
 /** Grid label: printed calendars write Punam and Amas without Sud/Vad (saves cell width). */
 const cellTithi = (n: number) => {
@@ -405,29 +408,33 @@ function Legend({ hasFestivals }: { hasFestivals: boolean }) {
       className="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-sm"
     >
       <li className={item}>
-        <span className="flex size-6 items-center justify-center rounded-full border-2 border-(--now-marker) text-caption font-semibold text-(--now-marker)">
-          {dayNumber("2026-01-01" as CivilDate)}
-        </span>
+        <span className="block size-5 rounded-md border-2 border-accent" />
         {t("keyToday")}
+      </li>
+      <li className={item}>
+        <MoonDot full />
+        {t("keyPunam")}
+      </li>
+      <li className={item}>
+        <MoonDot full={false} />
+        {t("keyAmas")}
       </li>
       {hasFestivals && (
         <li className={item}>
-          <span className="block size-2.5 rotate-45 bg-festival" />
+          <span className="block size-4 rounded-sm bg-festival-subtle ring-1 ring-festival" />
           {t("keyFestival")}
         </li>
       )}
       <li className={item}>
-        <PersonalIcon small />
+        <span className="block size-2 rounded-full bg-accent" />
         {t("keyFamily")}
       </li>
       <li className={item}>
-        <span className="rounded-sm border border-border-strong px-0.5 text-caption font-semibold">
-          {t("twoDayMark")}
-        </span>
+        <span className="font-bold">{t("twoDayMark")}</span>
         {t("keyTwoDay")}
       </li>
       <li className={item}>
-        <span className="rounded-sm border border-dashed border-border-strong px-0.5 text-caption font-semibold">
+        <span className="rounded-sm border border-dashed border-border-strong px-0.5 text-caption font-bold">
           {t("skipMark")}
         </span>
         {t("keySkipped")}
@@ -436,5 +443,60 @@ function Legend({ hasFestivals }: { hasFestivals: boolean }) {
         <li className="text-text-muted">{t("keyUnverified")}</li>
       )}
     </ul>
+  );
+}
+
+/** "This month": festivals and family dates in the month, each with a small coloured dot. */
+function ThisMonth({
+  month,
+  festivals,
+  family,
+}: {
+  month: YearMonth;
+  festivals: readonly Festival[];
+  family: readonly UpcomingRow[];
+}) {
+  const items = [
+    ...festivals
+      .filter((f) => f.date.startsWith(month))
+      .map((f) => ({
+        key: f.id + f.date,
+        date: f.date,
+        name: f.names[lang()],
+        dot: "bg-festival",
+      })),
+    ...family
+      .filter((r) => r.date.startsWith(month))
+      .map((r) => ({
+        key: r.event.id + r.date,
+        date: r.date,
+        name: r.event.title,
+        dot: "bg-accent",
+      })),
+  ].sort((x, y) => x.date.localeCompare(y.date));
+  return (
+    <section aria-labelledby="this-month" className="mt-8 flex flex-col gap-3">
+      <h2 id="this-month" className="text-title font-extrabold">
+        {t("thisMonth")}
+      </h2>
+      {items.length === 0 ? (
+        <p className="text-body text-text-muted">{t("noFestivalsMonth")}</p>
+      ) : (
+        <ul className="flex flex-col divide-y divide-border rounded-lg border border-border bg-surface">
+          {items.map((it) => (
+            <li key={it.key} className="flex items-center gap-3 px-4 py-3">
+              <span
+                aria-hidden="true"
+                className={`block size-2.5 flex-none rounded-full ${it.dot}`}
+              />
+              <span className="flex-1 font-semibold">{it.name}</span>
+              <span className="text-sm text-text-muted">
+                {dateShort(it.date)}
+              </span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
   );
 }

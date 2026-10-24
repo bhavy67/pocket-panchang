@@ -27,19 +27,37 @@ it("shows the glance card for Aaso Sud 11 at 2:10 PM", async () => {
       />
     </QueryClientProvider>,
   );
-  const glance = await screen.findByRole("region", { name: /^Aaso Sud 11\./ });
-  const g = within(glance);
-  expect(g.getByText(/until 2:4\d\sPM, then Sud 12/)).toBeTruthy();
-  expect(g.getByText("Choghadiya: Amrut")).toBeTruthy();
-  expect(g.getByText("Many avoid now")).toBeTruthy();
+  const hero = await screen.findByRole("region", { name: "Today's tithi" });
   expect(
-    g.getByRole("button", { name: /^Bhadra until 2:4\d\sPM$/ }),
+    within(hero).getByRole("heading", { level: 1, name: "Aaso Sud 11" }),
+  ).toBeTruthy();
+  expect(within(hero).getByText(/until 2:4\d\sPM, then Sud 12/)).toBeTruthy();
+  const now = screen.getByRole("region", { name: /^Good time starts at/ });
+  const n = within(now);
+  // Next good time skips Amrut (overlaps Rahu Kaal and Bhadra) and Kaal (not good): Shubh.
+  expect(
+    n.getByRole("heading", { name: /^Good time starts at 4:4\d\sPM$/ }),
   ).toBeTruthy();
   expect(
-    g.getByRole("button", { name: /^Rahu Kaal until 3:1\d\sPM$/ }),
+    n.getByText(
+      "Amrut is a good time, but Bhadra and Rahu Kaal are on, so many families wait.",
+    ),
   ).toBeTruthy();
-  // Next good time skips Amrut (overlaps Rahu Kaal and Bhadra) and Kaal (not good).
-  expect(g.getByText(/^Shubh, 4:4\d – 6:\d\d\sPM$/)).toBeTruthy();
+  expect(
+    n.getByRole("button", { name: /^Amrut · good until 3:1\d\sPM$/ }),
+  ).toBeTruthy();
+  expect(
+    n.getByRole("button", { name: /^Bhadra · avoid until 2:4\d\sPM$/ }),
+  ).toBeTruthy();
+  expect(
+    n.getByRole("button", { name: /^Rahu Kaal · avoid until 3:1\d\sPM$/ }),
+  ).toBeTruthy();
+  // The ribbon names all 8 day Choghadiya.
+  expect(
+    within(screen.getByRole("list", { name: "Your day" })).getAllByRole(
+      "button",
+    ),
+  ).toHaveLength(8);
 });
 
 it("renders Today in Gujarati, with Gujarati digits and time words", async () => {
@@ -57,8 +75,14 @@ it("renders Today in Gujarati, with Gujarati digits and time words", async () =>
     name: "આસો સુદ ૧૧",
   });
   expect(h1).toBeTruthy();
-  expect(await screen.findByText("ચોઘડિયું: અમૃત")).toBeTruthy();
-  expect(screen.getByText(/^શુભ, ૪:૪[૦-૯] – ૬:[૦-૯]{2}\sસાંજે$/)).toBeTruthy();
+  expect(
+    await screen.findByRole("heading", {
+      name: /^સારો સમય ૪:૪[૦-૯] સાંજે એ શરૂ થાય છે$/,
+    }),
+  ).toBeTruthy();
+  expect(
+    screen.getByRole("button", { name: /^અમૃત · સારો ૩:૧[૦-૯] બપોરે સુધી$/ }),
+  ).toBeTruthy();
   await loadLanguage("en");
 });
 

@@ -14,7 +14,7 @@ test("works offline after the first visit", async ({ page, context }) => {
   await context.setOffline(true);
   await page.reload();
   await expect(
-    page.getByRole("region", { name: /^Aaso Sud 11\./ }),
+    page.getByRole("heading", { level: 1, name: "Aaso Sud 11" }),
   ).toBeVisible();
   // A month never visited before: computed by the worker, offline.
   await page.goto("/month?m=2027-03");

@@ -30,14 +30,17 @@
   --color-personal-event: var(--personal-event);
   --color-personal-event-subtle: var(--personal-event-subtle);
   --color-now-marker: var(--now-marker);
+  --color-moon-lit: var(--moon-lit);
+  --color-moon-dark: var(--moon-dark);
 }
 
-/* Non-colour scales (docs/design/brief.md §8.4–8.5). Mode-independent. */
+/* Non-colour scales (ADR 0024 "Quiet Sky"; brief §8.4–8.5). Mode-independent. */
 @theme {
   --font-*: initial;
-  --font-ui: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-gu: "Noto Sans Gujarati", system-ui, sans-serif;
-  --font-hi: "Noto Sans Devanagari", system-ui, sans-serif;
+  --font-ui:
+    "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-gu: "Hind Vadodara", "Manrope", system-ui, sans-serif;
+  --font-hi: "Noto Sans Devanagari", "Manrope", system-ui, sans-serif;
 
   --text-*: initial;
   --text-caption: 0.9375rem;
@@ -47,13 +50,21 @@
   --text-title: 1.5rem;
   --text-headline: 1.875rem;
   --text-display: 2.25rem;
+  --text-hero: 2.125rem; /* 34px: today's tithi */
+  --text-lead: 1.375rem; /* 22px: card headlines */
+  --text-gu-hero: 1.1875rem; /* 19px: Gujarati tithi under the hero */
+  --text-micro: 0.6875rem; /* 11px: ribbon segment labels, uppercase eyebrows */
+  --text-tiny: 0.65625rem; /* 10.5px: tithi in month cells */
+  --text-cell-date: 1.0625rem; /* 17px: day number in month cells */
 
   --spacing: 0.25rem; /* rem: layout scales with text size (ADR 0017) */
 
   --radius-*: initial;
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 16px;
+  --radius-sm: 8px;
+  --radius-cell: 12px; /* month cells */
+  --radius-md: 14px; /* rows, inputs, buttons */
+  --radius-tile: 18px; /* panchang tiles */
+  --radius-lg: 22px; /* cards */
   --radius-full: 9999px;
 
   --ease-*: initial;
@@ -92,7 +103,14 @@
   }
 }
 
+/* Kagaz ("printed panchang") uses serif type; fonts are tokens, swapped per palette. */
+[data-palette="kagaz"] {
+  --font-ui: "Noto Serif", Georgia, serif;
+  --font-gu: "Noto Serif Gujarati", "Noto Serif", serif;
+}
+
 html {
+  font-variant-numeric: tabular-nums; /* every time and date lines up (ADR 0024) */
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-ui);
@@ -161,4 +179,14 @@ html {
     transform: translateX(-2rem);
     opacity: 0;
   }
+}
+
+/* Bhadra in the day ribbon: diagonal hatch in the avoid colour (ADR 0024), so it differs from
+ * Rahu Kaal (solid) and Yamaganda/Gulika (faded) by pattern, not colour alone. */
+.hatch {
+  background-image: repeating-linear-gradient(
+    135deg,
+    var(--inauspicious) 0 2px,
+    transparent 2px 5px
+  );
 }
