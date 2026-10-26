@@ -200,10 +200,7 @@ function SettingsNav() {
     ["about", t("about")],
   ];
   return (
-    <nav
-      aria-label={t("settings")}
-      className="flex flex-wrap gap-1 px-4 pt-3"
-    >
+    <nav aria-label={t("settings")} className="flex flex-wrap gap-1 px-4 pt-3">
       {items.map(([id, label]) => (
         <a
           key={id}

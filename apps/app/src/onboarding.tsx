@@ -20,7 +20,8 @@ export function Onboarding() {
   // The device guess shown on step 1, until the step 2 cards confirm (or this toggle overrides) it.
   const [uiLang, setUiLang] = useState<Lang>(deviceLang);
   const step = city ? 2 : 1;
-  const switchLanguage = (l: Lang) => void loadLanguage(l).then(() => setUiLang(l));
+  const switchLanguage = (l: Lang) =>
+    void loadLanguage(l).then(() => setUiLang(l));
   const finish = async (location = AHMEDABAD, language: Lang = uiLang) => {
     await loadLanguage(language);
     saveSettings(defaultSettings(location, language));
