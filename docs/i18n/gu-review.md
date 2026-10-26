@@ -12,7 +12,7 @@
 - [ ] **Month-grid markers:** "૨×" (two-day tithi) and "છૂટી" (skipped tithi).
 - [ ] **Event kinds:** વરસી / શ્રાદ્ધ, લગ્નતિથિ, જન્મદિવસ (તિથિ મુજબ).
 
-### UI strings (430)
+### UI strings (432)
 
 | OK | Key | English | ગુજરાતી (draft) |
 |---|---|---|---|
@@ -214,6 +214,8 @@
 | [ ] | `onTheDay` | On the day | તે જ દિવસે |
 | [ ] | `dayBefore` | 1 day before | ૧ દિવસ પહેલાં |
 | [ ] | `webReminders` | On the web, reminders come through the calendar file (Family dates → Save calendar file). | વેબ પર યાદ કેલેન્ડર ફાઇલથી આવે છે (પરિવારની તારીખો → કેલેન્ડર ફાઇલ સાચવો). |
+| [ ] | `webNoteTitle` | Reminders on the web | વેબ પર યાદ અપાવવા વિશે |
+| [ ] | `webNoteBody` | A browser can't send reminders on its own. Save the calendar file below and your phone's calendar will remind you instead. | બ્રાઉઝર જાતે યાદ અપાવી શકતું નથી. નીચે કેલેન્ડર ફાઇલ સાચવો, તમારા ફોનનું કેલેન્ડર તમને યાદ અપાવશે. |
 | [ ] | `alsoPitru` | Also remind me during Pitru Paksha (Shraddh fortnight) | પિતૃ પક્ષ (શ્રાદ્ધ પખવાડિયા)માં પણ યાદ અપાવો |
 | [ ] | `whichPitruDay` | Which Pitru Paksha day | પિતૃ પક્ષનો કયો દિવસ |
 | [ ] | `mahalayaHelp` | Technical term: Mahalaya. | શાસ્ત્રીય શબ્દ: મહાલય. |

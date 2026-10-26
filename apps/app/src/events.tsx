@@ -17,6 +17,7 @@ import { exportBackup, exportIcs } from "@/exports";
 import { lang, t } from "@/i18n";
 import { clockFor } from "@/lib/clock";
 import { dateShort, daysBetween } from "@/lib/format";
+import { isNative } from "@/ports";
 import { FIELDS, inherited, lunarLabel } from "@/policy";
 import { useSettings, type Settings } from "@/settings";
 import { Countdown, FamilyGlyph } from "@/today";
@@ -24,6 +25,23 @@ import { btnOutline, Section } from "@/ui";
 
 export const btnPrimary =
   "flex min-h-(--tap-min) items-center justify-center rounded-full bg-accent px-5 text-body font-strong text-text-on-accent focus-ring";
+
+// Per-device convenience only, never state that must persist (same rule as pwa.ts): try/catch.
+const WEB_NOTE_KEY = "web-reminders-note-dismissed";
+const webNoteDismissed = () => {
+  try {
+    return localStorage.getItem(WEB_NOTE_KEY) === "1";
+  } catch {
+    return false;
+  }
+};
+const dismissWebNote = () => {
+  try {
+    localStorage.setItem(WEB_NOTE_KEY, "1");
+  } catch {
+    /* private mode: the note just shows again */
+  }
+};
 
 export function Events() {
   const s = useSettings((st) => st.settings)!;
@@ -33,9 +51,14 @@ export function Events() {
   const { data: meta } = useQuery(metaQuery);
   const [status, setStatus] = useState("");
   const lastChange = Math.max(0, ...(events ?? []).map((e) => e.updatedAt));
-  const nudge =
-    (events?.length ?? 0) >= 3 && (meta?.lastBackupAt ?? 0) < lastChange;
+  // A varsi/shraddh date is worth protecting from the first one, not just at 3+ events.
+  const worthProtecting =
+    (events?.length ?? 0) >= 3 || !!events?.some((e) => e.kind === "shraddh");
+  const nudge = worthProtecting && (meta?.lastBackupAt ?? 0) < lastChange;
   const [next, ...later] = rows ?? [];
+  const [webNoteOpen, setWebNoteOpen] = useState(
+    !isNative() && !webNoteDismissed(),
+  );
 
   return (
     <main className="mx-auto flex max-w-180 flex-col gap-6 px-4 pt-4 pb-8">
@@ -47,6 +70,29 @@ export function Events() {
           + {t("add")}
         </Link>
       </header>
+
+      {webNoteOpen && (events?.length ?? 0) > 0 && (
+        <div
+          role="note"
+          className="flex items-start justify-between gap-3 rounded-card bg-surface-sunken p-4"
+        >
+          <p className="text-body">
+            <strong className="font-strong">{t("webNoteTitle")}</strong>{" "}
+            {t("webNoteBody")}
+          </p>
+          <button
+            type="button"
+            aria-label={t("close")}
+            onClick={() => {
+              dismissWebNote();
+              setWebNoteOpen(false);
+            }}
+            className="flex min-h-(--tap-min) min-w-(--tap-min) flex-none items-center justify-center rounded-md text-text-muted hover:bg-surface focus-ring"
+          >
+            ✕
+          </button>
+        </div>
+      )}
 
       {nudge && (
         <div

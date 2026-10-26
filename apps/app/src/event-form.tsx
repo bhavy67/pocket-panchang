@@ -264,7 +264,9 @@ function EventForm({ existing }: { existing: StoredEvent | undefined }) {
             <span className="text-body">{t(label)}</span>
           </label>
         ))}
-        <span className="text-sm text-text-muted">{t("webReminders")}</span>
+        {!isNative() && (
+          <span className="text-sm text-text-muted">{t("webReminders")}</span>
+        )}
       </fieldset>
 
       {kind === "shraddh" && (

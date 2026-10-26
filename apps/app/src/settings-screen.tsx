@@ -189,6 +189,34 @@ function PalettePreview({
   );
 }
 
+/** Jump links to each section below, for anyone who lands deep in a long page. */
+function SettingsNav() {
+  const items: [string, string][] = [
+    ["place", t("place")],
+    ["display", t("display")],
+    ["conventions", t("familyConventions")],
+    ["reminders", t("reminders")],
+    ["backup", t("backup")],
+    ["about", t("about")],
+  ];
+  return (
+    <nav
+      aria-label={t("settings")}
+      className="flex flex-wrap gap-1 px-4 pt-3"
+    >
+      {items.map(([id, label]) => (
+        <a
+          key={id}
+          href={`#${id}`}
+          className="min-h-(--tap-min) rounded-md px-2 py-1 text-sm font-label text-accent hover:bg-accent-subtle focus-ring"
+        >
+          {label}
+        </a>
+      ))}
+    </nav>
+  );
+}
+
 export function SettingsScreen() {
   const s = useSettings((st) => st.settings)!;
   const set = (patch: Partial<Settings>) => saveSettings({ ...s, ...patch });
@@ -202,6 +230,7 @@ export function SettingsScreen() {
       <h1 className="px-4 pt-4 text-headline leading-(--leading-heading) font-strong">
         {t("settings")}
       </h1>
+      <SettingsNav />
 
       <Section id="place" title={t("place")}>
         <div className="flex flex-col gap-5 px-card py-5 card">
@@ -224,7 +253,7 @@ export function SettingsScreen() {
         </div>
       </Section>
 
-      <Section title={t("display")}>
+      <Section id="display" title={t("display")}>
         <div className="flex flex-col gap-6 px-card py-5 card">
           <Choice
             legend={t("yearStyle")}
@@ -296,7 +325,7 @@ export function SettingsScreen() {
         </div>
       </Section>
 
-      <Section title={t("reminders")}>
+      <Section id="reminders" title={t("reminders")}>
         <div className="flex flex-col gap-3 px-card py-5 card">
           <ReminderTime s={s} />
           <Link to="/settings/notifications" className={btnOutline}>
@@ -352,7 +381,7 @@ export function SettingsScreen() {
         <InstallCard where="settings" />
       </div>
 
-      <Section title={t("about")}>
+      <Section id="about" title={t("about")}>
         <div className="flex flex-col gap-3 px-card py-5 card">
           <p className="text-lg font-label">
             {t("appName")}{" "}

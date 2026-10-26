@@ -4,7 +4,7 @@ import type { Lang } from "@panchang/calendar";
 import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { CityPicker, cityLabel } from "@/city-picker";
-import { loadLanguage, t } from "@/i18n";
+import { deviceLang, loadLanguage, t } from "@/i18n";
 import { AHMEDABAD, defaultSettings, saveSettings } from "@/settings";
 import { btnOutline } from "@/ui";
 import type { City } from "@/worker/cities";
@@ -17,8 +17,11 @@ const LANGUAGES: { lang: Lang; label: string; note: string }[] = [
 export function Onboarding() {
   const navigate = useNavigate();
   const [city, setCity] = useState<City | null>(null);
+  // The device guess shown on step 1, until the step 2 cards confirm (or this toggle overrides) it.
+  const [uiLang, setUiLang] = useState<Lang>(deviceLang);
   const step = city ? 2 : 1;
-  const finish = async (location = AHMEDABAD, language: Lang = "gu") => {
+  const switchLanguage = (l: Lang) => void loadLanguage(l).then(() => setUiLang(l));
+  const finish = async (location = AHMEDABAD, language: Lang = uiLang) => {
     await loadLanguage(language);
     saveSettings(defaultSettings(location, language));
     await navigate({ to: "/" });
@@ -36,7 +39,14 @@ export function Onboarding() {
             {t("back")}
           </button>
         ) : (
-          <span />
+          <button
+            type="button"
+            lang={uiLang === "gu" ? "en" : "gu"}
+            className="min-h-(--tap-min) rounded-md px-2 text-body text-text-muted underline underline-offset-3 focus-ring"
+            onClick={() => switchLanguage(uiLang === "gu" ? "en" : "gu")}
+          >
+            {uiLang === "gu" ? "English" : "ગુજરાતી"}
+          </button>
         )}
         <p className="flex items-center gap-2 text-sm text-text-muted">
           <span className="sr-only">{t("stepOf", { n: step, total: 2 })}</span>

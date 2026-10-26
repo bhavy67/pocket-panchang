@@ -226,6 +226,9 @@ export const en = {
   dayBefore: "1 day before",
   webReminders:
     "On the web, reminders come through the calendar file (Family dates → Save calendar file).",
+  webNoteTitle: "Reminders on the web",
+  webNoteBody:
+    "A browser can't send reminders on its own. Save the calendar file below and your phone's calendar will remind you instead.",
   alsoPitru: "Also remind me during Pitru Paksha (Shraddh fortnight)",
   whichPitruDay: "Which Pitru Paksha day",
   mahalayaHelp: "Technical term: Mahalaya.",
