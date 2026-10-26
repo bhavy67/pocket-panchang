@@ -199,19 +199,19 @@ export function tithiName(tithi: number, lang: DisplayLang): string {
 
 // Month grid cells only (≤ 7 characters, whole words): everyday short forms. Full names elsewhere.
 const FESTIVAL_SHORT: Record<string, [en: string, gu: string]> = {
-  "maha-shivaratri": ["Shiv R.", "શિવરાત"],
+  "maha-shivaratri": ["Shivrat", "શિવરાત"],
   "holika-dahan": ["Holi", "હોળી"],
   dhuleti: ["Dhuleti", "ધૂળેટી"],
   "raksha-bandhan": ["Rakhi", "રાખી"],
-  "janmashtami-smarta": ["Atham", "આઠમ"],
-  "janmashtami-vaishnava": ["Atham", "આઠમ"],
+  "janmashtami-smarta": ["Krishna", "કૃષ્ણ"],
+  "janmashtami-vaishnava": ["Krishna", "કૃષ્ણ"],
   navratri: ["Norta", "નોરતાં"],
   dussehra: ["Dasara", "દશેરા"],
-  dhanteras: ["Teras", "તેરસ"],
+  dhanteras: ["Dhan", "ધનતેરસ"],
   "kali-chaudas": ["Kali", "કાળી ચૌદસ"],
   diwali: ["Diwali", "દિવાળી"],
   "bestu-varas": ["Bestu", "બેસતું વર્ષ"],
-  "bhai-bij": ["Bhai B.", "ભાઈ બીજ"],
+  "bhai-bij": ["Bhaibij", "ભાઈ બીજ"],
   uttarayan: ["Utran", "ઉતરાણ"],
 };
 

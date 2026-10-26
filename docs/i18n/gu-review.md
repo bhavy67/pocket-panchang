@@ -622,17 +622,17 @@
 
 | OK | Key | English | ગુજરાતી (draft) |
 |---|---|---|---|
-| [ ] | `festivalShort.maha-shivaratri` | Shiv R. | શિવરાત |
+| [ ] | `festivalShort.maha-shivaratri` | Shivrat | શિવરાત |
 | [ ] | `festivalShort.holika-dahan` | Holi | હોળી |
 | [ ] | `festivalShort.dhuleti` | Dhuleti | ધૂળેટી |
 | [ ] | `festivalShort.raksha-bandhan` | Rakhi | રાખી |
-| [ ] | `festivalShort.janmashtami-smarta` | Atham | આઠમ |
-| [ ] | `festivalShort.janmashtami-vaishnava` | Atham | આઠમ |
+| [ ] | `festivalShort.janmashtami-smarta` | Krishna | કૃષ્ણ |
+| [ ] | `festivalShort.janmashtami-vaishnava` | Krishna | કૃષ્ણ |
 | [ ] | `festivalShort.navratri` | Norta | નોરતાં |
 | [ ] | `festivalShort.dussehra` | Dasara | દશેરા |
-| [ ] | `festivalShort.dhanteras` | Teras | તેરસ |
+| [ ] | `festivalShort.dhanteras` | Dhan | ધનતેરસ |
 | [ ] | `festivalShort.kali-chaudas` | Kali | કાળી ચૌદસ |
 | [ ] | `festivalShort.diwali` | Diwali | દિવાળી |
 | [ ] | `festivalShort.bestu-varas` | Bestu | બેસતું વર્ષ |
-| [ ] | `festivalShort.bhai-bij` | Bhai B. | ભાઈ બીજ |
+| [ ] | `festivalShort.bhai-bij` | Bhaibij | ભાઈ બીજ |
 | [ ] | `festivalShort.uttarayan` | Utran | ઉતરાણ |
