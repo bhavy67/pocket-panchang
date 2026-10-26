@@ -626,8 +626,8 @@
 | [ ] | `festivalShort.holika-dahan` | Holi | હોળી |
 | [ ] | `festivalShort.dhuleti` | Dhuleti | ધૂળેટી |
 | [ ] | `festivalShort.raksha-bandhan` | Rakhi | રાખી |
-| [ ] | `festivalShort.janmashtami-smarta` | Krishna | કૃષ્ણ |
-| [ ] | `festivalShort.janmashtami-vaishnava` | Krishna | કૃષ્ણ |
+| [ ] | `festivalShort.janmashtami-smarta` | Kanha | કૃષ્ણ |
+| [ ] | `festivalShort.janmashtami-vaishnava` | Kanha | કૃષ્ણ |
 | [ ] | `festivalShort.navratri` | Norta | નોરતાં |
 | [ ] | `festivalShort.dussehra` | Dasara | દશેરા |
 | [ ] | `festivalShort.dhanteras` | Dhan | ધનતેરસ |

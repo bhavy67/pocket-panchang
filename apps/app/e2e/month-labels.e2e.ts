@@ -23,7 +23,10 @@ for (const language of ["English", "ગુજરાતી"] as const)
         await page.addStyleTag({
           content: `html { font-size: ${scale} !important }`,
         });
-        await expect(page.locator("[data-cell-label]").first()).toBeVisible();
+        // Festivals load after the tithis; measuring earlier silently skips them.
+        await expect(
+          page.locator('[aria-busy="false"] [data-cell-label]').first(),
+        ).toBeVisible();
         // Measure with the real fonts (the system fallback is wider).
         await page.evaluate(() =>
           Promise.all(

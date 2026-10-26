@@ -22,7 +22,7 @@ import {
   weekdayInitials,
 } from "@/lib/format";
 import { firstDay, yearMonthOf, type YearMonth } from "@/lib/year-month";
-import { monthQuery } from "@/queries";
+import { festivalsQuery, monthQuery } from "@/queries";
 import { useSettings } from "@/settings";
 import { card } from "@/ui";
 import { SHOW_UNVERIFIED } from "@/flags";
@@ -51,6 +51,10 @@ export function Month({ month, date }: { month: YearMonth; date?: CivilDate }) {
   const today = clockFor(s.location.tz).localDate(useNow());
   const { data: days } = useQuery(monthQuery(s, month));
   const festivals = useFestivals(s, [Number(month.slice(0, 4))]);
+  // Same cached query as useFestivals: tells "no festivals" apart from "not loaded yet".
+  const festivalsLoaded = useQuery(
+    festivalsQuery(s, Number(month.slice(0, 4))),
+  ).isSuccess;
   const family = useOccurrenceRows(s, firstDay(month), 30) ?? [];
   const qc = useQueryClient();
   const [dir, setDir] = useState<"next" | "prev" | null>(null);
@@ -111,6 +115,7 @@ export function Month({ month, date }: { month: YearMonth; date?: CivilDate }) {
             swipeX.current = null;
             if (Math.abs(dx) > 60) go(dx < 0 ? 1 : -1);
           }}
+          aria-busy={!days || !festivalsLoaded}
           className={`mt-4 touch-pan-y ${dir === "next" ? "slide-next" : dir === "prev" ? "slide-prev" : ""}`}
         >
           <div
