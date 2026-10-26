@@ -12,7 +12,7 @@
 - [ ] **Month-grid markers:** "૨×" (two-day tithi) and "છૂટી" (skipped tithi).
 - [ ] **Event kinds:** વરસી / શ્રાદ્ધ, લગ્નતિથિ, જન્મદિવસ (તિથિ મુજબ).
 
-### UI strings (426)
+### UI strings (430)
 
 | OK | Key | English | ગુજરાતી (draft) |
 |---|---|---|---|
@@ -439,6 +439,13 @@
 | [ ] | `change` | Change | બદલો |
 | [ ] | `paletteKagaz` | Kagaz | કાગળ |
 | [ ] | `paletteUtsav` | Utsav | ઉત્સવ |
+| [ ] | `paletteShunya` | Shunya | શૂન્ય |
+| [ ] | `paletteCalmHint` | Quiet and clear, for everyone | શાંત અને સ્પષ્ટ, સૌ માટે |
+| [ ] | `paletteRaatHint` | True black, for checking at night | ઘેરો કાળો, રાત્રે જોવા માટે |
+| [ ] | `paletteKagazHint` | Like a printed panchang, larger text | છાપેલા પંચાંગ જેવું, મોટા અક્ષર |
+| [ ] | `paletteMandirHint` | Warm saffron and gold, for daily puja | કેસરી અને સોનેરી, રોજની પૂજા માટે |
+| [ ] | `paletteUtsavHint` | Bright and playful, for families | રંગીન અને આનંદી, પરિવાર માટે |
+| [ ] | `paletteShunyaHint` | Minimal, facts first | સાદું, ફક્ત મુદ્દાની વાત |
 
 ### Months (Gujarati year order) (12)
 

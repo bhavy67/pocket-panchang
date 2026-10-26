@@ -434,7 +434,7 @@ type CachedMonth = {
 - **Measured in Phase 11 (2026-10-24, Android 16 emulator, 4 cores / 4 GB, on an Apple-silicon host, so faster than a budget phone):** cold process start to first frame 0.62–1.0 s, Today glance 430–610 ms after WebView navigation start; hot start (app in memory) 50–188 ms; month in a fresh worker 219–320 ms (first computation, JIT-cold; borderline vs 300 ms), 50–152 ms once warm. With 2 GB RAM the same emulator swapped and took 6–9 s, so 2 GB Android 16 is not a supported budget target. Re-measure on the S24 and a real budget phone.
 - **Measured at end of Phase 10 (2026-10-24, `pnpm --filter @panchang/app e2e budgets`, production build, CPU ×4 + slow 4G via CDP):** initial JS **158.0 KB gzip** by Vite's report (152.8 KB by the E2E check's zlib) plus the active language catalogue loaded at boot (en 5.1 / gu 6.1 KB); worker **32.1 KB**; Today glance visible **139–262 ms** after a warm (service-worker + IndexedDB) reload; a never-computed month **55–133 ms** worker round trip. All budgets met. Caveat: a throttled laptop CPU is still faster than a real mid-range Android; re-measure on a device in Phase 11. Precache: 26 files, 2.58 MB (1.86 MB is the city list, for offline onboarding and city changes); Devanagari fonts are cached on first use only.
 - **Measured at end of Phase 9 (2026-10-24):** initial JS 156.8 KB gzip; worker 32.0 KB gzip (moon, occurrences, .ics, date helper); all non-Today routes in one lazy chunk (11.7 KB gzip).
-- **Fonts:** self-hosted script subsets: Manrope + Hind Vadodara; Noto Serif (+ Gujarati) for the Kagaz palette; Noto Sans Devanagari for Hindi (ADR 0024).
+- **Fonts:** self-hosted script subsets, per theme (ADR 0025): Calm Plus Jakarta Sans + Anek Gujarati (the only precached fonts); Raat Space Grotesk; Kagaz Fraunces + Noto Serif Gujarati; Mandir Marcellus + Hind Vadodara; Utsav Baloo Bhai 2; Shunya Geist. Other themes' fonts and Noto Sans Devanagari (Hindi) are cached on first use.
 
 ---
 
@@ -723,6 +723,13 @@ Follows Phase 12's reduced scope (numbered 11.5 because it reworks Phase 8–11 
 **Exit criteria:** revamped screens approved and recorded in `docs/design/screens.md`; CI and E2E green.
 
 > **Status (2026-10-24): complete.** "Quiet Sky" (ADR 0024): Manrope + Hind Vadodara (Kagaz: Noto Serif), 5 palettes × light/dark (Calm, Raat, Kagaz, Mandir, Utsav) with all contrast pairs passing, live moon from real elongation, new Today (hero, Right now, Your day ribbon, Panchang tiles), Month cells + "This month", Family Next card, Settings palette previews. Self-checked in 10 themes, 200% text and Gujarati; 22 E2E incl. axe on 10 themes; budgets: initial JS 159.8 KB gzip, worker 32.1 KB, Today warm 242 ms, month 127 ms (throttled). Screenshots in `docs/design/screens/`. `versionCode` 2 for closed testing.
+
+### Phase 11.6: Theme system 2.0
+Six themes (Calm, Raat, Kagaz, Mandir, Utsav, Shunya), each a full visual system: colour plus type, weights, letter-spacing, radii, density, surface style, shadows, moon and ribbon (ADR 0025, extends 0017/0024). Same constraints as 11.5 (tokens only, AA in every theme × mode and Gujarati, 200% text, ≥ 44 px targets, budgets, all tests); each theme's fonts load only when chosen.
+- **Step 1:** dev-only `/lab/themes` showing Today in all six themes × light/dark at phone width. Production unchanged.
+- **Step 2 (after Bhavy approves step 1):** roll out to every screen and to Settings.
+
+> **Status (2026-10-26): complete.** Step 1 lab approved by Bhavy; step 2 rolled out to every screen. `tokens.css` holds six oklch themes (token tests for all 12 blocks plus style tokens), Shunya added to Settings with "who it suits" hints, Tailwind weights reset to theme weights, lint bans raw weights/radii/shadows/tracking, only Calm's fonts precached (2.80 MB precache). 29 E2E incl. axe on every route in 12 themes and Gujarati, `themes-lab` (6 themes × 2 modes × en/gu × 100/200%); budgets: initial JS 160.7 KB gzip, Today warm 240 ms, month 132 ms. Screenshots regenerated in `docs/design/screens/` (36).
 
 ### Release finalization (after Phase 11.5)
 - README screenshots and Play store screenshots (8 phone shots, 1080 × 1920) plus the 1024 × 500 feature graphic, from the revamped UI.

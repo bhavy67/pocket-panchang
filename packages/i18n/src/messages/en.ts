@@ -499,6 +499,14 @@ export const en = {
   // Palettes (Phase 11.5)
   paletteKagaz: "Kagaz",
   paletteUtsav: "Utsav",
+  // Themes (Phase 11.6)
+  paletteShunya: "Shunya",
+  paletteCalmHint: "Quiet and clear, for everyone",
+  paletteRaatHint: "True black, for checking at night",
+  paletteKagazHint: "Like a printed panchang, larger text",
+  paletteMandirHint: "Warm saffron and gold, for daily puja",
+  paletteUtsavHint: "Bright and playful, for families",
+  paletteShunyaHint: "Minimal, facts first",
   // @@KEYS@@
 } as const;
 

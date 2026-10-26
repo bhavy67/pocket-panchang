@@ -6,7 +6,7 @@ import { t } from "@/i18n";
 import type { Health } from "@/native/android";
 import { isNative } from "@/ports";
 import { rescheduleReminders } from "@/reschedule";
-import { btnOutline, card, QualityIcon } from "@/ui";
+import { btnOutline, QualityIcon } from "@/ui";
 
 type Native = typeof import("@/native/android");
 
@@ -36,11 +36,11 @@ export function NotificationsHealth() {
       <Link to="/settings" className={`${btnOutline} self-start`}>
         {t("backToSettings")}
       </Link>
-      <h1 className="text-headline leading-(--leading-heading) font-bold">
+      <h1 className="text-headline leading-(--leading-heading) font-strong">
         {t("healthTitle")}
       </h1>
       {!isNative() ? (
-        <div className={`flex flex-col gap-3 p-5 ${card}`}>
+        <div className="flex flex-col gap-3 px-card py-5 card">
           <p className="text-body">{t("healthWeb")}</p>
           <Link to="/events" className={btnOutline}>
             {t("familyDates")}
@@ -91,8 +91,8 @@ export function NotificationsHealth() {
             }}
           />
           <BrandSteps manufacturer={h.manufacturer} />
-          <div className={`flex flex-col gap-3 p-5 ${card}`}>
-            <p className="text-lg font-semibold">{t("healthTestTitle")}</p>
+          <div className="flex flex-col gap-3 px-card py-5 card">
+            <p className="text-lg font-label">{t("healthTestTitle")}</p>
             <p className="text-body">{t("healthTestBody")}</p>
             <button
               type="button"
@@ -129,11 +129,11 @@ function Check({
   action: { label: string; run: () => Promise<void> };
 }) {
   return (
-    <section className={`flex flex-col gap-3 p-5 ${card}`}>
+    <section className="flex flex-col gap-3 px-card py-5 card">
       <div className="flex items-start gap-3">
         <QualityIcon tone={ok ? "good" : "rahu"} size={28} />
         <div className="flex min-w-0 flex-1 flex-col">
-          <h2 className="text-lg font-semibold">{title}</h2>
+          <h2 className="text-lg font-label">{title}</h2>
           <p className={`text-body ${ok ? "" : "text-inauspicious"}`}>
             <span className="sr-only">
               {ok ? t("healthOk") : t("healthNeedsAttention")}:{" "}
@@ -164,8 +164,8 @@ function BrandSteps({ manufacturer }: { manufacturer: string }) {
       : null;
   if (!steps) return null;
   return (
-    <section className={`flex flex-col gap-2 p-5 ${card}`}>
-      <h2 className="text-lg font-semibold">
+    <section className="flex flex-col gap-2 px-card py-5 card">
+      <h2 className="text-lg font-label">
         {manufacturer.includes("samsung")
           ? t("healthSamsungTitle")
           : t("healthXiaomiTitle")}

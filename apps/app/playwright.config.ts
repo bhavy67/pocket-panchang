@@ -17,9 +17,10 @@ export default defineConfig({
     ...(process.env.CI ? {} : { channel: "chrome" }),
   },
   webServer: {
-    // Festival rules are still unverified, so production hides them; E2E opts in to test markers.
+    // Festival rules are still unverified, so production hides them; E2E opts in to test markers
+    // and to the theme lab (Phase 11.6).
     command:
-      "VITE_SHOW_UNVERIFIED=1 pnpm build --outDir dist-e2e && pnpm preview --outDir dist-e2e --port 4173 --strictPort",
+      "VITE_SHOW_UNVERIFIED=1 VITE_LAB=1 pnpm build --outDir dist-e2e && pnpm preview --outDir dist-e2e --port 4173 --strictPort",
     url: "http://localhost:4173",
     reuseExistingServer: !process.env.CI,
     timeout: 180_000,

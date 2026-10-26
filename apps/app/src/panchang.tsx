@@ -21,7 +21,7 @@ import { lang, t } from "@/i18n";
 import { dateLong, timeOn } from "@/lib/format";
 import { moonQuery } from "@/queries";
 import type { Settings } from "@/settings";
-import { card, type SheetContent } from "@/ui";
+import { type SheetContent } from "@/ui";
 
 const COUNT = { tithi: 30, nakshatra: 27, yoga: 27, karana: 60 } as const;
 const next = (i: number, count: number) => (i % count) + 1;
@@ -99,21 +99,21 @@ export function ElementsCard({ view, tz }: { view: DayView; tz: string }) {
     },
   ];
   return (
-    <div className={`overflow-hidden ${card}`}>
+    <div className="overflow-hidden card">
       {rows.map((r) => (
         <div
           key={r.label}
-          className="flex flex-col gap-0.5 border-t border-border px-5 py-4 first:border-t-0"
+          className="flex flex-col gap-0.5 border-t border-border px-card py-4 first:border-t-0"
         >
           <div className="flex flex-wrap items-baseline justify-between gap-3">
             <span className="text-sm text-text-muted">{r.label}</span>
             {r.el.ends.length > 0 && (
-              <span className="rounded-sm bg-warning-subtle px-2 py-0.5 text-caption font-semibold text-warning">
+              <span className="rounded-sm bg-warning-subtle px-2 py-0.5 text-caption font-label text-warning">
                 {t("changesToday")}
               </span>
             )}
           </div>
-          <span className="text-lg leading-snug font-semibold">
+          <span className="text-lg leading-snug font-label">
             {r.name(r.el.atSunrise)}
           </span>
           <span className="text-sm text-text-muted tabular-nums">
@@ -124,7 +124,7 @@ export function ElementsCard({ view, tz }: { view: DayView; tz: string }) {
       ))}
       <div className="flex flex-col gap-0.5 border-t border-border px-5 py-4">
         <span className="text-sm text-text-muted">{t("weekday")}</span>
-        <span className="text-lg leading-snug font-semibold">
+        <span className="text-lg leading-snug font-label">
           {lang() === "gu" ? (
             weekdayName(day.vara, "gu")
           ) : (
@@ -146,13 +146,13 @@ function TithiMarkers({ el }: { el: ElementDay }) {
     <>
       {el.vriddhi && (
         <span className="text-sm">
-          <strong className="font-semibold">{t("twoDayTithi")}</strong>{" "}
+          <strong className="font-label">{t("twoDayTithi")}</strong>{" "}
           {t("twoDayTithiText", { tithi: tithiLabel(el.atSunrise, lang()) })}
         </span>
       )}
       {el.kshaya.map((k) => (
         <span key={k} className="text-sm">
-          <strong className="font-semibold">{t("skippedTithi")}</strong>{" "}
+          <strong className="font-label">{t("skippedTithi")}</strong>{" "}
           {t("skippedTithiText", { tithi: tithiLabel(k, lang()) })}
         </span>
       ))}
@@ -185,11 +185,11 @@ export function SunMoonCard({ view, s }: { view: DayView; s: Settings }) {
     ],
   ];
   return (
-    <div className="grid grid-cols-[repeat(auto-fit,minmax(min(10rem,100%),1fr))] gap-px overflow-hidden rounded-lg bg-border shadow-(--elevation-1)">
+    <div className="tile grid grid-cols-[repeat(auto-fit,minmax(min(10rem,100%),1fr))] gap-x-4 px-tile py-1">
       {cells.map(([k, v]) => (
-        <div key={k} className="flex flex-col bg-surface px-5 py-4">
+        <div key={k} className="flex flex-col py-3">
           <span className="text-sm text-text-muted">{k}</span>
-          <span className="text-lg font-semibold tabular-nums">{v}</span>
+          <span className="text-lg font-label tabular-nums">{v}</span>
         </div>
       ))}
     </div>

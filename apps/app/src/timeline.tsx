@@ -9,7 +9,7 @@ import type { DayView } from "@/day-data";
 import { choghadiyaName } from "@panchang/i18n";
 import { lang, t } from "@/i18n";
 import { range, time, timeShort } from "@/lib/format";
-import { card, QualityIcon, type SheetContent, type Tone } from "@/ui";
+import { QualityIcon, type SheetContent, type Tone } from "@/ui";
 
 // ---- Domain → display ----
 
@@ -143,7 +143,7 @@ function segment(a: Interval, row: Interval, first: boolean, last: boolean) {
 const COLS = "grid grid-cols-[44px_minmax(0,1fr)_120px] gap-[6px]";
 /** Lane labels stop growing at ~115% text (design decision 5). */
 const laneText =
-  "text-[length:min(var(--text-caption),17px)] font-semibold leading-tight";
+  "text-[length:min(var(--text-caption),17px)] font-label leading-tight";
 
 export function Timeline({
   view,
@@ -202,7 +202,7 @@ export function Timeline({
           <QualityIcon tone="bad" size={20} />
           {t("keyBad")}
         </li>
-        <li className="flex items-center gap-1.5 font-semibold text-inauspicious">
+        <li className="flex items-center gap-1.5 font-label text-inauspicious">
           <QualityIcon tone="rahu" size={20} />
           {t("rahuKaal")}
         </li>
@@ -215,9 +215,7 @@ export function Timeline({
         </li>
       </ul>
 
-      <div
-        className={`${COLS} mb-2 text-caption font-semibold text-text-muted`}
-      >
+      <div className={`${COLS} mb-2 text-caption font-label text-text-muted`}>
         <span />
         <span>{t("choghadiya")}</span>
         <span>{t("timesManyAvoid")}</span>
@@ -228,7 +226,7 @@ export function Timeline({
           <span className="block size-3.5 rounded-full border-[2.5px] border-warning" />
         </span>
         <span>
-          <strong className="font-semibold">{t("sunrise")}</strong>{" "}
+          <strong className="font-label">{t("sunrise")}</strong>{" "}
           {time(view.day.sunrise, tz)}
         </span>
       </div>
@@ -257,10 +255,8 @@ export function Timeline({
                   </span>
                   <span className="flex min-w-0 flex-col">
                     <span className="text-body leading-tight">
-                      <strong className="font-semibold">{chogName(c)}</strong>{" "}
-                      <span
-                        className={`text-sm font-semibold ${qualityInk(c)}`}
-                      >
+                      <strong className="font-label">{chogName(c)}</strong>{" "}
+                      <span className={`text-sm font-label ${qualityInk(c)}`}>
                         · {qualityLabel(c)}
                       </span>
                     </span>
@@ -357,7 +353,7 @@ export function Timeline({
                   className="pointer-events-none absolute inset-x-0 z-2 flex -translate-y-1/2 items-center"
                 >
                   <span className="flex w-11 flex-none flex-col items-center rounded-sm bg-(--timeline-now) py-0.5 leading-tight text-text-on-accent">
-                    <span className="text-[length:13px] font-bold">
+                    <span className="text-[length:13px] font-strong">
                       {t("now")}
                     </span>
                     <span className="text-[length:13px] tabular-nums">
@@ -378,7 +374,7 @@ export function Timeline({
           <span className="block size-3.5 rounded-full bg-text-muted" />
         </span>
         <span>
-          <strong className="font-semibold">{t("sunset")}</strong>{" "}
+          <strong className="font-label">{t("sunset")}</strong>{" "}
           {time(rows.at(-1)!.end, tz)}
         </span>
       </div>
@@ -405,7 +401,7 @@ export function NightChoghadiya({
         type="button"
         aria-expanded={open}
         onClick={() => setOpen(!open)}
-        className="mt-4 flex min-h-(--tap-min) w-full items-center justify-between gap-2 rounded-md border-[1.5px] border-border-strong bg-surface px-4 py-3 text-body font-semibold text-accent hover:bg-accent-subtle focus-ring"
+        className="mt-4 flex min-h-(--tap-min) w-full items-center justify-between gap-2 rounded-md border-[1.5px] border-border-strong bg-surface px-4 py-3 text-body font-label text-accent hover:bg-accent-subtle focus-ring"
       >
         <span>{open ? t("hideNight") : t("showNight")}</span>
         <svg
@@ -426,7 +422,7 @@ export function NightChoghadiya({
         </svg>
       </button>
       {open && (
-        <ul className={`mt-2 overflow-hidden ${card}`}>
+        <ul className="mt-2 overflow-hidden card">
           {m.night.map((c) => (
             <li
               key={c.start}
@@ -435,14 +431,14 @@ export function NightChoghadiya({
               <button
                 type="button"
                 onClick={() => onOpen(chogSheet(c, m, tz))}
-                className="flex min-h-(--tap-min) w-full items-center gap-3 px-4 py-3 text-left focus-ring"
+                className="flex min-h-(--tap-min) w-full items-center gap-3 px-card py-3 text-left focus-ring"
               >
                 <QualityIcon tone={toneOf(c)} />
                 <span className="flex flex-1 flex-col">
-                  <span className="text-body leading-tight font-semibold">
+                  <span className="text-body leading-tight font-label">
                     {chogName(c)}
                   </span>
-                  <span className={`text-sm font-semibold ${qualityInk(c)}`}>
+                  <span className={`text-sm font-label ${qualityInk(c)}`}>
                     {qualityLabel(c)}
                   </span>
                 </span>

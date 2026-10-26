@@ -11,8 +11,15 @@ import { isParseError, type ParseError } from "@panchang/engine";
 import { create } from "zustand";
 import { db } from "@/db";
 
-/** Colour palettes (ADR 0024); each has light and dark. */
-export const PALETTES = ["calm", "raat", "kagaz", "mandir", "utsav"] as const;
+/** Themes (ADR 0025); each has light and dark. */
+export const PALETTES = [
+  "calm",
+  "raat",
+  "kagaz",
+  "mandir",
+  "utsav",
+  "shunya",
+] as const;
 export type Palette = (typeof PALETTES)[number];
 
 export type Settings = {

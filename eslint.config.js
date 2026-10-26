@@ -21,7 +21,10 @@ const NO_NODE_IMPORTS = {
 };
 
 // Real colour values only, so strings like "#today" and plain text don't match.
-const RAW_COLOUR = String.raw`/#[0-9a-fA-F]{3,8}\b|\brgba?\(|\bhsla?\(/`;
+const RAW_COLOUR = String.raw`/#[0-9a-fA-F]{3,8}\b|\b(?:rgba?|hsla?|hwb|lab|lch|oklab|oklch|color)\(/`;
+// Theme style tokens (ADR 0025): weight, radius, shadow, letter-spacing and font family come from
+// the theme, so arbitrary values for them (font-[700], rounded-[14px], shadow-[…]) are banned.
+const RAW_STYLE = String.raw`/(?:^|\s)(?:font|rounded(?:-[trblse]{1,2})?|shadow|tracking)-\[(?!var\()/`;
 
 const importRule = (paths, patterns, extra = []) => [
   "error",
@@ -195,6 +198,11 @@ export default tseslint.config(
           message:
             "Raw colour: use a semantic token (ADR 0017). Raw colours live only in tokens.css.",
         },
+        ...["Literal[value", "TemplateElement[value.raw"].map((node) => ({
+          selector: `${node}=${RAW_STYLE}]`,
+          message:
+            "Raw weight/radius/shadow/tracking/font: use a theme token (ADR 0025), e.g. font-heading, rounded-card.",
+        })),
       ],
     },
   },

@@ -30,9 +30,9 @@ const osFontScale = isNative()
 // Theme = palette × mode (ADR 0017), both from settings; "system" follows the OS.
 const html = document.documentElement;
 const prefersDark = window.matchMedia("(prefers-color-scheme: dark)");
-// Dev only: ?palette=mandir&mode=dark previews a theme without touching saved settings, until
-// the Settings screen (Phase 9) offers the real switch.
-const preview = import.meta.env.DEV
+// Lab only (/lab/themes): ?palette=mandir&mode=dark previews a theme without touching saved
+// settings; ?lang=gu and ?scale=2 preview language and text size.
+const preview = __LAB__
   ? new URLSearchParams(location.search)
   : new URLSearchParams();
 const applyTheme = () => {
@@ -44,7 +44,7 @@ const applyTheme = () => {
   // The page language is the loaded UI language; mixed-script fragments carry their own lang.
   html.lang = lang();
   // In-app text size on top of the OS/browser setting: rem-based layout scales with it.
-  html.style.fontSize = `${(s?.textScale ?? 1) * osFontScale * 100}%`;
+  html.style.fontSize = `${Number(preview.get("scale") ?? s?.textScale ?? 1) * osFontScale * 100}%`;
   // Browser chrome follows the palette's surface token.
   document
     .querySelector('meta[name="theme-color"]')
@@ -66,7 +66,11 @@ if (settings)
     (e: unknown) => console.error("Reading month cache failed:", e),
   );
 // Only the active language's strings are fetched (§7), before the first render.
-await loadLanguage(settings?.language ?? deviceLang());
+await loadLanguage(
+  preview.get("lang") === "gu" || preview.get("lang") === "en"
+    ? (preview.get("lang") as "gu" | "en")
+    : (settings?.language ?? deviceLang()),
+);
 applyTheme();
 persistSettings();
 

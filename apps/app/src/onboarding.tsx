@@ -6,7 +6,7 @@ import { useState } from "react";
 import { CityPicker, cityLabel } from "@/city-picker";
 import { loadLanguage, t } from "@/i18n";
 import { AHMEDABAD, defaultSettings, saveSettings } from "@/settings";
-import { btnOutline, card } from "@/ui";
+import { btnOutline } from "@/ui";
 import type { City } from "@/worker/cities";
 
 const LANGUAGES: { lang: Lang; label: string; note: string }[] = [
@@ -59,7 +59,7 @@ export function Onboarding() {
 
       {step === 1 && (
         <header className="flex flex-col gap-2">
-          <h1 className="text-headline leading-(--leading-heading) font-bold">
+          <h1 className="text-headline leading-(--leading-heading) font-strong">
             {t("onbTitle")}
           </h1>
           <p className="text-body text-text-muted">{t("onbBody")}</p>
@@ -68,7 +68,7 @@ export function Onboarding() {
 
       {city ? (
         <section className="flex flex-col gap-4">
-          <h2 className="text-title leading-(--leading-heading) font-bold">
+          <h2 className="text-title leading-(--leading-heading) font-strong">
             {t("chooseLanguage")}
           </h2>
           <p className="text-text-muted">{cityLabel(city)}</p>
@@ -77,10 +77,10 @@ export function Onboarding() {
               key={lang}
               type="button"
               lang={lang}
-              className={`flex min-h-16 flex-col items-start justify-center px-5 text-left hover:bg-surface-sunken focus-ring ${card}`}
+              className="flex min-h-16 flex-col items-start justify-center px-card text-left hover:bg-surface-sunken focus-ring card"
               onClick={() => void finish(city.location, lang)}
             >
-              <span className="text-lg font-semibold">{label}</span>
+              <span className="text-lg font-label">{label}</span>
               {lang !== "en" && (
                 <span lang="en" className="text-sm text-text-muted">
                   {note}

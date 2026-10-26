@@ -133,7 +133,7 @@ export function Sheet({
       onClose={onClose}
       onClick={(e) => e.target === e.currentTarget && onClose()}
       aria-label={content?.title}
-      className="sheet mx-auto mt-auto mb-0 w-full max-w-xl rounded-t-3xl bg-surface-raised p-0 text-text shadow-(--elevation-3)"
+      className="sheet mx-auto mt-auto mb-0 w-full max-w-xl rounded-t-lg bg-surface-raised p-0 text-text shadow-(--elevation-3)"
     >
       {content && (
         <div className="flex flex-col gap-3 px-5 pt-3 pb-8">
@@ -143,11 +143,11 @@ export function Sheet({
           />
           <div className="flex flex-col gap-0.5">
             <span
-              className={`text-sm font-semibold ${kickerInk[content.tone ?? "muted"]}`}
+              className={`text-sm font-label ${kickerInk[content.tone ?? "muted"]}`}
             >
               {content.kicker}
             </span>
-            <h3 className="text-title leading-(--leading-heading) font-bold">
+            <h3 className="text-title leading-(--leading-heading) font-strong">
               {content.title}
             </h3>
             {content.range && (
@@ -182,7 +182,7 @@ export function Sheet({
           <button
             type="button"
             onClick={onClose}
-            className="min-h-13 rounded-md bg-accent text-body font-semibold text-text-on-accent focus-ring"
+            className="min-h-13 rounded-md bg-accent text-body font-label text-text-on-accent focus-ring"
           >
             {t("close")}
           </button>
@@ -193,7 +193,7 @@ export function Sheet({
 }
 
 export const btnOutline =
-  "flex min-h-(--tap-min) items-center justify-center rounded-md border-[1.5px] border-border-strong bg-surface px-4 text-body font-semibold text-accent hover:bg-accent-subtle focus-ring disabled:cursor-not-allowed disabled:opacity-50";
+  "flex min-h-(--tap-min) items-center justify-center rounded-md border-[1.5px] border-border-strong bg-surface px-4 text-body font-label text-accent hover:bg-accent-subtle focus-ring disabled:cursor-not-allowed disabled:opacity-50";
 
 export function Section({
   title,
@@ -213,7 +213,7 @@ export function Section({
   return (
     <section id={id} className={`scroll-mt-4 ${flush ? "" : "px-4 pt-8"}`}>
       <h2
-        className={`text-title leading-(--leading-heading) font-extrabold ${sub ? "" : "mb-3"}`}
+        className={`text-title leading-(--leading-heading) font-display font-heading tracking-display ${sub ? "" : "mb-3"}`}
       >
         {title}
       </h2>
@@ -222,8 +222,6 @@ export function Section({
     </section>
   );
 }
-
-export const card = "rounded-lg bg-surface shadow-(--elevation-1)";
 
 // ---- App shell: bottom navigation on phones, side rail from 1024 px (brief §5). ----
 
@@ -308,12 +306,12 @@ function PreviewBanner() {
       role="note"
       className="flex flex-wrap items-center gap-x-3 gap-y-1 border-b border-warning bg-warning-subtle px-4 py-2 text-sm"
     >
-      <strong className="font-semibold">{t("previewTitle")}</strong>
+      <strong className="font-label">{t("previewTitle")}</strong>
       <span>{t("previewBody")}</span>
       <Link
         to="/settings"
         hash="backup"
-        className="font-semibold text-accent underline underline-offset-3 focus-ring"
+        className="font-label text-accent underline underline-offset-3 focus-ring"
       >
         {t("previewLink")}
       </Link>
@@ -328,13 +326,13 @@ function UpdateBar() {
   return (
     <div
       role="status"
-      className="fixed inset-x-0 bottom-20 z-20 mx-auto flex max-w-xl flex-wrap items-center justify-between gap-3 rounded-lg border border-border bg-surface-raised p-4 shadow-(--elevation-3) lg:bottom-6"
+      className="fixed inset-x-0 bottom-20 z-20 mx-auto flex max-w-xl flex-wrap items-center justify-between gap-3 rounded-card bg-surface-raised p-4 shadow-(--elevation-3) lg:bottom-6"
     >
       <span className="text-body">{t("updateReady")}</span>
       <button
         type="button"
         onClick={() => void update()}
-        className="flex min-h-(--tap-min) items-center rounded-md bg-accent px-4 text-body font-semibold text-text-on-accent focus-ring"
+        className="flex min-h-(--tap-min) items-center rounded-md bg-accent px-4 text-body font-label text-text-on-accent focus-ring"
       >
         {t("updateReload")}
       </button>
@@ -353,15 +351,15 @@ export function InstallCard({ where }: { where: "today" | "settings" }) {
   if (!install && !ios) return null;
   if (where === "today" && (state.dismissed || state.visits < 2)) return null;
   return (
-    <div className={`flex flex-col gap-3 p-5 ${card}`}>
-      <p className="text-lg font-semibold">{t("installTitle")}</p>
+    <div className="flex flex-col gap-3 px-card py-5 card">
+      <p className="text-lg font-label">{t("installTitle")}</p>
       <p className="text-body">{ios ? t("installIos") : t("installBody")}</p>
       <div className="flex flex-wrap gap-2">
         {install && (
           <button
             type="button"
             onClick={() => void promptInstall()}
-            className="flex min-h-(--tap-min) items-center rounded-md bg-accent px-5 text-body font-semibold text-text-on-accent focus-ring"
+            className="flex min-h-(--tap-min) items-center rounded-md bg-accent px-5 text-body font-label text-text-on-accent focus-ring"
           >
             {t("installButton")}
           </button>
@@ -400,7 +398,7 @@ export function Shell() {
               key={n.to}
               to={n.to}
               activeOptions={{ exact: n.to === "/", includeSearch: false }}
-              className={`${navItem} text-text-muted data-[status=active]:font-bold data-[status=active]:text-accent [&[data-status=active]>span]:bg-accent-subtle`}
+              className={`${navItem} text-text-muted data-[status=active]:font-strong data-[status=active]:text-accent [&[data-status=active]>span]:bg-accent-subtle`}
             >
               <span className={pill}>
                 <svg

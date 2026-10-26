@@ -3,7 +3,6 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useId, useState } from "react";
 import { lang, t } from "@/i18n";
 import { citySearchQuery } from "@/queries";
-import { card } from "@/ui";
 import type { City } from "@/worker/cities";
 
 export const cityLabel = ({ location, admin }: City) =>
@@ -35,7 +34,7 @@ export function CityPicker({
 
   return (
     <div className="flex flex-col gap-2">
-      <label htmlFor={inputId} className="text-body font-semibold">
+      <label htmlFor={inputId} className="text-body font-label">
         {label}
       </label>
       <input
@@ -55,7 +54,7 @@ export function CityPicker({
             : ""}
       </p>
       {results.length > 0 && (
-        <ul className={`overflow-hidden ${card}`}>
+        <ul className="overflow-hidden card">
           {results.map((c) => (
             <li
               key={c.location.id}
@@ -63,7 +62,7 @@ export function CityPicker({
             >
               <button
                 type="button"
-                className="min-h-(--tap-min) w-full px-4 py-2 text-left text-body hover:bg-surface-sunken focus-ring"
+                className="min-h-(--tap-min) w-full px-card py-2 text-left text-body hover:bg-surface-sunken focus-ring"
                 onClick={() => {
                   onPick(c);
                   setQuery("");

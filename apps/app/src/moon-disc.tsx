@@ -16,11 +16,11 @@ export function useElongation(now: Instant): number | undefined {
 
 export function MoonDisc({
   elongation,
-  size = "5.25rem",
+  size = "var(--moon-size)",
   decorative = false,
 }: {
   elongation: number | undefined;
-  /** CSS size (rem, so it grows with text size). */
+  /** CSS size (rem, so it grows with text size); the theme sets the default. */
   size?: string;
   decorative?: boolean;
 }) {
@@ -34,7 +34,7 @@ export function MoonDisc({
   return (
     <svg
       viewBox="0 0 100 100"
-      style={{ width: size, height: size }}
+      style={{ width: size, height: size, filter: "var(--moon-glow)" }}
       className="flex-none"
       {...(decorative || elongation === undefined
         ? { "aria-hidden": true }
@@ -47,8 +47,10 @@ export function MoonDisc({
         cy="50"
         r="46"
         fill="none"
-        className="stroke-border"
-        strokeWidth="1.5"
+        style={{
+          stroke: "var(--moon-rim)",
+          strokeWidth: "var(--moon-rim-width)",
+        }}
       />
     </svg>
   );

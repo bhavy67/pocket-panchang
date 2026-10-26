@@ -32,7 +32,7 @@ import {
   setOverride,
 } from "@/policy";
 import { useSettings, type Settings } from "@/settings";
-import { btnOutline, card } from "@/ui";
+import { btnOutline } from "@/ui";
 import { worker } from "@/worker/client";
 import type { TithiProposal } from "@/worker/api";
 
@@ -65,7 +65,7 @@ function Field({
   const id = useId();
   return (
     <div className="flex flex-col gap-1">
-      <label htmlFor={id} className="text-body font-semibold">
+      <label htmlFor={id} className="text-body font-label">
         {label}
       </label>
       {children(id)}
@@ -147,7 +147,7 @@ function EventForm({ existing }: { existing: StoredEvent | undefined }) {
           {t("backToDates")}
         </button>
       </header>
-      <h1 className="text-headline leading-(--leading-heading) font-bold">
+      <h1 className="text-headline leading-(--leading-heading) font-strong">
         {existing ? t("editDate") : t("addFamilyDate")}
       </h1>
 
@@ -165,9 +165,7 @@ function EventForm({ existing }: { existing: StoredEvent | undefined }) {
       </Field>
 
       <fieldset className="flex flex-col gap-2">
-        <legend className="mb-2 text-body font-semibold">
-          {t("whatKind")}
-        </legend>
+        <legend className="mb-2 text-body font-label">{t("whatKind")}</legend>
         {KINDS.map((k) => (
           <label key={k} className={radio}>
             <input
@@ -183,7 +181,7 @@ function EventForm({ existing }: { existing: StoredEvent | undefined }) {
       </fieldset>
 
       <fieldset className="flex flex-col gap-3">
-        <legend className="mb-2 text-body font-semibold">{t("theDate")}</legend>
+        <legend className="mb-2 text-body font-label">{t("theDate")}</legend>
         <div className="grid grid-cols-[repeat(auto-fit,minmax(min(12rem,100%),1fr))] gap-2">
           {(
             [
@@ -228,7 +226,7 @@ function EventForm({ existing }: { existing: StoredEvent | undefined }) {
         {confirmed && mode === "tithi" && (
           <p className="text-body">
             {t("tithiIs")}{" "}
-            <strong className="font-semibold">{lunarLabel(lunar)}</strong>
+            <strong className="font-label">{lunarLabel(lunar)}</strong>
             {origin && (
               <span className="block text-sm text-text-muted">
                 {t("workedOutFrom", {
@@ -243,9 +241,7 @@ function EventForm({ existing }: { existing: StoredEvent | undefined }) {
       </fieldset>
 
       <fieldset className="flex flex-col gap-2">
-        <legend className="mb-2 text-body font-semibold">
-          {t("remindMe")}
-        </legend>
+        <legend className="mb-2 text-body font-label">{t("remindMe")}</legend>
         {(
           [
             [0, "onTheDay"],
@@ -273,7 +269,7 @@ function EventForm({ existing }: { existing: StoredEvent | undefined }) {
 
       {kind === "shraddh" && (
         <fieldset className="flex flex-col gap-3">
-          <legend className="mb-2 text-body font-semibold">
+          <legend className="mb-2 text-body font-label">
             {t("pitruPaksha")}
           </legend>
           <label className={radio}>
@@ -335,8 +331,8 @@ function EventForm({ existing }: { existing: StoredEvent | undefined }) {
         )}
       </Field>
 
-      <details className={`group p-4 ${card}`}>
-        <summary className="flex min-h-(--tap-min) cursor-pointer items-center text-body font-semibold text-accent focus-ring">
+      <details className="group px-card py-4 card">
+        <summary className="flex min-h-(--tap-min) cursor-pointer items-center text-body font-label text-accent focus-ring">
           {t("advanced")}
         </summary>
         <div className="mt-3 flex flex-col gap-5">
@@ -357,7 +353,7 @@ function EventForm({ existing }: { existing: StoredEvent | undefined }) {
             );
           })}
           <div className="flex flex-col gap-2">
-            <span className="text-body font-semibold">{t("useSunriseIn")}</span>
+            <span className="text-body font-label">{t("useSunriseIn")}</span>
             <p className="text-body">
               {(observance ?? s.observanceLocation).name}{" "}
               <span className="text-sm text-text-muted">
@@ -415,7 +411,7 @@ function EventForm({ existing }: { existing: StoredEvent | undefined }) {
         {existing && (
           <button
             type="button"
-            className="flex min-h-(--tap-min) items-center rounded-md border-[1.5px] border-danger px-5 text-body font-semibold text-danger focus-ring"
+            className="flex min-h-(--tap-min) items-center rounded-md border-[1.5px] border-danger px-5 text-body font-label text-danger focus-ring"
             onClick={() => {
               if (window.confirm(t("confirmDelete", { title: existing.title })))
                 void deleteEvent(existing.id).then(() =>
@@ -567,7 +563,7 @@ function DateHelper({
   if (proposal) {
     const warning = historicalZoneWarning(place, date, time);
     return (
-      <div className={`flex flex-col gap-3 p-4 ${card}`}>
+      <div className="flex flex-col gap-3 px-card py-4 card">
         <p className="text-lg">
           {t("worksOutTo", { tithi: lunarLabel(proposal.lunarDate) })}
         </p>
@@ -642,7 +638,7 @@ function DateHelper({
       </div>
       <p className="text-body">
         {t("whereItHappened")}{" "}
-        <strong className="font-semibold">{place.name}</strong>
+        <strong className="font-label">{place.name}</strong>
       </p>
       <CityPicker
         label={t("changePlace")}

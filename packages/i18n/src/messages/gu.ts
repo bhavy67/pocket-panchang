@@ -496,4 +496,12 @@ export const gu: Messages = {
   // Palettes (Phase 11.5)
   paletteKagaz: "કાગળ",
   paletteUtsav: "ઉત્સવ",
+  // Themes (Phase 11.6)
+  paletteShunya: "શૂન્ય",
+  paletteCalmHint: "શાંત અને સ્પષ્ટ, સૌ માટે",
+  paletteRaatHint: "ઘેરો કાળો, રાત્રે જોવા માટે",
+  paletteKagazHint: "છાપેલા પંચાંગ જેવું, મોટા અક્ષર",
+  paletteMandirHint: "કેસરી અને સોનેરી, રોજની પૂજા માટે",
+  paletteUtsavHint: "રંગીન અને આનંદી, પરિવાર માટે",
+  paletteShunyaHint: "સાદું, ફક્ત મુદ્દાની વાત",
 };

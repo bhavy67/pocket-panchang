@@ -32,15 +32,31 @@
   --color-now-marker: var(--now-marker);
   --color-moon-lit: var(--moon-lit);
   --color-moon-dark: var(--moon-dark);
+  --color-card-bg: var(--card-bg);
+  --color-tile-bg: var(--tile-bg);
+  --color-hero-text: var(--hero-text);
 }
 
-/* Non-colour scales (ADR 0024 "Quiet Sky"; brief §8.4–8.5). Mode-independent. */
+/* Non-colour scales (ADR 0025). Every theme in tokens.css overrides the font, weight, tracking,
+ * radius and spacing values below; these registrations create the utilities (font-heading,
+ * rounded-card, px-card, …) and hold Calm's values. Tailwind's own weight scale is reset, so
+ * font-bold and friends do not exist: weights come from the theme. */
 @theme {
   --font-*: initial;
   --font-ui:
-    "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-gu: "Hind Vadodara", "Manrope", system-ui, sans-serif;
-  --font-hi: "Noto Sans Devanagari", "Manrope", system-ui, sans-serif;
+    "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto,
+    sans-serif;
+  --font-gu: "Anek Gujarati", "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-hi: "Noto Sans Devanagari", var(--font-ui);
+  --font-display: var(--font-ui);
+
+  --font-weight-*: initial;
+  --font-weight-normal: 400;
+  --font-weight-hero: 700;
+  --font-weight-heading: 600;
+  --font-weight-strong: 600;
+  --font-weight-label: 500;
+  --tracking-display: -0.02em;
 
   --text-*: initial;
   --text-caption: 0.9375rem;
@@ -58,13 +74,16 @@
   --text-cell-date: 1.0625rem; /* 17px: day number in month cells */
 
   --spacing: 0.25rem; /* rem: layout scales with text size (ADR 0017) */
+  --spacing-card: 1.25rem; /* side padding of cards (0 in ruled themes, ADR 0025) */
+  --spacing-tile: 1rem;
 
   --radius-*: initial;
-  --radius-sm: 8px;
+  --radius-sm: 10px;
   --radius-cell: 12px; /* month cells */
   --radius-md: 14px; /* rows, inputs, buttons */
   --radius-tile: 18px; /* panchang tiles */
-  --radius-lg: 22px; /* cards */
+  --radius-lg: 20px; /* sheets, toasts */
+  --radius-card: 20px; /* surface cards */
   --radius-full: 9999px;
 
   --ease-*: initial;
@@ -103,12 +122,6 @@
   }
 }
 
-/* Kagaz ("printed panchang") uses serif type; fonts are tokens, swapped per palette. */
-[data-palette="kagaz"] {
-  --font-ui: "Noto Serif", Georgia, serif;
-  --font-gu: "Noto Serif Gujarati", "Noto Serif", serif;
-}
-
 html {
   font-variant-numeric: tabular-nums; /* every time and date lines up (ADR 0024) */
   background: var(--bg);
@@ -136,6 +149,24 @@ html {
   --elevation-1: 0 0 0 1px var(--border);
   --elevation-3: 0 0 0 1px var(--border);
   --scrim: color-mix(in srgb, var(--bg) 70%, transparent);
+}
+
+/* Surfaces (ADR 0025): a theme decides whether a card is a box (border), a layer (tonal
+ * background), a lift (shadow) or a rule (top divider only). Side padding is px-card / px-tile,
+ * which ruled themes set to 0 so text lines up with headings. */
+@utility card {
+  background: var(--card-bg);
+  border: var(--card-border);
+  border-block-start: var(--card-divider);
+  border-radius: var(--radius-card);
+  box-shadow: var(--card-shadow);
+}
+@utility tile {
+  background: var(--tile-bg);
+  border: var(--tile-border);
+  border-block-start: var(--tile-divider);
+  border-radius: var(--radius-tile);
+  box-shadow: var(--tile-shadow);
 }
 
 @utility focus-ring {

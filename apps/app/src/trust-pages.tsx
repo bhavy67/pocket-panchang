@@ -28,15 +28,15 @@ function Page({
         {t("backHome")}
       </Link>
       <header className="flex flex-col gap-1">
-        <p className="text-sm font-semibold text-accent">{t("appName")}</p>
-        <h1 className="text-headline leading-(--leading-heading) font-bold">
+        <p className="text-sm font-label text-accent">{t("appName")}</p>
+        <h1 className="text-headline leading-(--leading-heading) font-strong">
           {t(title)}
         </h1>
         {intro && <p className="text-sm text-text-muted">{t(intro)}</p>}
       </header>
       {sections.map(([h, body]) => (
         <section key={h} className="flex flex-col gap-2">
-          <h2 className="text-title leading-(--leading-heading) font-bold">
+          <h2 className="text-title leading-(--leading-heading) font-strong">
             {t(h)}
           </h2>
           <p className="text-body">{t(body)}</p>
@@ -78,7 +78,7 @@ export function HowPage() {
       </a>
       <Link
         to="/privacy"
-        className="self-start text-body font-semibold text-accent underline underline-offset-3 focus-ring"
+        className="self-start text-body font-label text-accent underline underline-offset-3 focus-ring"
       >
         {t("privacyPolicy")}
       </Link>

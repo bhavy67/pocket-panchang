@@ -256,7 +256,7 @@ Neutral Choghadiya (Char) uses `--text-muted` with a neutral icon.
 
 ### 8.3 Proposed v1 palettes
 
-> Superseded by ADR 0024 (Quiet Sky): palettes are now Calm, Raat, Kagaz, Mandir, Utsav; values live in `apps/app/src/styles/tokens.css`.
+> Superseded by ADR 0025 (Theme system 2.0): themes are Calm, Raat, Kagaz, Mandir, Utsav, Shunya; values live in `apps/app/src/styles/tokens.css`.
 
 - **Calm** (default): soft warm-white / deep slate, teal accent. Quiet and modern.
 - **Mandir** (warm traditional): ivory and turmeric tones, saffron-brown accent, maroon festival colour. Feels like a printed panchang.
@@ -293,7 +293,7 @@ Neutral Choghadiya (Char) uses `--text-muted` with a neutral icon.
 
 ### 8.4 Typography
 
-> Superseded by ADR 0024: Manrope + Hind Vadodara (Kagaz: Noto Serif + Noto Serif Gujarati).
+> Superseded by ADR 0025: each theme has its own fonts (Calm: Plus Jakarta Sans + Anek Gujarati).
 
 - **Latin:** system UI font stack (Roboto on Android, San Francisco on Apple, Segoe on Windows). No extra font download.
 - **Gujarati:** Noto Sans Gujarati. **Devanagari** (Hindi, v2): Noto Sans Devanagari. Self-hosted, subset to used glyphs; weights **400 and 600 only**.

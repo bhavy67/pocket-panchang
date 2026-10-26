@@ -6,7 +6,6 @@ import { t } from "@/i18n";
 import { dateShort, daysBetween } from "@/lib/format";
 import { lunarLabel } from "@/policy";
 import type { Settings } from "@/settings";
-import { card } from "@/ui";
 
 export const inDays = (n: number) =>
   n === 0 ? t("inToday") : n === 1 ? t("inTomorrow") : t("inDays", { n });
@@ -35,16 +34,16 @@ export function EventRow({
     <Link
       to="/events/$id"
       params={{ id: r.event.id }}
-      className={`flex min-h-18 w-full flex-wrap items-center gap-3 p-4 hover:bg-surface-sunken focus-ring ${card}`}
+      className="flex min-h-18 w-full flex-wrap items-center gap-3 px-card py-4 hover:bg-surface-sunken focus-ring card"
     >
       <PersonalIcon />
       <span className="flex min-w-[min(9rem,100%)] flex-1 flex-col">
-        <span className="text-caption font-semibold text-personal-event">
+        <span className="text-caption font-label text-personal-event">
           {t("familyDate")}
           {labels.length > 0 &&
             t("rowLabelSep") + labels.join(t("rowLabelSep"))}
         </span>
-        <span className="text-lg leading-tight font-semibold">
+        <span className="text-lg leading-tight font-label">
           {r.event.title}
         </span>
         <span className="text-sm text-text-muted">
@@ -52,7 +51,7 @@ export function EventRow({
           {city.id !== s.location.id && t("inCity", { city: city.name })}
         </span>
       </span>
-      <span className="flex-none text-right text-sm font-semibold">
+      <span className="flex-none text-right text-sm font-label">
         {inDays(daysBetween(today, r.date))}
       </span>
     </Link>

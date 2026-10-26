@@ -98,7 +98,7 @@ export function PolicySelect({
   const id = useId();
   return (
     <div className="flex flex-col gap-1">
-      <label htmlFor={id} className="text-body font-semibold">
+      <label htmlFor={id} className="text-body font-label">
         {t(field.label)}
       </label>
       <span className="text-sm">

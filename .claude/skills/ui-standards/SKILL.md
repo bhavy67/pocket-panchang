@@ -27,12 +27,12 @@ Source of truth: `PROJECT_PLAN.md` §9. Approved designs are listed in `docs/des
 - [ ] No meaning conveyed by color alone (pair with text or icon, e.g. vriddhi/kshaya/festival markers, Choghadiya quality)
 - [ ] `prefers-reduced-motion` respected
 - [ ] Keyboard navigable with a visible focus ring; correct semantics/labels for screen readers
-- [ ] Gujarati and Devanagari text render correctly (Hind Vadodara / Noto Serif Gujarati / Noto Sans Devanagari, self-hosted, subset) and line-height fits the script
+- [ ] Gujarati and Devanagari text render correctly (each theme's Gujarati font: Anek Gujarati / Noto Serif Gujarati / Hind Vadodara / Baloo Bhai 2, plus Noto Sans Devanagari; self-hosted, subset) and line-height fits the script
 
 ## Design tokens
 
-- Use tokens (CSS variables consumed via Tailwind) for color, type scale, spacing, radius, and motion. **No raw hex, px font sizes, or ad-hoc durations in components.**
-- Three token layers (primitive → semantic → component); components use semantic/component tokens only (ADR 0017). Theme = `palette` (calm | raat | kagaz | mandir | utsav, ADR 0024) × mode (system | light | dark); switching swaps token values, never per-component overrides. Values and contrast pairs: `docs/design/brief.md` §8.
+- Use tokens (CSS variables consumed via Tailwind) for color, type scale, weight (`font-hero|heading|strong|label`), spacing, radius, surfaces (`card`/`tile` + `px-card`/`px-tile`), and motion. Tap targets use `min-h-(--tap-min)`, never spacing-based heights (density changes per theme). **No raw hex, px font sizes, or ad-hoc durations in components.**
+- Three token layers (primitive → semantic → component); components use semantic/component tokens only (ADR 0017). Theme = `palette` (calm | raat | kagaz | mandir | utsav | shunya, ADR 0025: a theme sets colour, fonts, weights, radii, density, surfaces, moon and ribbon) × mode (system | light | dark); switching swaps token values, never per-component overrides. Values: `apps/app/src/styles/tokens.css`; contrast pairs: `tokens.test.ts`.
 - Need a value that isn't a token? Ask; don't add one silently.
 
 ## Data and time display

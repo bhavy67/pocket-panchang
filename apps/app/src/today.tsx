@@ -54,7 +54,7 @@ export function Today() {
             to="/settings"
             hash="place"
             aria-label={t("changeCityAria", { city: s.location.name })}
-            className="-ml-2 flex min-h-11 items-center gap-1 self-start rounded-md px-2 text-lg font-bold hover:bg-surface-sunken focus-ring"
+            className="-ml-2 flex min-h-(--tap-min) items-center gap-1 self-start rounded-md px-2 text-lg font-strong hover:bg-surface-sunken focus-ring"
           >
             {s.location.name}
             <Chevron />
@@ -70,7 +70,7 @@ export function Today() {
           </span>
           {/* Before sunrise the panchang day is still yesterday's (sunrise to sunrise, §4.5). */}
           {view && beforeSunrise && (
-            <span className="text-sm font-semibold">
+            <span className="text-sm font-label">
               {t("panchangDayUntil", {
                 weekday: weekdayName(view.day.vara, lang()),
                 time: time(view.day.nextSunrise, tz),
@@ -81,7 +81,7 @@ export function Today() {
         <button
           type="button"
           onClick={() => setSheet(howSheet(s, view?.date ?? date))}
-          className="flex min-h-11 flex-none items-center gap-1.5 rounded-full border border-border bg-surface px-4 text-body font-semibold text-accent hover:bg-accent-subtle focus-ring"
+          className="flex min-h-(--tap-min) flex-none items-center gap-1.5 rounded-full border border-border bg-surface px-4 text-body font-label text-accent hover:bg-accent-subtle focus-ring"
         >
           <HelpIcon />
           {t("help")}
@@ -99,7 +99,10 @@ export function Today() {
             onOpen={setSheet}
           />
           <section aria-labelledby="your-day" className="flex flex-col gap-3">
-            <h2 id="your-day" className="text-title font-extrabold">
+            <h2
+              id="your-day"
+              className="font-display text-title font-heading tracking-display"
+            >
               {t("yourDay")}
             </h2>
             <DayRibbon view={view} tz={tz} now={now} onOpen={setSheet} />
@@ -111,7 +114,7 @@ export function Today() {
             <span className="text-text-muted">{samvatLine(view.day, s)}</span>
             <Link
               to="/how"
-              className="flex min-h-11 items-center font-semibold text-accent focus-ring"
+              className="flex min-h-(--tap-min) items-center font-label text-accent focus-ring"
             >
               {t("howCalculated")}
             </Link>
@@ -122,7 +125,7 @@ export function Today() {
       ) : (
         <div
           aria-hidden="true"
-          className="h-64 animate-pulse rounded-lg bg-surface motion-reduce:animate-none"
+          className="h-64 animate-pulse rounded-card bg-card-bg motion-reduce:animate-none"
         />
       )}
       <Sheet content={sheet} onClose={() => setSheet(null)} />
@@ -189,10 +192,10 @@ function Hero({ view, now, tz }: { view: DayView; now: Instant; tz: string }) {
     >
       <MoonDisc elongation={elongation} />
       <div className="flex min-w-0 grow basis-[12rem] flex-col">
-        <span className="text-[length:var(--text-micro)] font-bold tracking-wider text-text-muted uppercase">
+        <span className="text-[length:var(--text-micro)] font-label tracking-wider text-text-muted uppercase">
           {t("todaysTithi")}
         </span>
-        <h1 className="text-[length:var(--text-hero)] leading-tight font-extrabold">
+        <h1 className="font-display text-[length:var(--text-hero)] leading-tight font-hero tracking-display text-hero-text">
           {primary}
         </h1>
         <span
@@ -273,9 +276,9 @@ function RightNow({
   return (
     <section
       aria-labelledby="right-now"
-      className="flex flex-col gap-4 rounded-lg border border-border bg-surface p-5"
+      className="card flex flex-col gap-4 px-card py-5"
     >
-      <p className="flex items-center gap-2 text-sm font-semibold text-text-muted">
+      <p className="flex items-center gap-2 text-sm font-label text-text-muted">
         <span aria-hidden="true" className="relative flex size-2.5">
           <span className="absolute inline-flex size-full animate-ping rounded-full bg-accent opacity-60 motion-reduce:animate-none" />
           <span className="relative inline-flex size-2.5 rounded-full bg-accent" />
@@ -285,7 +288,7 @@ function RightNow({
       <div className="flex flex-col gap-1">
         <h2
           id="right-now"
-          className="text-[length:var(--text-lead)] leading-tight font-extrabold"
+          className="font-display text-[length:var(--text-lead)] leading-tight font-heading tracking-display"
         >
           {headline}
         </h2>
@@ -297,15 +300,15 @@ function RightNow({
             <button
               type="button"
               onClick={() => onOpen(r.open)}
-              className={`flex min-h-12 w-full flex-wrap items-center justify-between gap-x-3 rounded-md px-3 py-2 text-left focus-ring ${
+              className={`flex min-h-(--tap-min) w-full flex-wrap items-center justify-between gap-x-3 rounded-md px-(--row-pad) py-2 text-left focus-ring ${
                 r.tone === "good"
-                  ? "bg-auspicious-subtle text-auspicious"
+                  ? "bg-[color-mix(in_oklab,var(--auspicious-subtle)_var(--row-fill),transparent)] text-auspicious"
                   : r.tone === "avoid"
-                    ? "bg-inauspicious-subtle text-inauspicious"
-                    : "bg-surface-sunken text-text-muted"
+                    ? "bg-[color-mix(in_oklab,var(--inauspicious-subtle)_var(--row-fill),transparent)] text-inauspicious"
+                    : "bg-[color-mix(in_oklab,var(--surface-sunken)_var(--row-fill),transparent)] text-text-muted"
               }`}
             >
-              <span className="flex items-center gap-2 font-bold">
+              <span className="flex items-center gap-2 font-strong">
                 <QualityIcon
                   tone={
                     r.tone === "good"
@@ -318,7 +321,7 @@ function RightNow({
                 />
                 <span className="text-text">
                   {r.name} ·{" "}
-                  <span className="font-semibold">
+                  <span className="font-label">
                     {t(
                       r.tone === "good"
                         ? "qShortGood"
@@ -329,7 +332,7 @@ function RightNow({
                   </span>
                 </span>
               </span>{" "}
-              <span className="text-sm font-semibold">
+              <span className="text-sm font-label">
                 {t("untilTime", { time: time(r.until, tz) })}
               </span>
             </button>
@@ -361,9 +364,9 @@ function Tile({
   extra?: ReactNode;
 }) {
   return (
-    <div className="flex min-w-0 flex-col gap-0.5 rounded-[var(--radius-tile)] border border-border bg-surface p-4">
+    <div className="tile flex min-w-0 flex-col gap-0.5 px-tile py-4">
       <span className="text-sm text-text-muted">{label}</span>
-      <span className="text-lg leading-snug font-bold">
+      <span className="text-lg leading-snug font-strong">
         {value}
         {extra}
       </span>
@@ -418,7 +421,10 @@ function PanchangTiles({
   ];
   return (
     <section aria-labelledby="panchang" className="flex flex-col gap-3">
-      <h2 id="panchang" className="text-title font-extrabold">
+      <h2
+        id="panchang"
+        className="font-display text-title font-heading tracking-display"
+      >
         {t("panchang")}
       </h2>
       <div className="grid grid-cols-[repeat(auto-fit,minmax(min(9.5rem,100%),1fr))] gap-3">
@@ -448,16 +454,13 @@ function PanchangTiles({
           sub={t("pakshaDay", { n: tithi <= 15 ? tithi : tithi - 15 })}
         />
       </div>
-      <ul className="grid grid-cols-[repeat(auto-fit,minmax(min(8rem,100%),1fr))] gap-px overflow-hidden rounded-[var(--radius-tile)] border border-border bg-border">
+      <ul className="tile grid grid-cols-[repeat(auto-fit,minmax(min(8rem,100%),1fr))] gap-x-3 px-tile py-1">
         {strip.map(([label, value, icon]) => (
-          <li
-            key={label}
-            className="flex items-center gap-2 bg-surface px-3 py-3"
-          >
+          <li key={label} className="flex items-center gap-2 py-2">
             {icon}
             <span className="flex flex-col leading-tight">
               <span className="text-caption text-text-muted">{label}</span>
-              <span className="font-bold">{value}</span>
+              <span className="font-strong">{value}</span>
             </span>
           </li>
         ))}
@@ -539,7 +542,10 @@ function ComingUp({ s, from }: { s: Settings; from: CivilDate }) {
   if (items.length === 0) return null;
   return (
     <section aria-labelledby="coming-up" className="flex flex-col gap-3">
-      <h2 id="coming-up" className="text-title font-extrabold">
+      <h2
+        id="coming-up"
+        className="font-display text-title font-heading tracking-display"
+      >
         {t("comingUp")}
       </h2>
       <ul className="flex flex-col gap-2">
@@ -564,7 +570,7 @@ function FamilyCard({ r, today }: { r: UpcomingRow; today: CivilDate }) {
     <Link
       to="/events/$id"
       params={{ id: r.event.id }}
-      className="flex min-h-18 flex-wrap items-center gap-3 rounded-lg bg-accent-subtle p-4 focus-ring"
+      className="flex min-h-18 flex-wrap items-center gap-3 rounded-card bg-accent-subtle p-4 focus-ring"
     >
       <span
         aria-hidden="true"
@@ -573,7 +579,9 @@ function FamilyCard({ r, today }: { r: UpcomingRow; today: CivilDate }) {
         <FamilyGlyph kind={r.event.kind} />
       </span>
       <span className="flex min-w-0 grow basis-[10rem] flex-col">
-        <span className="text-lg leading-tight font-bold">{r.event.title}</span>
+        <span className="text-lg leading-tight font-strong">
+          {r.event.title}
+        </span>
         <span className="text-sm text-text-muted">
           {lunarLabel(r.event.lunarDate)}
         </span>
@@ -596,11 +604,11 @@ function FestivalCard({
     <Link
       to="/day"
       search={{ date: f.date }}
-      className="flex min-h-18 flex-wrap items-center gap-3 rounded-lg border border-border bg-surface p-4 focus-ring"
+      className="card flex min-h-18 flex-wrap items-center gap-3 px-card py-4 focus-ring"
     >
       <FestivalIcon />
       <span className="flex min-w-0 grow basis-[10rem] flex-col">
-        <span className="text-lg leading-tight font-bold">
+        <span className="text-lg leading-tight font-strong">
           {f.names[lang()]}
           {f.variant && ` (${f.variant.label[lang()]})`}
         </span>
@@ -616,7 +624,7 @@ function FestivalCard({
 }
 
 export const Countdown = ({ n }: { n: number }) => (
-  <span className="flex-none text-right text-sm font-bold">
+  <span className="flex-none text-right text-sm font-strong">
     {n === 0 ? t("inToday") : n === 1 ? t("inTomorrow") : t("daysCount", { n })}
   </span>
 );

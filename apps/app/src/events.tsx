@@ -23,7 +23,7 @@ import { Countdown, FamilyGlyph } from "@/today";
 import { btnOutline, Section } from "@/ui";
 
 export const btnPrimary =
-  "flex min-h-(--tap-min) items-center justify-center rounded-full bg-accent px-5 text-body font-bold text-text-on-accent focus-ring";
+  "flex min-h-(--tap-min) items-center justify-center rounded-full bg-accent px-5 text-body font-strong text-text-on-accent focus-ring";
 
 export function Events() {
   const s = useSettings((st) => st.settings)!;
@@ -40,7 +40,7 @@ export function Events() {
   return (
     <main className="mx-auto flex max-w-180 flex-col gap-6 px-4 pt-4 pb-8">
       <header className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-headline leading-(--leading-heading) font-extrabold">
+        <h1 className="text-headline leading-(--leading-heading) font-display font-heading tracking-display">
           {t("familyDates")}
         </h1>
         <Link to="/events/$id" params={{ id: "new" }} className={btnPrimary}>
@@ -51,10 +51,10 @@ export function Events() {
       {nudge && (
         <div
           role="note"
-          className="flex flex-col gap-3 rounded-lg bg-warning-subtle p-4"
+          className="flex flex-col gap-3 rounded-card bg-warning-subtle p-4"
         >
           <p className="text-body">
-            <strong className="font-bold">{t("nudgeTitle")}</strong>{" "}
+            <strong className="font-strong">{t("nudgeTitle")}</strong>{" "}
             {t("nudgeBody")}
           </p>
           <button
@@ -72,24 +72,27 @@ export function Events() {
       )}
 
       {events?.length === 0 ? (
-        <div className="flex flex-col gap-3 rounded-lg border border-border bg-surface p-5">
-          <p className="text-lg font-bold">{t("noDatesTitle")}</p>
+        <div className="card flex flex-col gap-3 px-card py-5">
+          <p className="text-lg font-strong">{t("noDatesTitle")}</p>
           <p className="text-body text-text-muted">{t("noDatesBody")}</p>
         </div>
       ) : !rows ? (
         <div
           aria-hidden="true"
-          className="h-48 animate-pulse rounded-lg bg-surface motion-reduce:animate-none"
+          className="h-48 animate-pulse rounded-card bg-card-bg motion-reduce:animate-none"
         />
       ) : (
         <>
           {next && <NextCard r={next} rows={rows} today={today} s={s} />}
           {later.length > 0 && (
             <section aria-labelledby="later" className="flex flex-col gap-2">
-              <h2 id="later" className="text-title font-extrabold">
+              <h2
+                id="later"
+                className="text-title font-display font-heading tracking-display"
+              >
                 {t("later")}
               </h2>
-              <ul className="flex flex-col divide-y divide-border rounded-lg border border-border bg-surface">
+              <ul className="card flex flex-col divide-y divide-border">
                 {later.map((r) => (
                   <li key={`${r.event.id}|${r.date}`}>
                     <LaterRow r={r} today={today} s={s} />
@@ -179,17 +182,17 @@ function NextCard({
       <Link
         to="/events/$id"
         params={{ id: e.id }}
-        className="flex flex-col gap-4 rounded-lg bg-accent p-5 text-text-on-accent focus-ring"
+        className="flex flex-col gap-4 rounded-card bg-accent p-5 text-text-on-accent focus-ring"
       >
         <span className="flex flex-wrap items-start justify-between gap-3">
           <span className="flex min-w-0 grow basis-[10rem] flex-col">
-            <span className="text-[length:var(--text-micro)] font-bold tracking-wider uppercase">
+            <span className="text-[length:var(--text-micro)] font-strong tracking-wider uppercase">
               {t("next")}
               {occurrenceLabel(r) && ` · ${occurrenceLabel(r)}`}
             </span>
             <span
               id="next-date"
-              className="text-title leading-tight font-extrabold"
+              className="text-title leading-tight font-display font-heading tracking-display"
             >
               {e.title}
             </span>
@@ -214,7 +217,7 @@ function NextCard({
               className="flex flex-wrap justify-between gap-x-3 py-2"
             >
               <dt className="text-sm">{k}</dt>
-              <dd className="text-sm font-bold">{v}</dd>
+              <dd className="text-sm font-strong">{v}</dd>
             </div>
           ))}
         </dl>
@@ -248,11 +251,11 @@ function LaterRow({
     <Link
       to="/events/$id"
       params={{ id: r.event.id }}
-      className="flex min-h-16 flex-wrap items-center gap-3 px-4 py-3 hover:bg-surface-sunken focus-ring"
+      className="flex min-h-16 flex-wrap items-center gap-3 px-card py-3 hover:bg-surface-sunken focus-ring"
     >
       <span
         aria-hidden="true"
-        className="flex size-10 flex-none items-center justify-center rounded-full bg-accent-subtle font-extrabold text-accent"
+        className="flex size-10 flex-none items-center justify-center rounded-full bg-accent-subtle font-display font-heading tracking-display text-accent"
       >
         {r.event.kind === "shraddh" ? (
           <FamilyGlyph kind="shraddh" />
@@ -261,10 +264,10 @@ function LaterRow({
         )}
       </span>
       <span className="flex min-w-0 grow basis-[10rem] flex-col">
-        <span className="font-bold">
+        <span className="font-strong">
           {r.event.title}
           {label && (
-            <span className="font-semibold text-text-muted"> · {label}</span>
+            <span className="font-label text-text-muted"> · {label}</span>
           )}
         </span>
         <span className="text-sm text-text-muted">
@@ -289,9 +292,12 @@ function Conventions({ s }: { s: Settings }) {
   return (
     <section
       aria-labelledby="keeps"
-      className="flex flex-col gap-2 rounded-lg bg-surface-sunken p-5"
+      className="flex flex-col gap-2 rounded-card bg-surface-sunken p-5"
     >
-      <h2 id="keeps" className="text-lg font-extrabold">
+      <h2
+        id="keeps"
+        className="text-lg font-display font-heading tracking-display"
+      >
         {t("familyKeeps")}
       </h2>
       <p className="text-body">
@@ -304,7 +310,7 @@ function Conventions({ s }: { s: Settings }) {
       <Link
         to="/settings"
         hash="conventions"
-        className="self-start font-bold text-accent focus-ring"
+        className="self-start font-strong text-accent focus-ring"
       >
         {t("change")}
       </Link>

@@ -5,6 +5,8 @@ date: 2026-10-24
 
 # 0024. "Quiet Sky" UI (supersedes the Phase 8 look)
 
+> **Partly superseded by [ADR 0025](0025-theme-system-2.md) (2026-10-26):** palettes, type, weights and surfaces. Screen structure, the moon, the ribbon's meaning and the behaviours below still apply.
+
 Bhavy approved a new visual direction, **Quiet Sky**, for Phase 11.5: minimal and calm, with a live moon and one horizontal "Your day" ribbon instead of the dense glance card and vertical timeline. It replaces the Phase 8 look (`docs/design/screens.md` "Decisions established by the approved Today screen", brief §8.3 palette values and §8.4 typography). The token architecture (ADR 0017) is unchanged: palettes × light/dark are token values only, and contrast pairs are tested.
 
 ## Decisions

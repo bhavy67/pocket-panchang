@@ -10,13 +10,32 @@ const { version } = JSON.parse(
   readFileSync(new URL("./package.json", import.meta.url), "utf8"),
 ) as { version: string };
 
+/** Font files not precached: every theme's except Calm's, and Devanagari (ADR 0025). */
+const ON_DEMAND_FONTS = [
+  "space-grotesk",
+  "fraunces",
+  "noto-serif-gujarati",
+  "marcellus",
+  "hind-vadodara",
+  "baloo-bhai-2",
+  "geist",
+  "noto-sans-devanagari",
+];
+
 export default defineConfig({
-  define: { __APP_VERSION__: JSON.stringify(version) },
+  define: {
+    __APP_VERSION__: JSON.stringify(version),
+    // Theme lab and ?v2 previews (Phase 11.6): dev, or a build that opts in (E2E). A literal, so
+    // production drops the lab route and themes.css entirely.
+    __LAB__: JSON.stringify(
+      process.env.NODE_ENV !== "production" || process.env.VITE_LAB === "1",
+    ),
+  },
   plugins: [
     react(),
     tailwindcss(),
-    // Full offline (§9, Phase 10): precache the app, worker, Gujarati fonts and the city list
-    // (offline onboarding and city changes). "prompt": a new version waits for the user's tap.
+    // Full offline (§9, Phase 10): precache the app, worker, the default theme's fonts and the
+    // city list (offline onboarding and city changes). "prompt": a new version waits for the user's tap.
     VitePWA({
       registerType: "prompt",
       injectRegister: false,
@@ -33,9 +52,10 @@ export default defineConfig({
         scope: "/",
         display: "standalone",
         orientation: "portrait",
-        // Calm palette accent and background (tokens.css); the manifest can't read CSS variables.
-        theme_color: "#0B6E79",
-        background_color: "#F7F6F2",
+        // Calm accent and light background (tokens.css oklch, as sRGB hex); the manifest can't
+        // read CSS variables.
+        theme_color: "#494FCC",
+        background_color: "#F6F7FA",
         categories: ["lifestyle", "utilities"],
         icons: [
           { src: "icons/icon-192.png", sizes: "192x192", type: "image/png" },
@@ -50,10 +70,10 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ["**/*.{js,css,html,woff2,png,svg,json}"],
-        // Devanagari (v2 Hindi) is cached on first use instead; analyzer output never ships.
+        // Only Calm's fonts (the default theme) are precached; the other themes' fonts and
+        // Devanagari (v2 Hindi) are cached on first use (ADR 0025). Analyzer output never ships.
         globIgnores: [
-          "**/noto-sans-devanagari-*",
-          "**/noto-serif-*", // Kagaz palette only: cached on first use
+          `**/{${ON_DEMAND_FONTS.join(",")}}-*`,
           "stats.*",
           "vercel.json",
         ],
@@ -61,7 +81,9 @@ export default defineConfig({
         navigateFallback: "index.html",
         runtimeCaching: [
           {
-            urlPattern: /noto-(sans-devanagari|serif)-.*\.woff2$/,
+            urlPattern: new RegExp(
+              `(${ON_DEMAND_FONTS.join("|")})-.*\\.woff2$`,
+            ),
             handler: "CacheFirst",
             options: { cacheName: "fonts-on-demand" },
           },

@@ -31,10 +31,10 @@ for (const language of ["English", "ગુજરાતી"] as const)
         await page.evaluate(() =>
           Promise.all(
             [
-              "400 11px Manrope",
-              "700 11px Manrope",
-              "400 11px 'Hind Vadodara'",
-              "700 11px 'Hind Vadodara'",
+              "400 11px 'Plus Jakarta Sans'",
+              "600 11px 'Plus Jakarta Sans'",
+              "400 11px 'Anek Gujarati'",
+              "600 11px 'Anek Gujarati'",
             ].map((f) => document.fonts.load(f, "aક")),
           ),
         );

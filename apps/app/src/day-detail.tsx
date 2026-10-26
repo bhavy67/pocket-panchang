@@ -19,7 +19,7 @@ import {
 } from "@/panchang";
 import { useSettings } from "@/settings";
 import { NightChoghadiya, Timeline } from "@/timeline";
-import { btnOutline, card, Section, Sheet, type SheetContent } from "@/ui";
+import { btnOutline, Section, Sheet, type SheetContent } from "@/ui";
 import type { Festival } from "@/worker/api";
 import { EventRow } from "@/event-row";
 import { useOccurrenceRows } from "@/events-data";
@@ -79,10 +79,10 @@ export function DayDetail({
             </Link>
           </span>
         </div>
-        <h1 className="mt-2 text-title leading-(--leading-heading) font-bold">
+        <h1 className="mt-2 text-title leading-(--leading-heading) font-strong">
           {dateLong(date)}
           {isToday && (
-            <span className="ml-2 align-middle text-sm font-semibold text-(--now-marker)">
+            <span className="ml-2 align-middle text-sm font-label text-(--now-marker)">
               {t("today")}
             </span>
           )}
@@ -164,7 +164,7 @@ export function DayDetail({
             <button
               type="button"
               onClick={() => setSheet(howSheet(s, date))}
-              className="min-h-(--tap-min) px-4 text-body font-semibold text-accent underline underline-offset-3 focus-ring"
+              className="min-h-(--tap-min) px-4 text-body font-label text-accent underline underline-offset-3 focus-ring"
             >
               {t("howCalculated")}
             </button>
@@ -175,7 +175,7 @@ export function DayDetail({
       ) : (
         <div
           aria-hidden="true"
-          className={`mx-4 mt-6 h-64 animate-pulse motion-reduce:animate-none ${card}`}
+          className="mx-4 mt-6 h-64 animate-pulse motion-reduce:animate-none card"
         />
       )}
       <Sheet content={sheet} onClose={() => setSheet(null)} />
@@ -197,7 +197,7 @@ function FestivalList({
       {festivals.map((f) => (
         <li
           key={f.id + f.date}
-          className={`flex items-center gap-3 p-4 ${card}`}
+          className="flex items-center gap-3 px-card py-4 card"
         >
           <span
             aria-hidden="true"
@@ -206,11 +206,11 @@ function FestivalList({
             <span className="block size-3.5 rotate-45 bg-festival" />
           </span>
           <span className="flex min-w-0 flex-1 flex-col">
-            <span className="text-caption font-semibold text-festival">
+            <span className="text-caption font-label text-festival">
               {t("festival")}
               {f.unverified && t("notVerified")}
             </span>
-            <span className="text-lg leading-tight font-semibold">
+            <span className="text-lg leading-tight font-label">
               {f.names[lang()]}
               {f.variant && ` (${f.variant.label[lang()]})`}
               {lang() === "en" && (

@@ -11,7 +11,7 @@ import {
   type Instant,
 } from "@panchang/engine";
 import { useQuery } from "@tanstack/react-query";
-import { useId, useState, type ReactNode } from "react";
+import { useId, useState, type CSSProperties, type ReactNode } from "react";
 import { backupErrorKey, parseBackup } from "@/backup";
 import { loadLanguage, t } from "@/i18n";
 import { Link } from "@tanstack/react-router";
@@ -43,7 +43,7 @@ import {
   useSettings,
   type Settings,
 } from "@/settings";
-import { btnOutline, card, InstallCard, Section } from "@/ui";
+import { btnOutline, InstallCard, Section } from "@/ui";
 import { worker } from "@/worker/client";
 
 const radio =
@@ -68,7 +68,7 @@ function Choice<T extends string | number>({
   const name = useId();
   return (
     <fieldset className="flex flex-col gap-2">
-      <legend className="mb-2 text-body font-semibold">{legend}</legend>
+      <legend className="mb-2 text-body font-label">{legend}</legend>
       {/* Text options size to their labels, so one never wraps while a row has room to spare;
           a pair splits the row in half; previews share a grid. */}
       <div
@@ -111,7 +111,17 @@ const PALETTES = [
   ["kagaz", "paletteKagaz"],
   ["mandir", "paletteMandir"],
   ["utsav", "paletteUtsav"],
+  ["shunya", "paletteShunya"],
 ] as const;
+
+const PALETTE_HINTS = {
+  calm: "paletteCalmHint",
+  raat: "paletteRaatHint",
+  kagaz: "paletteKagazHint",
+  mandir: "paletteMandirHint",
+  utsav: "paletteUtsavHint",
+  shunya: "paletteShunyaHint",
+} as const;
 
 /** Thursday's day Choghadiya, for the preview ribbon. */
 const SAMPLE = [
@@ -134,27 +144,38 @@ const sampleStyle = (q: (typeof SAMPLE)[number]) =>
         : "bg-surface-sunken";
 
 /**
- * A one-line live preview (moon, name, ribbon) in the palette's own tokens and the current mode
- * (data attributes scope the tokens, ADR 0017).
+ * A live preview (moon, name, who it suits, ribbon) in the palette's own colours, shapes and
+ * current mode (data attributes scope the tokens, ADR 0017). Text stays in the current theme's
+ * fonts so opening Settings never downloads another theme's fonts (ADR 0025).
  */
 function PalettePreview({
   palette,
   label,
 }: {
-  palette: string;
+  palette: keyof typeof PALETTE_HINTS;
   label: string;
 }) {
-  const mode = document.documentElement.dataset.mode ?? "light";
+  const root = getComputedStyle(document.documentElement);
+  const font = (v: string) => root.getPropertyValue(v).trim();
   return (
     <span
       data-palette={palette}
-      data-mode={mode}
-      className="flex min-w-0 flex-1 items-center gap-2 rounded-md border border-border bg-bg px-2 py-1.5 text-text"
-      style={{ fontFamily: "var(--font-ui)" }}
+      data-mode={document.documentElement.dataset.mode ?? "light"}
+      className="flex min-w-0 flex-1 items-center gap-3 rounded-md border border-border bg-bg px-3 py-2 text-text"
+      style={
+        {
+          "--font-ui": font("--font-ui"),
+          "--font-gu": font("--font-gu"),
+          "--font-display": font("--font-ui"),
+        } as CSSProperties
+      }
     >
-      <MoonDisc elongation={130} size="1.5rem" decorative />
-      <span className="min-w-0 flex-1 truncate text-body font-bold">
-        {label}
+      <MoonDisc elongation={130} size="1.75rem" decorative />
+      <span className="flex min-w-0 flex-1 flex-col leading-tight">
+        <span className="text-body font-strong">{label}</span>
+        <span className="text-caption text-text-muted">
+          {t(PALETTE_HINTS[palette])}
+        </span>
       </span>
       <span aria-hidden="true" className="flex h-2.5 w-10 flex-none gap-px">
         {SAMPLE.map((q, i) => (
@@ -178,12 +199,12 @@ export function SettingsScreen() {
 
   return (
     <main className="mx-auto max-w-180">
-      <h1 className="px-4 pt-4 text-headline leading-(--leading-heading) font-bold">
+      <h1 className="px-4 pt-4 text-headline leading-(--leading-heading) font-strong">
         {t("settings")}
       </h1>
 
       <Section id="place" title={t("place")}>
-        <div className={`flex flex-col gap-5 p-5 ${card}`}>
+        <div className="flex flex-col gap-5 px-card py-5 card">
           <div className="flex flex-col gap-2">
             <p className="text-body">
               {t("showingFor", { city: s.location.name })}
@@ -204,7 +225,7 @@ export function SettingsScreen() {
       </Section>
 
       <Section title={t("display")}>
-        <div className={`flex flex-col gap-6 p-5 ${card}`}>
+        <div className="flex flex-col gap-6 px-card py-5 card">
           <Choice
             legend={t("yearStyle")}
             value={s.samvat}
@@ -276,7 +297,7 @@ export function SettingsScreen() {
       </Section>
 
       <Section title={t("reminders")}>
-        <div className={`flex flex-col gap-3 p-5 ${card}`}>
+        <div className="flex flex-col gap-3 px-card py-5 card">
           <ReminderTime s={s} />
           <Link to="/settings/notifications" className={btnOutline}>
             {t("healthLink")}
@@ -285,7 +306,7 @@ export function SettingsScreen() {
       </Section>
 
       <Section title={t("backup")} sub={t("backupSub")}>
-        <div id="backup" className={`flex flex-col gap-3 p-5 ${card}`}>
+        <div id="backup" className="flex flex-col gap-3 px-card py-5 card">
           <p className="text-body">
             {meta?.lastBackupAt
               ? t("lastBackup", {
@@ -332,8 +353,8 @@ export function SettingsScreen() {
       </div>
 
       <Section title={t("about")}>
-        <div className={`flex flex-col gap-3 p-5 ${card}`}>
-          <p className="text-lg font-semibold">
+        <div className="flex flex-col gap-3 px-card py-5 card">
+          <p className="text-lg font-label">
             {t("appName")}{" "}
             <span className="text-sm font-normal text-text-muted">
               {t("appVersion", { v: __APP_VERSION__ })}
@@ -354,7 +375,7 @@ export function SettingsScreen() {
             {t("reportMismatch")}
           </a>
           <p className="text-body">
-            <strong className="font-semibold">{t("privateTitle")}</strong>{" "}
+            <strong className="font-label">{t("privateTitle")}</strong>{" "}
             {t("privateBody")}
           </p>
           <p className="text-sm text-text-muted">{t("cityAttribution")}</p>
@@ -412,7 +433,7 @@ function ReminderTime({ s }: { s: Settings }) {
   const id = useId();
   return (
     <div className="flex flex-col gap-1">
-      <label htmlFor={id} className="text-body font-semibold">
+      <label htmlFor={id} className="text-body font-label">
         {t("reminderTime")}
       </label>
       <input
@@ -476,8 +497,8 @@ function Conventions({
     );
   };
   return (
-    <details className={`p-4 ${card}`}>
-      <summary className="flex min-h-(--tap-min) cursor-pointer items-center text-body font-semibold focus-ring">
+    <details className="px-card py-4 card">
+      <summary className="flex min-h-(--tap-min) cursor-pointer items-center text-body font-label focus-ring">
         {t(KIND_LABEL[kind])}
       </summary>
       <div className="mt-3 flex flex-col gap-5">

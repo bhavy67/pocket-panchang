@@ -103,11 +103,11 @@ test("Gujarati: page language, Gujarati digits and time words", async ({
   await expect(
     page.getByRole("button", { name: /^અમૃત · સારો/ }),
   ).toBeVisible();
-  // The self-hosted Gujarati font is the one in use.
+  // The default theme's self-hosted Gujarati font (Calm: Anek Gujarati) is the one in use.
   const loaded = await page.evaluate(async () => {
     await document.fonts.ready;
     return [...document.fonts].some(
-      (f) => f.family.includes("Hind Vadodara") && f.status === "loaded",
+      (f) => f.family.includes("Anek Gujarati") && f.status === "loaded",
     );
   });
   expect(loaded).toBe(true);

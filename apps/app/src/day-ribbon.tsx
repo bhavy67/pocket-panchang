@@ -67,7 +67,7 @@ export function DayRibbon({
             <span
               aria-hidden="true"
               style={{ left: pct(nowAt) }}
-              className="absolute top-0 -translate-x-1/2 rounded-full bg-accent px-2 py-0.5 text-[length:var(--text-micro)] font-bold whitespace-nowrap text-text-on-accent"
+              className="absolute top-0 -translate-x-1/2 rounded-full bg-accent px-2 py-0.5 text-[length:var(--text-micro)] font-strong whitespace-nowrap text-text-on-accent"
             >
               {t("now")} {timeShort(now, tz)}
             </span>
@@ -79,7 +79,7 @@ export function DayRibbon({
           </>
         )}
         <ul
-          className="@container flex gap-0.5 text-[length:var(--text-micro)]"
+          className="@container flex gap-(--ribbon-gap) text-[length:var(--text-micro)]"
           aria-label={t("yourDay")}
         >
           {m.day.map((c, i) => (
@@ -87,12 +87,12 @@ export function DayRibbon({
               <button
                 type="button"
                 onClick={() => onOpen(chogSheet(c, m, tz))}
-                className={`flex h-11 w-full items-center justify-center px-0.5 font-bold focus-ring ${segmentStyle(c)} ${
+                className={`flex h-(--ribbon-h) w-full items-center justify-center px-0.5 font-strong focus-ring ${segmentStyle(c)} ${
                   i === 0
-                    ? "rounded-l-full"
+                    ? "rounded-l-(--ribbon-end-radius) rounded-r-(--ribbon-radius)"
                     : i === 7
-                      ? "rounded-r-full"
-                      : "rounded-sm"
+                      ? "rounded-l-(--ribbon-radius) rounded-r-(--ribbon-end-radius)"
+                      : "rounded-(--ribbon-radius)"
                 }`}
               >
                 <span
@@ -113,7 +113,7 @@ export function DayRibbon({
         </ul>
         <div
           aria-hidden="true"
-          className="relative mt-1.5 h-2.5 rounded-full bg-surface-sunken"
+          className="relative mt-1.5 h-(--ribbon-lane-h) rounded-full bg-surface-sunken"
         >
           {avoid.map((a) => (
             <span
@@ -132,13 +132,18 @@ export function DayRibbon({
 
       <div className="flex justify-between text-sm text-text-muted">
         <span>
-          {t("sunrise")} {time(sunrise, tz)}
+          {t("sunrise")}{" "}
+          <span className="whitespace-nowrap">{time(sunrise, tz)}</span>
         </span>
         <span>
-          {t("noon")} {time(((sunrise + sunset) / 2) as Instant, tz)}
+          {t("noon")}{" "}
+          <span className="whitespace-nowrap">
+            {time(((sunrise + sunset) / 2) as Instant, tz)}
+          </span>
         </span>
         <span>
-          {t("sunset")} {time(sunset, tz)}
+          {t("sunset")}{" "}
+          <span className="whitespace-nowrap">{time(sunset, tz)}</span>
         </span>
       </div>
 
@@ -151,14 +156,14 @@ export function DayRibbon({
             <button
               type="button"
               onClick={() => onOpen(avoidSheet(a, view, tz))}
-              className="flex min-h-11 w-full items-center gap-2 rounded-md px-2 text-left hover:bg-surface-sunken focus-ring"
+              className="flex min-h-(--tap-min) w-full items-center gap-2 rounded-md px-2 text-left hover:bg-surface-sunken focus-ring"
             >
               <span
                 aria-hidden="true"
                 className={`block h-2.5 w-5 flex-none rounded-full ${laneStyle(a)}`}
               />
               <span className="flex min-w-0 flex-col leading-tight">
-                <span className="text-sm font-semibold">{a.name}</span>
+                <span className="text-sm font-label">{a.name}</span>
                 <span className="text-caption text-text-muted">
                   {range(a.start, a.end, tz)}
                 </span>
@@ -172,7 +177,7 @@ export function DayRibbon({
         to="/day"
         search={{ date: view.date }}
         hash="hours"
-        className="self-start text-body font-semibold text-accent underline-offset-3 hover:underline focus-ring"
+        className="self-start text-body font-label text-accent underline-offset-3 hover:underline focus-ring"
       >
         {t("seeAllPeriods")}
       </Link>

@@ -12,7 +12,7 @@ A calm, private, offline Hindu panchang that's Gujarati-first and diaspora-aware
 - **Family dates by tithi:** saved as lunar dates (e.g. Kartak Vad 5), recomputed every year with the family's conventions (printed-calendar day or aparahna for shraddh, vriddhi/kshaya tithis, adhik months, Pitru Paksha), for the family's city even when you live abroad. Enter by tithi or from a Gregorian date with a confirm step.
 - **Reminders:** exact Android notifications at your chosen time, never later than that time in the family's city; `.ics` calendar export on the web.
 - **Private and offline:** everything is computed on the device; PWA and Android app; JSON backup/restore.
-- **Gujarati and English** throughout; large text; light/dark in five palettes; WCAG 2.2 AA checked in CI.
+- **Gujarati and English** throughout; large text; light/dark in six themes; WCAG 2.2 AA checked in CI.
 
 Festivals are computed but **hidden in production** until each rule is checked against printed calendars ([festival gate](docs/release/festival-gate.md)).
 
@@ -82,7 +82,7 @@ pnpm --filter @panchang/app android:debug   # debug APK
 
 Release: [web](docs/release/web.md) · [Android AAB](docs/release/android.md) · [Play listing kit](docs/release/play-store.md).
 
-City data: [GeoNames](https://www.geonames.org), CC-BY 4.0. Astronomy: [astronomy-engine](https://github.com/cosinekitty/astronomy) (MIT). Fonts: Manrope, Hind Vadodara, Noto Serif / Serif Gujarati / Sans Devanagari (OFL).
+City data: [GeoNames](https://www.geonames.org), CC-BY 4.0. Astronomy: [astronomy-engine](https://github.com/cosinekitty/astronomy) (MIT). Fonts: Plus Jakarta Sans, Anek Gujarati, Space Grotesk, Fraunces, Noto Serif Gujarati, Marcellus, Hind Vadodara, Baloo Bhai 2, Geist, Noto Sans Devanagari (OFL).
 
 ## License
 

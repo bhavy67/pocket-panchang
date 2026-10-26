@@ -134,6 +134,19 @@ export const routeTree = rootRoute.addChildren([
   onboardingRoute,
   howRoute,
   privacyRoute,
+  // Theme lab (Phase 11.6, ADR 0025): created inside the __LAB__ branch so production drops it.
+  ...(__LAB__
+    ? [
+        createRoute({
+          getParentRoute: () => rootRoute,
+          path: "/lab/themes",
+          component: lazyRouteComponent(
+            () => import("@/lab-themes"),
+            "ThemeLab",
+          ),
+        }),
+      ]
+    : []),
 ]);
 
 export const createAppRouter = (history?: RouterHistory) =>

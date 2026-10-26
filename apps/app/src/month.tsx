@@ -24,7 +24,6 @@ import {
 import { firstDay, yearMonthOf, type YearMonth } from "@/lib/year-month";
 import { festivalsQuery, monthQuery } from "@/queries";
 import { useSettings } from "@/settings";
-import { card } from "@/ui";
 import { SHOW_UNVERIFIED } from "@/flags";
 import type { Festival } from "@/worker/api";
 
@@ -81,7 +80,7 @@ export function Month({ month, date }: { month: YearMonth; date?: CivilDate }) {
       <div className="mx-auto w-full max-w-180 px-[min(1rem,16px)] pt-4">
         <header className="flex flex-wrap items-center justify-between gap-2">
           <div className="flex min-w-[min(12rem,100%)] flex-1 flex-col">
-            <h1 className="text-headline leading-(--leading-heading) font-extrabold">
+            <h1 className="text-headline leading-(--leading-heading) font-display font-heading tracking-display">
               {monthTitle(firstDay(month))}
             </h1>
             {days && <LunarSpan days={days} />}
@@ -120,7 +119,7 @@ export function Month({ month, date }: { month: YearMonth; date?: CivilDate }) {
         >
           <div
             aria-hidden="true"
-            className="grid grid-cols-7 pb-1 text-center text-[length:min(var(--text-caption),17px)] font-semibold text-text-muted"
+            className="grid grid-cols-7 pb-1 text-center text-[length:min(var(--text-caption),17px)] font-label text-text-muted"
           >
             {weekdayInitials().map((w) => (
               <span key={w}>{w}</span>
@@ -143,7 +142,7 @@ export function Month({ month, date }: { month: YearMonth; date?: CivilDate }) {
           ) : (
             <div
               aria-hidden="true"
-              className={`h-96 animate-pulse motion-reduce:animate-none ${card}`}
+              className="h-96 animate-pulse motion-reduce:animate-none card"
             />
           )}
         </div>
@@ -269,7 +268,7 @@ function Grid({
                 key={f.id}
                 aria-hidden="true"
                 style={{ gridColumn: `${from + 1} / ${to + 2}` }}
-                className="flex min-h-6 items-center justify-between gap-1 rounded-sm bg-festival-subtle px-1.5 text-[length:min(var(--text-caption),18px)] font-semibold text-festival"
+                className="flex min-h-6 items-center justify-between gap-1 rounded-sm bg-festival-subtle px-1.5 text-[length:min(var(--text-caption),18px)] font-label text-festival"
               >
                 <span className="[overflow-wrap:anywhere]">
                   {dates[from] === f.date
@@ -337,7 +336,7 @@ function Cell({
     <Link
       {...link}
       aria-current={today ? "date" : undefined}
-      className={`flex min-h-[4.125rem] min-w-0 flex-col items-start gap-0.5 rounded-[var(--radius-cell)] px-[min(0.25rem,4px)] py-[min(0.375rem,6px)] text-left focus-ring ${
+      className={`flex min-h-[4.125rem] min-w-0 flex-col items-start gap-0.5 rounded-cell px-[min(0.25rem,4px)] py-[min(0.375rem,6px)] text-left focus-ring ${
         today ? "border-2 border-accent" : "border border-transparent"
       } ${selected ? "bg-accent-subtle" : festive ? "bg-festival-subtle" : "bg-surface hover:bg-surface-sunken"}`}
     >
@@ -345,7 +344,7 @@ function Cell({
         aria-hidden="true"
         className="flex w-full items-center justify-between gap-0.5"
       >
-        <span className="text-[length:min(var(--text-cell-date),22px)] leading-none font-extrabold">
+        <span className="text-[length:min(var(--text-cell-date),22px)] leading-none font-display font-heading tracking-display">
           {dayNumber(c.date)}
         </span>
         {family.length > 0 && (
@@ -366,7 +365,7 @@ function Cell({
       )}
       <span
         aria-hidden="true"
-        className="flex flex-wrap items-center gap-1 text-[length:min(var(--text-tiny),11px)] leading-tight font-bold"
+        className="flex flex-wrap items-center gap-1 text-[length:min(var(--text-tiny),11px)] leading-tight font-strong"
       >
         {twoDay && <span className="text-text">{t("twoDayMark")}</span>}
         {skipped.length > 0 && (
@@ -382,7 +381,7 @@ function Cell({
           data-cell-label
           // Never split a name: a word a hair too wide (font rendering varies by OS) spills into
           // the cell padding instead; names with spaces still wrap between words.
-          className="max-w-full text-[length:min(var(--text-tiny),10.5px)] leading-tight font-bold tracking-tight text-festival [overflow-wrap:normal]"
+          className="max-w-full text-[length:min(var(--text-tiny),10.5px)] leading-tight font-strong tracking-tight text-festival [overflow-wrap:normal]"
         >
           {festivalShortName(f.id, lang()) ?? f.names[lang()]}
           {/* The dev-only marker may wrap on its own rather than break the name. */}
@@ -444,11 +443,11 @@ function Legend({ hasFestivals }: { hasFestivals: boolean }) {
         {t("keyFamily")}
       </li>
       <li className={item}>
-        <span className="font-bold">{t("twoDayMark")}</span>
+        <span className="font-strong">{t("twoDayMark")}</span>
         {t("keyTwoDay")}
       </li>
       <li className={item}>
-        <span className="rounded-sm border border-dashed border-border-strong px-0.5 text-caption font-bold">
+        <span className="rounded-sm border border-dashed border-border-strong px-0.5 text-caption font-strong">
           {t("skipMark")}
         </span>
         {t("keySkipped")}
@@ -490,20 +489,23 @@ function ThisMonth({
   ].sort((x, y) => x.date.localeCompare(y.date));
   return (
     <section aria-labelledby="this-month" className="mt-8 flex flex-col gap-3">
-      <h2 id="this-month" className="text-title font-extrabold">
+      <h2
+        id="this-month"
+        className="text-title font-display font-heading tracking-display"
+      >
         {t("thisMonth")}
       </h2>
       {items.length === 0 ? (
         <p className="text-body text-text-muted">{t("noFestivalsMonth")}</p>
       ) : (
-        <ul className="flex flex-col divide-y divide-border rounded-lg border border-border bg-surface">
+        <ul className="card flex flex-col divide-y divide-border">
           {items.map((it) => (
-            <li key={it.key} className="flex items-center gap-3 px-4 py-3">
+            <li key={it.key} className="flex items-center gap-3 px-card py-3">
               <span
                 aria-hidden="true"
                 className={`block size-2.5 flex-none rounded-full ${it.dot}`}
               />
-              <span className="flex-1 font-semibold">{it.name}</span>
+              <span className="flex-1 font-label">{it.name}</span>
               <span className="text-sm text-text-muted">
                 {dateShort(it.date)}
               </span>
