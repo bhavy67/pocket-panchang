@@ -380,7 +380,9 @@ function Cell({
           key={f.id}
           aria-hidden="true"
           data-cell-label
-          className="max-w-full text-[length:min(var(--text-tiny),10.5px)] leading-tight font-bold text-festival"
+          // Never split a name: a word a hair too wide (font rendering varies by OS) spills into
+          // the cell padding instead; names with spaces still wrap between words.
+          className="max-w-full text-[length:min(var(--text-tiny),10.5px)] leading-tight font-bold tracking-tight text-festival [overflow-wrap:normal]"
         >
           {festivalShortName(f.id, lang()) ?? f.names[lang()]}
           {/* The dev-only marker may wrap on its own rather than break the name. */}

@@ -266,16 +266,14 @@
 | [ ] | `yearShaka` | Shaka Samvat | શક સંવત |
 | [ ] | `language` | Language | ભાષા |
 | [ ] | `textSize` | Text size | અક્ષરનું કદ |
+| [ ] | `sizeSmaller` | Smaller | નાનું |
 | [ ] | `sizeNormal` | Normal | સામાન્ય |
 | [ ] | `sizeLarge` | Large | મોટું |
-| [ ] | `sizeLarger` | Larger | વધુ મોટું |
-| [ ] | `sizeLargest` | Largest | સૌથી મોટું |
 | [ ] | `colours` | Colours | રંગ |
 | [ ] | `paletteCalm` | Calm | શાંત |
 | [ ] | `paletteMandir` | Mandir | મંદિર |
 | [ ] | `paletteRaat` | Raat | રાત |
 | [ ] | `lightOrDark` | Light or dark | આછું કે ઘાટું |
-| [ ] | `modeSystem` | Same as phone | ફોન મુજબ |
 | [ ] | `modeLight` | Light | આછું |
 | [ ] | `modeDark` | Dark | ઘાટું |
 | [ ] | `familyConventions` | Family conventions | પરિવારના રિવાજ |
@@ -439,7 +437,6 @@
 | [ ] | `familyKeeps` | How your family keeps dates | તમારો પરિવાર તારીખો કેવી રીતે પાળે છે |
 | [ ] | `familyKeepsSummary` | Varsi: {varsi}. Birthdays: {birthday}. When a tithi spans two days: {vriddhi}. | વરસી: {varsi}. જન્મદિવસ: {birthday}. તિથિ બે દિવસ હોય ત્યારે: {vriddhi}. |
 | [ ] | `change` | Change | બદલો |
-| [ ] | `previewTithi` | Aaso Sud 11 | આસો સુદ ૧૧ |
 | [ ] | `paletteKagaz` | Kagaz | કાગળ |
 | [ ] | `paletteUtsav` | Utsav | ઉત્સવ |
 

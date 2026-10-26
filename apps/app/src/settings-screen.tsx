@@ -55,28 +55,37 @@ function Choice<T extends string | number>({
   options,
   onChange,
   render,
-  min = "9rem",
+  min = "11rem",
 }: {
   legend: string;
   value: T;
   options: readonly (readonly [T, string])[];
   onChange: (v: T) => void;
   render?: (v: T, label: string) => ReactNode;
-  /** Narrowest column; long labels get one option per row. */
+  /** Narrowest preview column (only with `render`). */
   min?: string;
 }) {
   const name = useId();
   return (
     <fieldset className="flex flex-col gap-2">
       <legend className="mb-2 text-body font-semibold">{legend}</legend>
+      {/* Text options size to their labels, so one never wraps while a row has room to spare;
+          a pair splits the row in half; previews share a grid. */}
       <div
-        className="grid gap-2"
-        style={{
-          gridTemplateColumns: `repeat(auto-fit, minmax(min(${min}, 100%), 1fr))`,
-        }}
+        className={render ? "grid gap-2" : "flex flex-wrap gap-2"}
+        style={
+          render
+            ? {
+                gridTemplateColumns: `repeat(auto-fit, minmax(min(${min}, 100%), 1fr))`,
+              }
+            : undefined
+        }
       >
         {options.map(([v, label]) => (
-          <label key={v} className={radio}>
+          <label
+            key={v}
+            className={`${radio} ${render ? "" : options.length === 2 ? "flex-1 basis-0" : "grow"}`}
+          >
             <input
               type="radio"
               name={name}
@@ -125,7 +134,7 @@ const sampleStyle = (q: (typeof SAMPLE)[number]) =>
         : "bg-surface-sunken";
 
 /**
- * A live preview of the hero and ribbon in the palette's own tokens and the current mode
+ * A one-line live preview (moon, name, ribbon) in the palette's own tokens and the current mode
  * (data attributes scope the tokens, ADR 0017).
  */
 function PalettePreview({
@@ -140,19 +149,14 @@ function PalettePreview({
     <span
       data-palette={palette}
       data-mode={mode}
-      className="flex flex-1 flex-col gap-2 rounded-md border border-border bg-bg p-3 text-text"
+      className="flex min-w-0 flex-1 items-center gap-2 rounded-md border border-border bg-bg px-2 py-1.5 text-text"
       style={{ fontFamily: "var(--font-ui)" }}
     >
-      <span className="flex items-center gap-2">
-        <MoonDisc elongation={130} size="2.25rem" decorative />
-        <span className="flex min-w-0 flex-col leading-tight">
-          <span className="text-body font-extrabold">{label}</span>
-          <span className="text-caption text-text-muted">
-            {t("previewTithi")}
-          </span>
-        </span>
+      <MoonDisc elongation={130} size="1.5rem" decorative />
+      <span className="min-w-0 flex-1 truncate text-body font-bold">
+        {label}
       </span>
-      <span aria-hidden="true" className="flex h-3 gap-px">
+      <span aria-hidden="true" className="flex h-2.5 w-10 flex-none gap-px">
         {SAMPLE.map((q, i) => (
           <span
             key={i}
@@ -160,10 +164,6 @@ function PalettePreview({
           />
         ))}
       </span>
-      <span
-        aria-hidden="true"
-        className="block h-1.5 w-1/3 rounded-full bg-accent"
-      />
     </span>
   );
 }
@@ -207,7 +207,6 @@ export function SettingsScreen() {
         <div className={`flex flex-col gap-6 p-5 ${card}`}>
           <Choice
             legend={t("yearStyle")}
-            min="100%"
             value={s.samvat}
             options={[
               ["vikram-kartikadi", t("yearKartikadi")],
@@ -231,10 +230,9 @@ export function SettingsScreen() {
             legend={t("textSize")}
             value={s.textScale}
             options={[
+              [0.875, t("sizeSmaller")],
               [1, t("sizeNormal")],
               [1.25, t("sizeLarge")],
-              [1.5, t("sizeLarger")],
-              [2, t("sizeLargest")],
             ]}
             onChange={(textScale) => set({ textScale })}
           />
@@ -242,15 +240,21 @@ export function SettingsScreen() {
             legend={t("colours")}
             value={s.palette}
             options={PALETTES.map(([v, k]) => [v, t(k)] as const)}
+            min="14rem"
             onChange={(palette) => set({ palette })}
-            min="11rem"
             render={(v, label) => <PalettePreview palette={v} label={label} />}
           />
           <Choice
             legend={t("lightOrDark")}
-            value={s.theme}
+            // "system" (the default) follows the phone until a mode is picked; show what it resolves to.
+            value={
+              s.theme === "system"
+                ? document.documentElement.dataset.mode === "dark"
+                  ? "dark"
+                  : "light"
+                : s.theme
+            }
             options={[
-              ["system", t("modeSystem")],
               ["light", t("modeLight")],
               ["dark", t("modeDark")],
             ]}

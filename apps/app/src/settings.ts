@@ -166,7 +166,8 @@ export function parseSettings(v: unknown): Settings | ParseError {
     language,
     palette,
     theme,
-    textScale,
+    // Larger/Largest (1.5, 2) were removed: older saves and backups fall back to Large.
+    textScale: Math.min(textScale, 1.25),
     householdPolicy: policy,
     observanceLocation,
     reminderTime,
