@@ -159,7 +159,9 @@ it("defines a theme × mode block for every Settings palette, and no others", ()
   const themes = [
     ...new Set(
       [
-        ...css.matchAll(/\[data-palette="([a-z]+)"\]\[data-mode="(?:light|dark)"\]\s*\{/g),
+        ...css.matchAll(
+          /\[data-palette="([a-z]+)"\]\[data-mode="(?:light|dark)"\]\s*\{/g,
+        ),
       ].map((m) => m[1]),
     ),
   ];

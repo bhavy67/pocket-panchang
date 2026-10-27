@@ -102,7 +102,13 @@ export function Month({ month, date }: { month: YearMonth; date?: CivilDate }) {
   const onPointerDown = (e: ReactPointerEvent<HTMLDivElement>) => {
     e.currentTarget.setPointerCapture(e.pointerId);
     const now = performance.now();
-    drag.current = { x: e.clientX, t: now, lastX: e.clientX, lastT: now, prefetched: false };
+    drag.current = {
+      x: e.clientX,
+      t: now,
+      lastX: e.clientX,
+      lastT: now,
+      prefetched: false,
+    };
     if (gridRef.current) {
       gridRef.current.style.transition = "none";
       // Only while actually dragging: a GPU layer left promoted all the time (as this and the

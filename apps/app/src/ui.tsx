@@ -136,9 +136,12 @@ export function Sheet({
   // Swipe-to-dismiss, following the finger (transform only); a far-enough or fast-enough
   // downward drag closes the sheet, otherwise it springs back.
   const contentRef = useRef<HTMLDivElement>(null);
-  const drag = useRef<{ y: number; t: number; lastY: number; lastT: number } | null>(
-    null,
-  );
+  const drag = useRef<{
+    y: number;
+    t: number;
+    lastY: number;
+    lastT: number;
+  } | null>(null);
   const onPointerDown = (e: ReactPointerEvent<HTMLDivElement>) => {
     e.currentTarget.setPointerCapture(e.pointerId);
     const now = performance.now();

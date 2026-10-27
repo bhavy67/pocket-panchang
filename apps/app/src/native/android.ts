@@ -141,11 +141,14 @@ export async function sendTestReminder() {
 // env(safe-area-inset-top) padding so content itself still clears the status bar.
 export async function syncStatusBar(mode: "light" | "dark") {
   await StatusBar.setOverlaysWebView({ overlay: true });
-  await StatusBar.setStyle({ style: mode === "dark" ? Style.Dark : Style.Light });
+  await StatusBar.setStyle({
+    style: mode === "dark" ? Style.Dark : Style.Light,
+  });
 }
 
 // ---- Haptics (Phase 11.7): toggles/selections get a light tap, swipes a slightly firmer one. ----
-export const hapticSelect = () => void Haptics.selectionChanged().catch(() => undefined);
+export const hapticSelect = () =>
+  void Haptics.selectionChanged().catch(() => undefined);
 export const hapticTap = () =>
   void Haptics.impact({ style: ImpactStyle.Light }).catch(() => undefined);
 export const hapticSwipe = () =>
