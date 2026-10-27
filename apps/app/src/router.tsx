@@ -150,7 +150,15 @@ export const routeTree = rootRoute.addChildren([
 ]);
 
 export const createAppRouter = (history?: RouterHistory) =>
-  createRouter({ routeTree, ...(history && { history }) });
+  createRouter({
+    routeTree,
+    // defaultViewTransition was tried for route nav (Phase 11.7) but dropped: screens differ
+    // enough in height (Today vs. the long Settings page) that the browser's root crossfade
+    // shows both old and new content at once, ghosting — see src/lib/fade.ts.
+    // Back/forward restores where you were on Month/Settings instead of snapping to the top.
+    scrollRestoration: true,
+    ...(history && { history }),
+  });
 
 export const router = createAppRouter();
 

@@ -16,6 +16,7 @@ import {
   usePwa,
 } from "@/pwa";
 import { hydrateSettings, persistSettings, useSettings } from "@/settings";
+import { withFade } from "@/lib/fade";
 import "@/styles/app.css";
 
 // Android: the WebView's own text zoom is off (MainActivity), so the system font size is
@@ -30,7 +31,7 @@ const osFontScale = isNative()
 // Theme = palette × mode (ADR 0017), both from settings; "system" follows the OS.
 const html = document.documentElement;
 const prefersDark = window.matchMedia("(prefers-color-scheme: dark)");
-// Lab only (/lab/themes): ?palette=mandir&mode=dark previews a theme without touching saved
+// Lab only (/lab/themes): ?palette=raat&mode=dark previews a theme without touching saved
 // settings; ?lang=gu and ?scale=2 preview language and text size.
 const preview = __LAB__
   ? new URLSearchParams(location.search)
@@ -52,9 +53,20 @@ const applyTheme = () => {
       "content",
       getComputedStyle(html).getPropertyValue("--surface").trim(),
     );
+  if (isNative())
+    void import("@/native/android").then(({ syncStatusBar }) =>
+      syncStatusBar(html.dataset.mode === "dark" ? "dark" : "light"),
+    );
 };
-prefersDark.addEventListener("change", applyTheme);
-useSettings.subscribe(applyTheme);
+prefersDark.addEventListener("change", () => withFade(applyTheme));
+// Every palette shares one font/radii/shadow system (2026-10-27), so a palette/mode change is
+// only ever a recolour — no font to preload, just the fade so it isn't a hard jump.
+useSettings.subscribe(({ settings: s }, { settings: prev }) => {
+  if (!s) return;
+  if (prev && (s.palette !== prev.palette || s.theme !== prev.theme))
+    withFade(applyTheme);
+  else applyTheme();
+});
 
 // Cold start (§7): settings and today's cached month from IndexedDB before the first render.
 const settings = await hydrateSettings().catch((e: unknown) => {
@@ -83,6 +95,21 @@ createRoot(rootElement).render(
       <RouterProvider router={router} />
     </QueryClientProvider>
   </StrictMode>,
+);
+
+// The boot splash (index.html) fades out once Today has actually painted, not just mounted:
+// two rAFs guarantee a committed frame has shown before it starts hiding.
+requestAnimationFrame(() =>
+  requestAnimationFrame(() => {
+    const splash = document.getElementById("boot-splash");
+    if (!splash) return;
+    // Belt and braces: transitionend never fires under prefers-reduced-motion (no transition).
+    splash.addEventListener("transitionend", () => splash.remove(), {
+      once: true,
+    });
+    setTimeout(() => splash.remove(), 250);
+    splash.classList.add("hide");
+  }),
 );
 
 if (isNative()) {

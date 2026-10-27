@@ -1,4 +1,4 @@
-// Accessibility audit (Phase 10): axe (WCAG 2.2 AA rules) on every route, in all six
+// Accessibility audit (Phase 10): axe (WCAG 2.2 AA rules) on every route, in all four
 // palettes × light/dark (English) and in Gujarati; plus keyboard checks.
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
@@ -80,7 +80,7 @@ async function audit(page: Page, label: string) {
   }
 }
 
-for (const palette of ["calm", "raat", "kagaz", "mandir", "utsav", "shunya"])
+for (const palette of ["calm", "raat", "utsav", "shunya"])
   for (const scheme of ["light", "dark"] as const)
     test(`axe: ${palette} ${scheme}`, async ({ page }) => {
       await page.emulateMedia({ colorScheme: scheme });

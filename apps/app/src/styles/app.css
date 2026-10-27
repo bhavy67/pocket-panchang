@@ -117,6 +117,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   :root {
+    --dur-fast: 0ms;
     --dur-base: 0ms;
     --dur-slow: 0ms;
   }
@@ -131,6 +132,33 @@ html {
   line-height: var(--leading-body);
   /* Large text: break a word only when it can't fit a line on its own (brief §5). */
   overflow-wrap: break-word;
+  /* Native feel (Phase 11.7): no flash on tap, no pull-to-refresh/rubber-band chaining to the
+     browser chrome (the month grid's own drag handles its own horizontal gesture). */
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: contain;
+}
+
+/* Every tappable control gets a quick press-down (existing :hover tints already give the tonal
+ * half of this on tap, since mobile WebViews apply :hover for the duration of a touch). */
+button,
+a,
+[role="button"],
+summary {
+  transition: transform var(--dur-fast) var(--ease-standard);
+}
+button:active,
+a:active,
+[role="button"]:active,
+summary:active {
+  transform: scale(0.98);
+}
+
+/* Chrome (controls) never shows a text-selection handle; page content still does. */
+button,
+nav,
+summary {
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 /* Component tokens (ADR 0017 layer 3): aliases of semantic tokens only. Shadows mix the text
@@ -210,6 +238,12 @@ html {
     transform: translateX(-2rem);
     opacity: 0;
   }
+}
+
+/* Earthshine + sheen gradient stops (moon-disc.tsx, Phase 11.7): a <stop> can't take a
+ * Tailwind fill utility. */
+.moon-earthshine-stop {
+  stop-color: var(--moon-lit);
 }
 
 /* Bhadra in the day ribbon: diagonal hatch in the avoid colour (ADR 0024), so it differs from

@@ -1,10 +1,11 @@
-// Theme lab (Phase 11.6, ADR 0025): axe (WCAG 2.2 AA) on Today in all six themes ×
-// light/dark, in English and Gujarati, at 100% and 200% text; ≥ 44 px targets; the lab page.
+// Theme lab (Phase 11.6, ADR 0025; reduced to four palettes 2026-10-27): axe (WCAG 2.2 AA) on
+// Today in every palette × light/dark, in English and Gujarati, at 100% and 200% text;
+// ≥ 44 px targets; the lab page.
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
 import { onboard } from "./helpers";
 
-const THEMES = ["calm", "raat", "kagaz", "mandir", "utsav", "shunya"];
+const THEMES = ["calm", "raat", "utsav", "shunya"];
 
 async function axe(page: Page, label: string) {
   await page.getByRole("heading", { level: 1 }).waitFor();
@@ -59,13 +60,13 @@ for (const lang of ["en", "gu"])
         }
   });
 
-test("theme lab lists six themes with light and dark frames", async ({
+test("theme lab lists four themes with light and dark frames", async ({
   page,
 }) => {
   await onboard(page);
   await page.goto("/lab/themes");
-  await expect(page.getByRole("heading", { level: 2 })).toHaveCount(6);
-  await expect(page.locator("iframe")).toHaveCount(12);
+  await expect(page.getByRole("heading", { level: 2 })).toHaveCount(4);
+  await expect(page.locator("iframe")).toHaveCount(8);
   const { violations } = await new AxeBuilder({ page })
     .exclude("iframe")
     .withTags(["wcag2a", "wcag2aa", "wcag22aa"])

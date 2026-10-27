@@ -1,53 +1,42 @@
-// Theme lab (Phase 11.6, ADR 0025): Today in all six themes, light and dark, side by side at
-// phone width. Each frame is the real app in an iframe (?palette preview), so
-// every theme gets its own document, viewport and text size. Dev and E2E builds only (LAB), so
-// these strings are not translated.
+// Theme lab (Phase 11.6, ADR 0025; reduced to four palettes 2026-10-27): Today in every palette,
+// light and dark, side by side at phone width. Each frame is the real app in an iframe (?palette
+// preview), so every palette gets its own document, viewport and text size. Dev and E2E builds
+// only (LAB), so these strings are not translated.
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useSettings } from "@/settings";
 
+// One shared type/radii/shadow system (Bhavy, 2026-10-27) — every palette below only recolours
+// it, so `type` is the same line for all four and isn't worth repeating per card.
+const SHARED_TYPE = "Plus Jakarta Sans + Anek Gujarati";
 const THEMES = [
   {
     id: "calm",
     name: "Calm",
     who: "Everyone (default)",
     why: "Contemporary and quiet: light neutral ground, soft elevation instead of borders, one indigo accent.",
-    type: "Plus Jakarta Sans + Anek Gujarati",
+    type: SHARED_TYPE,
   },
   {
     id: "raat",
     name: "Raat",
     who: "Night owls, younger users, checks at night",
     why: "True-black OLED with tonal layers, a glowing moon and a luminous cyan accent; dark first.",
-    type: "Space Grotesk + Anek Gujarati",
-  },
-  {
-    id: "kagaz",
-    name: "Kagaz",
-    who: "Elders, traditional households, printed-panchang lovers",
-    why: "Modern editorial: paper white, ink black, print red, ruled sections, larger type for reading at arm's length.",
-    type: "Fraunces + Noto Serif Gujarati",
-  },
-  {
-    id: "mandir",
-    name: "Mandir",
-    who: "Devotional users, daily puja, temple-goers",
-    why: "Warm and serene: saffron ground, marigold moon halo, maroon headings, gold hairlines, unhurried spacing.",
-    type: "Marcellus + Hind Vadodara",
+    type: SHARED_TYPE,
   },
   {
     id: "utsav",
     name: "Utsav",
     who: "Young families, festivals, kids",
-    why: "Joyful and rounded: rangoli brights on a calm base, tonal pink cards, pill ribbon, big radii.",
-    type: "Baloo Bhai 2",
+    why: "Joyful: rangoli brights on a calm base, tonal pink cards, pill ribbon.",
+    type: SHARED_TYPE,
   },
   {
     id: "shunya",
     name: "Shunya",
     who: "Busy professionals and NRIs who want facts fast",
-    why: "Minimal monochrome, compact density, hairline rules instead of cards, one signal-orange accent.",
-    type: "Geist + Anek Gujarati",
+    why: "Minimal monochrome, one signal-orange accent.",
+    type: SHARED_TYPE,
   },
 ] as const;
 
@@ -100,7 +89,7 @@ export function ThemeLab() {
       <header className="flex flex-col gap-3">
         <h1 className="text-headline font-heading">Theme lab</h1>
         <p className="max-w-160 text-body text-text-muted">
-          Today in all six themes at phone width. Each frame is the live app, so
+          Today in every palette at phone width. Each frame is the live app, so
           you can scroll and tap inside it. Swipe sideways to compare light and
           dark.
         </p>

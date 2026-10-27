@@ -291,7 +291,6 @@ export const gu: Messages = {
   sizeLarge: "મોટું",
   colours: "રંગ",
   paletteCalm: "શાંત",
-  paletteMandir: "મંદિર",
   paletteRaat: "રાત",
   lightOrDark: "આછું કે ઘાટું",
   modeLight: "આછું",
@@ -497,14 +496,11 @@ export const gu: Messages = {
     "વરસી: {varsi}. જન્મદિવસ: {birthday}. તિથિ બે દિવસ હોય ત્યારે: {vriddhi}.",
   change: "બદલો",
   // Palettes (Phase 11.5)
-  paletteKagaz: "કાગળ",
   paletteUtsav: "ઉત્સવ",
   // Themes (Phase 11.6)
   paletteShunya: "શૂન્ય",
   paletteCalmHint: "શાંત અને સ્પષ્ટ, સૌ માટે",
   paletteRaatHint: "ઘેરો કાળો, રાત્રે જોવા માટે",
-  paletteKagazHint: "છાપેલા પંચાંગ જેવું, મોટા અક્ષર",
-  paletteMandirHint: "કેસરી અને સોનેરી, રોજની પૂજા માટે",
   paletteUtsavHint: "રંગીન અને આનંદી, પરિવાર માટે",
   paletteShunyaHint: "સાદું, ફક્ત મુદ્દાની વાત",
 };

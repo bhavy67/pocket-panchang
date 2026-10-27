@@ -10,17 +10,9 @@ const { version } = JSON.parse(
   readFileSync(new URL("./package.json", import.meta.url), "utf8"),
 ) as { version: string };
 
-/** Font files not precached: every theme's except Calm's, and Devanagari (ADR 0025). */
-const ON_DEMAND_FONTS = [
-  "space-grotesk",
-  "fraunces",
-  "noto-serif-gujarati",
-  "marcellus",
-  "hind-vadodara",
-  "baloo-bhai-2",
-  "geist",
-  "noto-sans-devanagari",
-];
+/** Font files not precached: Devanagari (Hindi, v2) only — every palette shares one font pair
+ * since 2026-10-27, precached like the rest of the app shell. */
+const ON_DEMAND_FONTS = ["noto-sans-devanagari"];
 
 export default defineConfig({
   define: {

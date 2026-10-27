@@ -45,9 +45,7 @@ const COLOUR = [
   "moon-dark",
 ] as const;
 type Colour = (typeof COLOUR)[number];
-/** Per theme × mode, besides colours. */
-const MODE_STYLE = ["card-shadow", "tile-shadow", "moon-glow"];
-/** Per theme (mode-independent). Kagaz may also enlarge the --text-* scale. */
+/** Shared by every palette (not per theme × mode, since 2026-10-27: one visual system). */
 const STYLE = [
   "font-ui",
   "font-gu",
@@ -70,6 +68,8 @@ const STYLE = [
   "card-divider",
   "tile-border",
   "tile-divider",
+  "card-shadow",
+  "tile-shadow",
   "moon-size",
   "moon-rim",
   "moon-rim-width",
@@ -79,6 +79,8 @@ const STYLE = [
   "ribbon-end-radius",
   "ribbon-lane-h",
 ];
+/** Mode-dependent only (dark gets a glow, in the palette's own moon colour; light doesn't). */
+const MODE_STYLE = ["moon-glow"];
 
 const RAW_COLOUR =
   /#[0-9a-fA-F]{3,8}\b|\b(?:rgba?|hsla?|hwb|lab|lch|oklab|oklch|color)\(/;
@@ -153,35 +155,44 @@ const PAIRS: [Colour, Colour, number][] = [
   ]),
 ];
 
-it("defines a theme for every Settings palette, and no others", () => {
-  const themes = [...css.matchAll(/\n\[data-palette="([a-z]+)"\] \{/g)].map(
-    (m) => m[1],
-  );
+it("defines a theme × mode block for every Settings palette, and no others", () => {
+  const themes = [
+    ...new Set(
+      [
+        ...css.matchAll(/\[data-palette="([a-z]+)"\]\[data-mode="(?:light|dark)"\]\s*\{/g),
+      ].map((m) => m[1]),
+    ),
+  ];
   expect(themes).toEqual([...PALETTES]);
 });
 
-it("shares the modern baseline: plain status rows", () => {
-  const shared = declarations(
-    [...css.matchAll(/:root\s*\{([^}]*)\}/g)][1]?.[1] ?? "",
-  );
-  expect(Object.fromEntries(shared)).toEqual({
-    "--row-fill": "0%",
-    "--row-pad": "0rem",
-  });
-});
+const sharedBlock = () =>
+  declarations([...css.matchAll(/:root\s*\{([^}]*)\}/g)][1]?.[1] ?? "");
 
-it.each(PALETTES)("%s sets every style token, with modern weights", (p) => {
-  const style = block(`[data-palette="${p}"]`);
-  const set = [...style.keys()]
-    .map((k) => k.slice(2))
-    .filter((k) => !k.startsWith("text-"));
-  expect(set.sort()).toEqual([...STYLE].sort());
+it("defines the shared structural system once, with modern weights", () => {
+  const shared = sharedBlock();
+  const set = [...shared.keys()].map((k) => k.slice(2));
+  expect(set.sort()).toEqual(["row-fill", "row-pad", ...STYLE].sort());
+  expect(shared.get("--row-fill")).toBe("0%");
+  expect(shared.get("--row-pad")).toBe("0rem");
+  expect(shared.get("--card-shadow")).toBe("none");
+  expect(shared.get("--tile-shadow")).toBe("none");
   for (const w of ["hero", "heading", "strong", "label"])
-    expect(Number(style.get(`--font-weight-${w}`))).toBeLessThanOrEqual(700);
+    expect(Number(shared.get(`--font-weight-${w}`))).toBeLessThanOrEqual(700);
   // The ribbon segments are buttons: ≥ 44 px at 100% text.
-  expect(parseFloat(style.get("--ribbon-h") ?? "0")).toBeGreaterThanOrEqual(
+  expect(parseFloat(shared.get("--ribbon-h") ?? "0")).toBeGreaterThanOrEqual(
     2.75,
   );
+});
+
+it("gives dark mode a moon glow and light none, shared across every palette", () => {
+  const light = block('[data-mode="light"]');
+  const dark = block('[data-mode="dark"]');
+  expect([...light.keys()]).toEqual(MODE_STYLE.map((k) => `--${k}`));
+  expect([...dark.keys()]).toEqual(MODE_STYLE.map((k) => `--${k}`));
+  expect(light.get("--moon-glow")).toBe("none");
+  expect(dark.get("--moon-glow")).not.toBe("none");
+  expect(dark.get("--moon-glow")).toContain("var(--moon-lit)");
 });
 
 describe.each(PALETTES.flatMap((p) => MODES.map((m) => [p, m] as const)))(
@@ -189,9 +200,9 @@ describe.each(PALETTES.flatMap((p) => MODES.map((m) => [p, m] as const)))(
   (palette, mode) => {
     const theme = block(`[data-palette="${palette}"][data-mode="${mode}"]`);
 
-    it("defines exactly the colour set (each a primitive) plus mode style", () => {
+    it("defines exactly the colour set, each resolving to a primitive", () => {
       const defined = [...theme.keys()].map((k) => k.slice(2)).sort();
-      expect(defined).toEqual([...COLOUR, ...MODE_STYLE].sort());
+      expect(defined).toEqual([...COLOUR].sort());
       for (const token of COLOUR)
         expect(() => resolve(theme, token)).not.toThrow();
     });

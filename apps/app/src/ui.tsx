@@ -2,8 +2,15 @@
 // never colour alone: good = filled circle + tick, not good = diamond + bar, neutral = outlined
 // circle + bar.
 import { Link, Outlet } from "@tanstack/react-router";
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type PointerEvent as ReactPointerEvent,
+  type ReactNode,
+} from "react";
 import { t } from "@/i18n";
+import { haptic } from "@/ports";
 import {
   installCardState,
   needsIosHint,
@@ -125,6 +132,45 @@ export function Sheet({
     if (content && d && !d.open) d.showModal?.();
     if (!content && d?.open) d.close();
   }, [content]);
+
+  // Swipe-to-dismiss, following the finger (transform only); a far-enough or fast-enough
+  // downward drag closes the sheet, otherwise it springs back.
+  const contentRef = useRef<HTMLDivElement>(null);
+  const drag = useRef<{ y: number; t: number; lastY: number; lastT: number } | null>(
+    null,
+  );
+  const onPointerDown = (e: ReactPointerEvent<HTMLDivElement>) => {
+    e.currentTarget.setPointerCapture(e.pointerId);
+    const now = performance.now();
+    drag.current = { y: e.clientY, t: now, lastY: e.clientY, lastT: now };
+    if (contentRef.current) contentRef.current.style.transition = "none";
+  };
+  const onPointerMove = (e: ReactPointerEvent<HTMLDivElement>) => {
+    const d = drag.current;
+    const el = contentRef.current;
+    if (!d || !el) return;
+    const dy = Math.max(0, e.clientY - d.y);
+    el.style.transform = `translateY(${dy}px)`;
+    d.lastY = e.clientY;
+    d.lastT = performance.now();
+  };
+  const onPointerUp = (e: ReactPointerEvent<HTMLDivElement>) => {
+    const d = drag.current;
+    const el = contentRef.current;
+    drag.current = null;
+    if (!d || !el) return;
+    const dy = Math.max(0, e.clientY - d.y);
+    const velocity = (e.clientY - d.lastY) / Math.max(1, d.lastT - d.t);
+    el.style.transition = "transform var(--dur-base) var(--ease-exit)";
+    if (dy > 80 || velocity > 0.5) {
+      haptic("tap");
+      el.style.transform = "translateY(100%)";
+      el.addEventListener("transitionend", onClose, { once: true });
+    } else {
+      el.style.transform = "translateY(0px)";
+    }
+  };
+
   return (
     // Backdrop click closes too; the keyboard equivalent is Esc, which <dialog> handles natively.
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions
@@ -136,7 +182,14 @@ export function Sheet({
       className="sheet mx-auto mt-auto mb-0 w-full max-w-xl rounded-t-lg bg-surface-raised p-0 text-text shadow-(--elevation-3)"
     >
       {content && (
-        <div className="flex flex-col gap-3 px-5 pt-3 pb-8">
+        <div
+          ref={contentRef}
+          onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
+          onPointerUp={onPointerUp}
+          onPointerCancel={onPointerUp}
+          className="flex touch-none flex-col gap-3 px-5 pt-3 pb-8"
+        >
           <span
             aria-hidden="true"
             className="h-1 w-10 self-center rounded-full bg-border"
@@ -383,10 +436,12 @@ export function InstallCard({ where }: { where: "today" | "settings" }) {
 }
 
 export function Shell() {
-  // Remount on a language change so every t() call re-runs (t is module-level).
-  const language = useSettings((st) => st.settings?.language);
+  // t() is module-level, but loadLanguage() always resolves before the settings change that
+  // triggers this re-render (Phase 11.7), so every t() call below already reads the new
+  // catalogue — no remount needed, and no lost scroll position or component state.
+  useSettings((st) => st.settings?.language);
   return (
-    <div key={language} className="min-h-dvh bg-bg text-text">
+    <div className="min-h-dvh bg-bg pt-[env(safe-area-inset-top)] text-text">
       {import.meta.env.VITE_FAMILY_PREVIEW === "1" && <PreviewBanner />}
       <div className="lg:flex">
         <nav

@@ -292,7 +292,6 @@ export const en = {
   sizeLarge: "Large",
   colours: "Colours",
   paletteCalm: "Calm",
-  paletteMandir: "Mandir",
   paletteRaat: "Raat",
   lightOrDark: "Light or dark",
   modeLight: "Light",
@@ -500,14 +499,11 @@ export const en = {
     "Varsi: {varsi}. Birthdays: {birthday}. When a tithi spans two days: {vriddhi}.",
   change: "Change",
   // Palettes (Phase 11.5)
-  paletteKagaz: "Kagaz",
   paletteUtsav: "Utsav",
   // Themes (Phase 11.6)
   paletteShunya: "Shunya",
   paletteCalmHint: "Quiet and clear, for everyone",
   paletteRaatHint: "True black, for checking at night",
-  paletteKagazHint: "Like a printed panchang, larger text",
-  paletteMandirHint: "Warm saffron and gold, for daily puja",
   paletteUtsavHint: "Bright and playful, for families",
   paletteShunyaHint: "Minimal, facts first",
   // @@KEYS@@

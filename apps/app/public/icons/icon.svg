@@ -1,8 +1,22 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <!-- Placeholder icon (brief §9 Q2): a sun arc meeting a crescent, the Sun–Moon angle that
-       defines a tithi. Replace when the public name and identity are chosen (ADR 0016). -->
-  <rect width="512" height="512" fill="#0B6E79"/>
-  <circle cx="256" cy="300" r="150" fill="none" stroke="#F7F6F2" stroke-width="28" stroke-dasharray="471 1000" transform="rotate(180 256 300)"/>
-  <path d="M332 150a86 86 0 1 0 0 150a104 104 0 1 1 0-150z" fill="#F2B65A"/>
-  <rect x="96" y="378" width="320" height="28" rx="14" fill="#F7F6F2"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 108 108">
+  <!-- Crescent moon + diya (Phase 11.7): the Moon that sets the tithi, and the lamp lit for
+       family remembrance (shraddh) and festival (Utsav) occasions. Calm accent (tokens.css,
+       oklch(0.5 0.19 275) = #494FCC); regenerate icons/* with apps/app/.tmp-build.mjs-equivalent
+       if this changes. -->
+  <rect width="108" height="108" rx="22" fill="#494FCC"/>
+  <mask id="crescent-mask">
+    <rect width="108" height="108" fill="white"/>
+    <circle cx="52" cy="30" r="15" fill="black"/>
+  </mask>
+  <circle cx="42" cy="34" r="19" fill="#FBEEC9" mask="url(#crescent-mask)"/>
+  <ellipse cx="56" cy="76" rx="26" ry="11" fill="#FBEEC9"/>
+  <path
+    d="M 56 74
+       C 46 74 42 64 50 54
+       C 52.5 51 54.5 48 56 44
+       C 57.5 48 59.5 51 62 54
+       C 70 64 66 74 56 74
+       Z"
+    fill="#FFB357"
+  />
 </svg>

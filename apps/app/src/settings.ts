@@ -11,16 +11,12 @@ import { isParseError, type ParseError } from "@panchang/engine";
 import { create } from "zustand";
 import { db } from "@/db";
 
-/** Themes (ADR 0025); each has light and dark. */
-export const PALETTES = [
-  "calm",
-  "raat",
-  "kagaz",
-  "mandir",
-  "utsav",
-  "shunya",
-] as const;
+/** Palettes (ADR 0025); each has light and dark. Kagaz and Mandir were removed 2026-10-27
+ * (Bhavy: a palette that's also a different layout kept reflowing and ghosting on switch);
+ * `parsePalette` below remaps anyone's already-saved choice to Calm. */
+export const PALETTES = ["calm", "raat", "utsav", "shunya"] as const;
 export type Palette = (typeof PALETTES)[number];
+const RETIRED_PALETTES = new Set(["kagaz", "mandir"]);
 
 export type Settings = {
   readonly location: Location;
@@ -153,7 +149,14 @@ export function parseSettings(v: unknown): Settings | ParseError {
     return fail(`Bad samvat: ${String(samvat)}`);
   if (!oneOf(language, ["gu", "en", "hi"] as const))
     return fail(`Bad language: ${String(language)}`);
-  if (!oneOf(palette, PALETTES)) return fail(`Bad palette: ${String(palette)}`);
+  // Kagaz and Mandir are retired: a saved choice of either falls back to Calm rather than
+  // failing the whole settings row (which would force onboarding again).
+  const resolvedPalette =
+    typeof palette === "string" && RETIRED_PALETTES.has(palette)
+      ? "calm"
+      : palette;
+  if (!oneOf(resolvedPalette, PALETTES))
+    return fail(`Bad palette: ${String(palette)}`);
   if (!oneOf(theme, ["system", "light", "dark"] as const))
     return fail(`Bad theme: ${String(theme)}`);
   if (typeof textScale !== "number" || !(textScale >= 0.5 && textScale <= 3))
@@ -171,7 +174,7 @@ export function parseSettings(v: unknown): Settings | ParseError {
     tradition,
     samvat,
     language,
-    palette,
+    palette: resolvedPalette,
     theme,
     // Larger/Largest (1.5, 2) were removed: older saves and backups fall back to Large.
     textScale: Math.min(textScale, 1.25),

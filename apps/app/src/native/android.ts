@@ -2,8 +2,10 @@
 import { App } from "@capacitor/app";
 import { registerPlugin } from "@capacitor/core";
 import { Directory, Encoding, Filesystem } from "@capacitor/filesystem";
+import { Haptics, ImpactStyle } from "@capacitor/haptics";
 import { LocalNotifications } from "@capacitor/local-notifications";
 import { Share } from "@capacitor/share";
+import { Style, StatusBar } from "@capacitor/status-bar";
 import { t } from "@/i18n";
 import type { ReminderPort, SharePort } from "@/ports";
 
@@ -132,6 +134,22 @@ export async function sendTestReminder() {
     ],
   });
 }
+
+// ---- Status bar (Phase 11.7): icon colour follows the active theme. targetSdk 36 enforces
+// edge-to-edge, so both system bars are already transparent (setBackgroundColor is a no-op) and
+// the app's own bg/surface colour shows through them; Shell/onboarding add
+// env(safe-area-inset-top) padding so content itself still clears the status bar.
+export async function syncStatusBar(mode: "light" | "dark") {
+  await StatusBar.setOverlaysWebView({ overlay: true });
+  await StatusBar.setStyle({ style: mode === "dark" ? Style.Dark : Style.Light });
+}
+
+// ---- Haptics (Phase 11.7): toggles/selections get a light tap, swipes a slightly firmer one. ----
+export const hapticSelect = () => void Haptics.selectionChanged().catch(() => undefined);
+export const hapticTap = () =>
+  void Haptics.impact({ style: ImpactStyle.Light }).catch(() => undefined);
+export const hapticSwipe = () =>
+  void Haptics.impact({ style: ImpactStyle.Medium }).catch(() => undefined);
 
 // ---- App lifecycle ----
 

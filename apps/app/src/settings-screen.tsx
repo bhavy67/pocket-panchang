@@ -14,6 +14,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useId, useState, type CSSProperties, type ReactNode } from "react";
 import { backupErrorKey, parseBackup } from "@/backup";
 import { loadLanguage, t } from "@/i18n";
+import { withFade } from "@/lib/fade";
+import { haptic } from "@/ports";
 import { Link } from "@tanstack/react-router";
 import { CityPicker, inputClass } from "@/city-picker";
 import type { StoredEvent } from "@/db";
@@ -56,6 +58,7 @@ function Choice<T extends string | number>({
   onChange,
   render,
   min = "11rem",
+  columns = 2,
 }: {
   legend: string;
   value: T;
@@ -64,15 +67,30 @@ function Choice<T extends string | number>({
   render?: (v: T, label: string) => ReactNode;
   /** Narrowest preview column (only with `render`). */
   min?: string;
+  /** Fixed column count (ignored with `render`, which gets its own viewport-driven grid). Chosen
+   * per field by its own label length, e.g. 1 for "Vikram Samvat (from Diwali)" — never computed
+   * from the rendered text, which is what caused the jerk this replaces (see below). */
+  columns?: 1 | 2;
 }) {
   const name = useId();
   return (
     <fieldset className="flex flex-col gap-2">
       <legend className="mb-2 text-body font-label">{legend}</legend>
-      {/* Text options size to their labels, so one never wraps while a row has room to spare;
-          a pair splits the row in half; previews share a grid. */}
+      {/* A fixed-column grid (not content-width flex-wrap): the row count depends only on how
+          many options there are and the `columns` the field was given, never on how long a
+          label happens to render — so switching language never reflows it mid-fade (Bhavy,
+          2026-10-27: "maintain two row structure... as it creates jerk while changing
+          language"; applied the same way to every Choice field, not just this one). Previews
+          (render) share a wider, viewport-driven grid instead; they're a different shape (icon +
+          two lines + sample ribbon), not susceptible to the same language-length reflow. */}
       <div
-        className={render ? "grid gap-2" : "flex flex-wrap gap-2"}
+        className={
+          render
+            ? "grid gap-2"
+            : columns === 1
+              ? "grid grid-cols-1 gap-2"
+              : "grid grid-cols-2 gap-2"
+        }
         style={
           render
             ? {
@@ -82,15 +100,15 @@ function Choice<T extends string | number>({
         }
       >
         {options.map(([v, label]) => (
-          <label
-            key={v}
-            className={`${radio} ${render ? "" : options.length === 2 ? "flex-1 basis-0" : "grow"}`}
-          >
+          <label key={v} className={radio}>
             <input
               type="radio"
               name={name}
               checked={value === v}
-              onChange={() => onChange(v)}
+              onChange={() => {
+                haptic("select");
+                onChange(v);
+              }}
               className="size-5 flex-none accent-(--accent)"
             />
             {render ? (
@@ -108,8 +126,6 @@ function Choice<T extends string | number>({
 const PALETTES = [
   ["calm", "paletteCalm"],
   ["raat", "paletteRaat"],
-  ["kagaz", "paletteKagaz"],
-  ["mandir", "paletteMandir"],
   ["utsav", "paletteUtsav"],
   ["shunya", "paletteShunya"],
 ] as const;
@@ -117,8 +133,6 @@ const PALETTES = [
 const PALETTE_HINTS = {
   calm: "paletteCalmHint",
   raat: "paletteRaatHint",
-  kagaz: "paletteKagazHint",
-  mandir: "paletteMandirHint",
   utsav: "paletteUtsavHint",
   shunya: "paletteShunyaHint",
 } as const;
@@ -261,6 +275,9 @@ export function SettingsScreen() {
               ["shaka", t("yearShaka")],
             ]}
             onChange={(samvat) => set({ samvat })}
+            // Full-width rows: "Vikram Samvat (from Diwali)" wraps to 3-4 lines in a 2-column
+            // cell at phone width (checked both languages), which is worse than one row each.
+            columns={1}
           />
           <Choice
             legend={t("language")}
@@ -270,7 +287,9 @@ export function SettingsScreen() {
               ["en", "English"],
             ]}
             onChange={(language) =>
-              void loadLanguage(language).then(() => set({ language }))
+              void loadLanguage(language).then(() =>
+                withFade(() => set({ language })),
+              )
             }
           />
           <Choice

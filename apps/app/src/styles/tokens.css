@@ -1,9 +1,13 @@
-/* Design tokens: Theme system 2.0 (ADR 0025, extends ADR 0017/0024). Six themes x light/dark.
- * A theme sets colour AND type, weights, letter-spacing, radii, density, surface style, shadows,
- * and the moon and day-ribbon style. Layer 1 (primitives, oklch, kept inside sRGB) in the first
- * :root block; layer 2 (semantic) in one style block per theme plus one colour block per
- * theme x mode. Components use semantic tokens only. Raw colour values are allowed ONLY in this
- * file (enforced by ESLint for TS/TSX and by tokens.test.ts for CSS). */
+/* Design tokens (ADR 0017, ADR 0024; ADR 0025 "Theme system 2.0" reduced and partly reverted —
+ * see docs/adr/0025-theme-system-2.md). Four palettes x light/dark, one shared visual system:
+ * every palette uses the same type, weights, radii, spacing, borders and shadows (Bhavy,
+ * 2026-10-27: "keep css classes and borders and other stuff similar across all themes" — Kagaz
+ * and Mandir, each a distinct visual system with its own fonts/radii/shadows, are removed
+ * outright rather than folded in, since a palette that *is* a different layout is exactly what
+ * kept reflowing and ghosting). Layer 1 (primitives, oklch, kept inside sRGB) in the first :root
+ * block; layer 2 (semantic) in one shared structural block plus one colour block per
+ * palette x mode. Components use semantic tokens only. Raw colour values are allowed ONLY in
+ * this file (enforced by ESLint for TS/TSX and by tokens.test.ts for CSS). */
 
 :root {
   /* calm */
@@ -94,87 +98,6 @@
   --raat-970-040-95: oklch(0.97 0.04 95);
   --raat-980-004-240: oklch(0.98 0.004 240);
   --raat-985-004-240: oklch(0.985 0.004 240);
-  /* kagaz */
-  --kagaz-1000-000-0: oklch(1 0 0);
-  --kagaz-140-005-70: oklch(0.14 0.005 70);
-  --kagaz-160-008-60: oklch(0.16 0.008 60);
-  --kagaz-170-006-70: oklch(0.17 0.006 70);
-  --kagaz-180-030-30: oklch(0.18 0.03 30);
-  --kagaz-220-008-70: oklch(0.22 0.008 70);
-  --kagaz-270-040-145: oklch(0.27 0.04 145);
-  --kagaz-280-040-80: oklch(0.28 0.04 80);
-  --kagaz-280-050-340: oklch(0.28 0.05 340);
-  --kagaz-290-050-30: oklch(0.29 0.05 30);
-  --kagaz-300-008-70: oklch(0.3 0.008 70);
-  --kagaz-320-010-70: oklch(0.32 0.01 70);
-  --kagaz-400-010-60: oklch(0.4 0.01 60);
-  --kagaz-450-090-145: oklch(0.45 0.09 145);
-  --kagaz-450-130-340: oklch(0.45 0.13 340);
-  --kagaz-500-100-70: oklch(0.5 0.1 70);
-  --kagaz-500-190-28: oklch(0.5 0.19 28);
-  --kagaz-560-012-70: oklch(0.56 0.012 70);
-  --kagaz-600-014-70: oklch(0.6 0.014 70);
-  --kagaz-750-140-30: oklch(0.75 0.14 30);
-  --kagaz-800-014-80: oklch(0.8 0.014 80);
-  --kagaz-800-110-340: oklch(0.8 0.11 340);
-  --kagaz-820-110-145: oklch(0.82 0.11 145);
-  --kagaz-840-012-80: oklch(0.84 0.012 80);
-  --kagaz-840-120-85: oklch(0.84 0.12 85);
-  --kagaz-860-010-80: oklch(0.86 0.01 80);
-  --kagaz-950-010-85: oklch(0.95 0.01 85);
-  --kagaz-950-025-30: oklch(0.95 0.025 30);
-  --kagaz-950-025-340: oklch(0.95 0.025 340);
-  --kagaz-950-030-145: oklch(0.95 0.03 145);
-  --kagaz-950-030-90: oklch(0.95 0.03 90);
-  --kagaz-950-040-85: oklch(0.95 0.04 85);
-  --kagaz-955-008-80: oklch(0.955 0.008 80);
-  --kagaz-970-030-90: oklch(0.97 0.03 90);
-  --kagaz-990-004-85: oklch(0.99 0.004 85);
-  /* mandir */
-  --mandir-150-025-35: oklch(0.15 0.025 35);
-  --mandir-180-030-35: oklch(0.18 0.03 35);
-  --mandir-200-040-40: oklch(0.2 0.04 40);
-  --mandir-220-035-38: oklch(0.22 0.035 38);
-  --mandir-240-040-30: oklch(0.24 0.04 30);
-  --mandir-260-040-40: oklch(0.26 0.04 40);
-  --mandir-290-050-140: oklch(0.29 0.05 140);
-  --mandir-300-050-80: oklch(0.3 0.05 80);
-  --mandir-300-060-10: oklch(0.3 0.06 10);
-  --mandir-300-060-320: oklch(0.3 0.06 320);
-  --mandir-320-040-40: oklch(0.32 0.04 40);
-  --mandir-320-060-60: oklch(0.32 0.06 60);
-  --mandir-380-120-18: oklch(0.38 0.12 18);
-  --mandir-400-130-18: oklch(0.4 0.13 18);
-  --mandir-420-060-80: oklch(0.42 0.06 80);
-  --mandir-450-050-40: oklch(0.45 0.05 40);
-  --mandir-450-150-10: oklch(0.45 0.15 10);
-  --mandir-460-140-320: oklch(0.46 0.14 320);
-  --mandir-470-100-145: oklch(0.47 0.1 145);
-  --mandir-500-110-65: oklch(0.5 0.11 65);
-  --mandir-500-180-27: oklch(0.5 0.18 27);
-  --mandir-580-080-70: oklch(0.58 0.08 70);
-  --mandir-620-070-75: oklch(0.62 0.07 75);
-  --mandir-760-130-25: oklch(0.76 0.13 25);
-  --mandir-780-110-10: oklch(0.78 0.11 10);
-  --mandir-800-040-75: oklch(0.8 0.04 75);
-  --mandir-800-110-320: oklch(0.8 0.11 320);
-  --mandir-820-120-140: oklch(0.82 0.12 140);
-  --mandir-820-130-72: oklch(0.82 0.13 72);
-  --mandir-840-070-85: oklch(0.84 0.07 85);
-  --mandir-840-130-75: oklch(0.84 0.13 75);
-  --mandir-850-120-85: oklch(0.85 0.12 85);
-  --mandir-880-118-82: oklch(0.88 0.118 82);
-  --mandir-900-030-78: oklch(0.9 0.03 78);
-  --mandir-930-045-70: oklch(0.93 0.045 70);
-  --mandir-930-060-85: oklch(0.93 0.06 85);
-  --mandir-935-030-78: oklch(0.935 0.03 78);
-  --mandir-940-030-10: oklch(0.94 0.03 10);
-  --mandir-940-030-320: oklch(0.94 0.03 320);
-  --mandir-940-040-140: oklch(0.94 0.04 140);
-  --mandir-950-020-80: oklch(0.95 0.02 80);
-  --mandir-968-020-80: oklch(0.968 0.02 80);
-  --mandir-985-012-85: oklch(0.985 0.012 85);
-  --mandir-990-010-85: oklch(0.99 0.01 85);
   /* utsav */
   --utsav-1000-000-0: oklch(1 0 0);
   --utsav-150-020-320: oklch(0.15 0.02 320);
@@ -261,15 +184,12 @@
   --shunya-995-000-0: oklch(0.995 0 0);
 }
 
-/* Shared by all six (modern baseline): Right now status rows are plain lines, not tinted boxes;
- * their icon and word still carry the meaning. */
+/* Shared by every palette (Bhavy, 2026-10-27): one visual system, so a palette switch only ever
+ * recolours — it can never reflow, resize or ghost. Right now status rows are plain lines, not
+ * tinted boxes; their icon and word still carry the meaning. */
 :root {
   --row-fill: 0%;
   --row-pad: 0rem;
-}
-
-/* Calm (default, everyone): contemporary and quiet. Soft elevation, indigo accent. */
-[data-palette="calm"] {
   --font-ui:
     "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto,
     sans-serif;
@@ -297,6 +217,8 @@
   --card-divider: none;
   --tile-border: none;
   --tile-divider: none;
+  --card-shadow: none;
+  --tile-shadow: none;
   --moon-size: 5.5rem;
   --moon-rim: var(--border);
   --moon-rim-width: 0;
@@ -307,6 +229,17 @@
   --ribbon-lane-h: 0.5rem;
 }
 
+/* A soft moon glow in dark mode only, in the palette's own moon colour; flat everywhere else. */
+[data-mode="light"] {
+  --moon-glow: none;
+}
+[data-mode="dark"] {
+  --moon-glow: drop-shadow(
+    0 0 1.25rem color-mix(in oklch, var(--moon-lit) 20%, transparent)
+  );
+}
+
+/* Calm (default, everyone): contemporary and quiet. Soft neutral ground, one indigo accent. */
 [data-palette="calm"][data-mode="light"] {
   color-scheme: light;
   --bg: var(--calm-975-004-270);
@@ -338,13 +271,6 @@
   --moon-lit: var(--calm-950-050-90);
   --moon-dark: var(--calm-870-010-270);
   --tile-bg: var(--calm-997-000-270);
-  --card-shadow:
-    0 1px 2px oklch(0.25 0.03 270 / 0.05),
-    0 8px 24px -8px oklch(0.25 0.03 270 / 0.14);
-  --tile-shadow:
-    0 1px 2px oklch(0.25 0.03 270 / 0.05),
-    0 4px 14px -6px oklch(0.25 0.03 270 / 0.12);
-  --moon-glow: none;
 }
 
 [data-palette="calm"][data-mode="dark"] {
@@ -378,48 +304,9 @@
   --moon-lit: var(--calm-930-050-90);
   --moon-dark: var(--calm-310-014-270);
   --tile-bg: var(--calm-215-014-270);
-  --card-shadow: none;
-  --tile-shadow: none;
-  --moon-glow: drop-shadow(0 0 1.25rem oklch(0.93 0.05 90 / 0.18));
 }
 
-/* Raat (night owls): true-black OLED, tonal layers, glowing moon, luminous cyan accent. */
-[data-palette="raat"] {
-  --font-ui:
-    "Space Grotesk", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-gu:
-    "Anek Gujarati", "Space Grotesk", system-ui, -apple-system, "Segoe UI",
-    Roboto, sans-serif;
-  --font-display:
-    "Space Grotesk", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-weight-hero: 600;
-  --font-weight-heading: 600;
-  --font-weight-strong: 600;
-  --font-weight-label: 500;
-  --tracking-display: -0.025em;
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-cell: 10px;
-  --radius-tile: 16px;
-  --radius-lg: 20px;
-  --radius-card: 20px;
-  --spacing: 0.25rem;
-  --spacing-card: 1.25rem;
-  --spacing-tile: 1rem;
-  --card-border: none;
-  --card-divider: none;
-  --tile-border: none;
-  --tile-divider: none;
-  --moon-size: 6rem;
-  --moon-rim: var(--border);
-  --moon-rim-width: 0;
-  --ribbon-h: 2.75rem;
-  --ribbon-gap: 0.125rem;
-  --ribbon-radius: 4px;
-  --ribbon-end-radius: 12px;
-  --ribbon-lane-h: 0.375rem;
-}
-
+/* Raat (night owls): true-black OLED, tonal layers, luminous cyan accent. */
 [data-palette="raat"][data-mode="light"] {
   color-scheme: light;
   --bg: var(--raat-985-004-240);
@@ -451,9 +338,6 @@
   --moon-lit: var(--raat-960-030-95);
   --moon-dark: var(--raat-860-010-240);
   --tile-bg: var(--raat-955-008-240);
-  --card-shadow: none;
-  --tile-shadow: none;
-  --moon-glow: none;
 }
 
 [data-palette="raat"][data-mode="dark"] {
@@ -487,271 +371,9 @@
   --moon-lit: var(--raat-970-040-95);
   --moon-dark: var(--raat-240-014-250);
   --tile-bg: var(--raat-140-012-250);
-  --card-shadow: none;
-  --tile-shadow: none;
-  --moon-glow: drop-shadow(0 0 0.375rem oklch(0.97 0.04 95 / 0.5))
-    drop-shadow(0 0 1.75rem oklch(0.97 0.04 95 / 0.4));
 }
 
-/* Kagaz (elders, printed-panchang lovers): modern editorial. Paper, ink, print red; flat with rules; larger type. */
-[data-palette="kagaz"] {
-  --font-ui: "Fraunces", Georgia, serif;
-  --font-gu: "Noto Serif Gujarati", "Fraunces", Georgia, serif;
-  --font-display: "Fraunces", Georgia, serif;
-  --font-weight-hero: 600;
-  --font-weight-heading: 600;
-  --font-weight-strong: 600;
-  --font-weight-label: 500;
-  --tracking-display: -0.01em;
-  --radius-sm: 4px;
-  --radius-md: 6px;
-  --radius-cell: 6px;
-  --radius-tile: 6px;
-  --radius-lg: 8px;
-  --radius-card: 0px;
-  --spacing: 0.25rem;
-  --spacing-card: 0rem;
-  --spacing-tile: 0rem;
-  --card-border: none;
-  --card-divider: 0.1875rem solid var(--text);
-  --tile-border: none;
-  --tile-divider: 1px solid var(--border-strong);
-  --moon-size: 5.5rem;
-  --moon-rim: var(--text);
-  --moon-rim-width: 2;
-  --ribbon-h: 3rem;
-  --ribbon-gap: 0.125rem;
-  --ribbon-radius: 2px;
-  --ribbon-end-radius: 2px;
-  --ribbon-lane-h: 0.5rem;
-  --text-caption: 1.0625rem;
-  --text-sm: 1.125rem;
-  --text-body: 1.25rem;
-  --text-lg: 1.375rem;
-  --text-title: 1.625rem;
-  --text-headline: 2rem;
-  --text-display: 2.5rem;
-  --text-hero: 2.5rem;
-  --text-lead: 1.5rem;
-  --text-gu-hero: 1.3125rem;
-  --text-micro: 0.8125rem;
-}
-
-[data-palette="kagaz"][data-mode="light"] {
-  color-scheme: light;
-  --bg: var(--kagaz-990-004-85);
-  --surface: var(--kagaz-990-004-85);
-  --surface-raised: var(--kagaz-1000-000-0);
-  --surface-sunken: var(--kagaz-955-008-80);
-  --card-bg: var(--kagaz-990-004-85);
-  --text: var(--kagaz-160-008-60);
-  --text-muted: var(--kagaz-400-010-60);
-  --text-on-accent: var(--kagaz-1000-000-0);
-  --hero-text: var(--kagaz-160-008-60);
-  --border: var(--kagaz-860-010-80);
-  --border-strong: var(--kagaz-560-012-70);
-  --focus-ring: var(--kagaz-500-190-28);
-  --accent: var(--kagaz-500-190-28);
-  --accent-subtle: var(--kagaz-950-025-30);
-  --danger: var(--kagaz-500-190-28);
-  --warning: var(--kagaz-500-100-70);
-  --warning-subtle: var(--kagaz-950-040-85);
-  --auspicious: var(--kagaz-450-090-145);
-  --auspicious-subtle: var(--kagaz-950-030-145);
-  --inauspicious: var(--kagaz-500-190-28);
-  --inauspicious-subtle: var(--kagaz-950-025-30);
-  --festival: var(--kagaz-450-130-340);
-  --festival-subtle: var(--kagaz-950-025-340);
-  --personal-event: var(--kagaz-500-190-28);
-  --personal-event-subtle: var(--kagaz-950-025-30);
-  --now-marker: var(--kagaz-500-190-28);
-  --moon-lit: var(--kagaz-970-030-90);
-  --moon-dark: var(--kagaz-840-012-80);
-  --tile-bg: var(--kagaz-990-004-85);
-  --card-shadow: none;
-  --tile-shadow: none;
-  --moon-glow: none;
-}
-
-[data-palette="kagaz"][data-mode="dark"] {
-  color-scheme: dark;
-  --bg: var(--kagaz-170-006-70);
-  --surface: var(--kagaz-170-006-70);
-  --surface-raised: var(--kagaz-220-008-70);
-  --surface-sunken: var(--kagaz-140-005-70);
-  --card-bg: var(--kagaz-170-006-70);
-  --text: var(--kagaz-950-010-85);
-  --text-muted: var(--kagaz-800-014-80);
-  --text-on-accent: var(--kagaz-180-030-30);
-  --hero-text: var(--kagaz-950-010-85);
-  --border: var(--kagaz-320-010-70);
-  --border-strong: var(--kagaz-600-014-70);
-  --focus-ring: var(--kagaz-750-140-30);
-  --accent: var(--kagaz-750-140-30);
-  --accent-subtle: var(--kagaz-290-050-30);
-  --danger: var(--kagaz-750-140-30);
-  --warning: var(--kagaz-840-120-85);
-  --warning-subtle: var(--kagaz-280-040-80);
-  --auspicious: var(--kagaz-820-110-145);
-  --auspicious-subtle: var(--kagaz-270-040-145);
-  --inauspicious: var(--kagaz-750-140-30);
-  --inauspicious-subtle: var(--kagaz-290-050-30);
-  --festival: var(--kagaz-800-110-340);
-  --festival-subtle: var(--kagaz-280-050-340);
-  --personal-event: var(--kagaz-750-140-30);
-  --personal-event-subtle: var(--kagaz-290-050-30);
-  --now-marker: var(--kagaz-750-140-30);
-  --moon-lit: var(--kagaz-950-030-90);
-  --moon-dark: var(--kagaz-300-008-70);
-  --tile-bg: var(--kagaz-170-006-70);
-  --card-shadow: none;
-  --tile-shadow: none;
-  --moon-glow: none;
-}
-
-/* Mandir (devotional): warm and serene. Saffron, marigold and maroon; gold hairlines; unhurried spacing. */
-[data-palette="mandir"] {
-  --font-ui:
-    "Hind Vadodara", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-gu:
-    "Hind Vadodara", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-display: "Marcellus", "Hind Vadodara", Georgia, serif;
-  --font-weight-hero: 400;
-  --font-weight-heading: 400;
-  --font-weight-strong: 600;
-  --font-weight-label: 500;
-  --tracking-display: 0.01em;
-  --radius-sm: 10px;
-  --radius-md: 14px;
-  --radius-cell: 12px;
-  --radius-tile: 16px;
-  --radius-lg: 20px;
-  --radius-card: 20px;
-  --spacing: 0.28rem;
-  --spacing-card: 1.375rem;
-  --spacing-tile: 1.125rem;
-  --card-border: 1px solid var(--border);
-  --card-divider: 1px solid var(--border);
-  --tile-border: 1px solid var(--border);
-  --tile-divider: 1px solid var(--border);
-  --moon-size: 5.75rem;
-  --moon-rim: var(--border-strong);
-  --moon-rim-width: 1.5;
-  --ribbon-h: 2.75rem;
-  --ribbon-gap: 0.1875rem;
-  --ribbon-radius: 8px;
-  --ribbon-end-radius: 9999px;
-  --ribbon-lane-h: 0.5rem;
-}
-
-[data-palette="mandir"][data-mode="light"] {
-  color-scheme: light;
-  --bg: var(--mandir-968-020-80);
-  --surface: var(--mandir-985-012-85);
-  --surface-raised: var(--mandir-990-010-85);
-  --surface-sunken: var(--mandir-935-030-78);
-  --card-bg: var(--mandir-985-012-85);
-  --text: var(--mandir-240-040-30);
-  --text-muted: var(--mandir-450-050-40);
-  --text-on-accent: var(--mandir-990-010-85);
-  --hero-text: var(--mandir-380-120-18);
-  --border: var(--mandir-840-070-85);
-  --border-strong: var(--mandir-580-080-70);
-  --focus-ring: var(--mandir-400-130-18);
-  --accent: var(--mandir-400-130-18);
-  --accent-subtle: var(--mandir-930-045-70);
-  --danger: var(--mandir-500-180-27);
-  --warning: var(--mandir-500-110-65);
-  --warning-subtle: var(--mandir-930-060-85);
-  --auspicious: var(--mandir-470-100-145);
-  --auspicious-subtle: var(--mandir-940-040-140);
-  --inauspicious: var(--mandir-450-150-10);
-  --inauspicious-subtle: var(--mandir-940-030-10);
-  --festival: var(--mandir-460-140-320);
-  --festival-subtle: var(--mandir-940-030-320);
-  --personal-event: var(--mandir-400-130-18);
-  --personal-event-subtle: var(--mandir-930-045-70);
-  --now-marker: var(--mandir-400-130-18);
-  --moon-lit: var(--mandir-880-118-82);
-  --moon-dark: var(--mandir-900-030-78);
-  --tile-bg: var(--mandir-985-012-85);
-  --card-shadow: 0 12px 32px -20px oklch(0.4 0.1 40 / 0.35);
-  --tile-shadow: none;
-  --moon-glow: drop-shadow(0 0 1rem oklch(0.85 0.15 75 / 0.5));
-}
-
-[data-palette="mandir"][data-mode="dark"] {
-  color-scheme: dark;
-  --bg: var(--mandir-180-030-35);
-  --surface: var(--mandir-220-035-38);
-  --surface-raised: var(--mandir-260-040-40);
-  --surface-sunken: var(--mandir-150-025-35);
-  --card-bg: var(--mandir-220-035-38);
-  --text: var(--mandir-950-020-80);
-  --text-muted: var(--mandir-800-040-75);
-  --text-on-accent: var(--mandir-200-040-40);
-  --hero-text: var(--mandir-840-130-75);
-  --border: var(--mandir-420-060-80);
-  --border-strong: var(--mandir-620-070-75);
-  --focus-ring: var(--mandir-820-130-72);
-  --accent: var(--mandir-820-130-72);
-  --accent-subtle: var(--mandir-320-060-60);
-  --danger: var(--mandir-760-130-25);
-  --warning: var(--mandir-850-120-85);
-  --warning-subtle: var(--mandir-300-050-80);
-  --auspicious: var(--mandir-820-120-140);
-  --auspicious-subtle: var(--mandir-290-050-140);
-  --inauspicious: var(--mandir-780-110-10);
-  --inauspicious-subtle: var(--mandir-300-060-10);
-  --festival: var(--mandir-800-110-320);
-  --festival-subtle: var(--mandir-300-060-320);
-  --personal-event: var(--mandir-820-130-72);
-  --personal-event-subtle: var(--mandir-320-060-60);
-  --now-marker: var(--mandir-820-130-72);
-  --moon-lit: var(--mandir-880-118-82);
-  --moon-dark: var(--mandir-320-040-40);
-  --tile-bg: var(--mandir-220-035-38);
-  --card-shadow: none;
-  --tile-shadow: none;
-  --moon-glow: drop-shadow(0 0 1.25rem oklch(0.85 0.15 75 / 0.35));
-}
-
-/* Utsav (young families, festivals): joyful and rounded. Rangoli brights on a calm base, tonal layers, big radii. */
-[data-palette="utsav"] {
-  --font-ui:
-    "Baloo Bhai 2", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-gu:
-    "Baloo Bhai 2", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-display:
-    "Baloo Bhai 2", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-weight-hero: 700;
-  --font-weight-heading: 700;
-  --font-weight-strong: 600;
-  --font-weight-label: 500;
-  --tracking-display: 0em;
-  --radius-sm: 12px;
-  --radius-md: 18px;
-  --radius-cell: 14px;
-  --radius-tile: 24px;
-  --radius-lg: 28px;
-  --radius-card: 28px;
-  --spacing: 0.25rem;
-  --spacing-card: 1.375rem;
-  --spacing-tile: 1.125rem;
-  --card-border: none;
-  --card-divider: none;
-  --tile-border: none;
-  --tile-divider: none;
-  --moon-size: 5.75rem;
-  --moon-rim: var(--accent);
-  --moon-rim-width: 3;
-  --ribbon-h: 3rem;
-  --ribbon-gap: 0.25rem;
-  --ribbon-radius: 9999px;
-  --ribbon-end-radius: 9999px;
-  --ribbon-lane-h: 0.625rem;
-}
-
+/* Utsav (young families, festivals): joyful. Rangoli brights on a calm base, tonal cards. */
 [data-palette="utsav"][data-mode="light"] {
   color-scheme: light;
   --bg: var(--utsav-985-006-60);
@@ -783,9 +405,6 @@
   --moon-lit: var(--utsav-930-088-90);
   --moon-dark: var(--utsav-880-020-350);
   --tile-bg: var(--utsav-955-014-60);
-  --card-shadow: none;
-  --tile-shadow: none;
-  --moon-glow: none;
 }
 
 [data-palette="utsav"][data-mode="dark"] {
@@ -819,47 +438,9 @@
   --moon-lit: var(--utsav-930-080-90);
   --moon-dark: var(--utsav-340-030-320);
   --tile-bg: var(--utsav-150-020-320);
-  --card-shadow: none;
-  --tile-shadow: none;
-  --moon-glow: none;
 }
 
-/* Shunya (busy professionals, NRIs): minimal monochrome, compact, data first, hairline dividers, one accent. */
-[data-palette="shunya"] {
-  --font-ui: "Geist", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-gu:
-    "Anek Gujarati", "Geist", system-ui, -apple-system, "Segoe UI", Roboto,
-    sans-serif;
-  --font-display:
-    "Geist", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-weight-hero: 600;
-  --font-weight-heading: 600;
-  --font-weight-strong: 600;
-  --font-weight-label: 500;
-  --tracking-display: -0.035em;
-  --radius-sm: 4px;
-  --radius-md: 6px;
-  --radius-cell: 4px;
-  --radius-tile: 0px;
-  --radius-lg: 8px;
-  --radius-card: 0px;
-  --spacing: 0.21rem;
-  --spacing-card: 0rem;
-  --spacing-tile: 0rem;
-  --card-border: none;
-  --card-divider: 1px solid var(--border);
-  --tile-border: none;
-  --tile-divider: 1px solid var(--border);
-  --moon-size: 3.75rem;
-  --moon-rim: var(--border-strong);
-  --moon-rim-width: 1.5;
-  --ribbon-h: 2.75rem;
-  --ribbon-gap: 1px;
-  --ribbon-radius: 0px;
-  --ribbon-end-radius: 0px;
-  --ribbon-lane-h: 0.25rem;
-}
-
+/* Shunya (busy professionals, NRIs): minimal monochrome, data first, one signal-orange accent. */
 [data-palette="shunya"][data-mode="light"] {
   color-scheme: light;
   --bg: var(--shunya-995-000-0);
@@ -891,9 +472,6 @@
   --moon-lit: var(--shunya-970-000-0);
   --moon-dark: var(--shunya-870-000-0);
   --tile-bg: var(--shunya-995-000-0);
-  --card-shadow: none;
-  --tile-shadow: none;
-  --moon-glow: none;
 }
 
 [data-palette="shunya"][data-mode="dark"] {
@@ -927,13 +505,4 @@
   --moon-lit: var(--shunya-950-000-0);
   --moon-dark: var(--shunya-300-000-0);
   --tile-bg: var(--shunya-130-000-0);
-  --card-shadow: none;
-  --tile-shadow: none;
-  --moon-glow: none;
-}
-
-/* Marcellus has one weight; Gujarati headings in Mandir use Hind Vadodara, which needs weight. */
-[data-palette="mandir"]:lang(gu) {
-  --font-weight-hero: 600;
-  --font-weight-heading: 600;
 }

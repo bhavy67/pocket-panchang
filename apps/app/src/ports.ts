@@ -46,6 +46,18 @@ export const webShare: SharePort = {
 
 export const isNative = () => Capacitor.isNativePlatform();
 
+/** A light tap, fired and forgotten; a no-op on the web (Phase 11.7). */
+export const haptic = (kind: "select" | "tap" | "swipe" = "tap") => {
+  if (!isNative()) return;
+  void import("@/native/android").then((m) =>
+    kind === "select"
+      ? m.hapticSelect()
+      : kind === "swipe"
+        ? m.hapticSwipe()
+        : m.hapticTap(),
+  );
+};
+
 let ports: Promise<{ reminders: ReminderPort; share: SharePort }> | undefined;
 /** The ports for this platform. */
 export const platformPorts = () =>

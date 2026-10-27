@@ -7,7 +7,13 @@ import { addDays, type CivilDate } from "@panchang/engine";
 import { festivalShortName, monthName, tithiLabel } from "@panchang/i18n";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  type PointerEvent as ReactPointerEvent,
+} from "react";
 import type { MonthDay } from "@/db";
 import { DayDetail } from "@/day-detail";
 import { useOccurrenceRows, type UpcomingRow } from "@/events-data";
@@ -22,6 +28,7 @@ import {
   weekdayInitials,
 } from "@/lib/format";
 import { firstDay, yearMonthOf, type YearMonth } from "@/lib/year-month";
+import { haptic } from "@/ports";
 import { festivalsQuery, monthQuery } from "@/queries";
 import { useSettings } from "@/settings";
 import { SHOW_UNVERIFIED } from "@/flags";
@@ -57,9 +64,17 @@ export function Month({ month, date }: { month: YearMonth; date?: CivilDate }) {
   const family = useOccurrenceRows(s, firstDay(month), 30) ?? [];
   const qc = useQueryClient();
   const [dir, setDir] = useState<"next" | "prev" | null>(null);
-  const swipeX = useRef<number | null>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
+  const drag = useRef<{
+    x: number;
+    t: number;
+    lastX: number;
+    lastT: number;
+    prefetched: boolean;
+  } | null>(null);
 
-  // §7 prefetch: adjacent months in idle time, so month changes never wait on the worker.
+  // §7 prefetch: adjacent months in idle time, so month changes never wait on the worker. A
+  // swipe in progress (below) prefetches its direction immediately instead of waiting for idle.
   useEffect(() => {
     const prefetch = () => {
       void qc.prefetchQuery(monthQuery(s, shiftMonth(month, 1)));
@@ -71,7 +86,72 @@ export function Month({ month, date }: { month: YearMonth; date?: CivilDate }) {
 
   const go = (by: number) => {
     setDir(by > 0 ? "next" : "prev");
-    void navigate({ to: "/month", search: { m: shiftMonth(month, by) } });
+    // Flipping months stays on the same page: snapping scroll to the top on every tap (the
+    // router's default) is itself a jerk — most visible going forward, since reading a month
+    // scrolls down first, then "next" snaps back to 0; "prev" right after starts from 0 already
+    // so the same snap is invisible. Keep whatever scroll position the user was at instead.
+    void navigate({
+      to: "/month",
+      search: { m: shiftMonth(month, by) },
+      resetScroll: false,
+    });
+  };
+
+  // Drag follows the finger (transform only, no React state/re-render); on release, a fast
+  // flick or a far-enough drag commits the month change, otherwise it springs back.
+  const onPointerDown = (e: ReactPointerEvent<HTMLDivElement>) => {
+    e.currentTarget.setPointerCapture(e.pointerId);
+    const now = performance.now();
+    drag.current = { x: e.clientX, t: now, lastX: e.clientX, lastT: now, prefetched: false };
+    if (gridRef.current) {
+      gridRef.current.style.transition = "none";
+      // Only while actually dragging: a GPU layer left promoted all the time (as this and the
+      // bottom nav briefly were) competes with whatever else is compositing and can make a
+      // *different*, unrelated fixed element (the nav) visibly lag and snap back into place —
+      // confirmed by video on a real device, not reproducible in any headless check.
+      gridRef.current.style.willChange = "transform";
+    }
+  };
+  const onPointerMove = (e: ReactPointerEvent<HTMLDivElement>) => {
+    const d = drag.current;
+    const el = gridRef.current;
+    if (!d || !el) return;
+    const dx = e.clientX - d.x;
+    el.style.transform = `translateX(${dx}px)`;
+    if (!d.prefetched && Math.abs(dx) > 10) {
+      d.prefetched = true;
+      void qc.prefetchQuery(monthQuery(s, shiftMonth(month, dx < 0 ? 1 : -1)));
+    }
+    d.lastX = e.clientX;
+    d.lastT = performance.now();
+  };
+  const onPointerUp = (e: ReactPointerEvent<HTMLDivElement>) => {
+    const d = drag.current;
+    const el = gridRef.current;
+    drag.current = null;
+    if (!d || !el) return;
+    const dx = e.clientX - d.x;
+    const velocity = (d.lastX - d.x) / Math.max(1, d.lastT - d.t); // px/ms
+    el.style.transition = "transform var(--dur-base) var(--ease-exit)";
+    if (Math.abs(dx) <= 60 && Math.abs(velocity) <= 0.5) {
+      el.style.transform = "translateX(0px)";
+      el.addEventListener(
+        "transitionend",
+        () => {
+          el.style.willChange = "auto";
+        },
+        { once: true },
+      );
+      return;
+    }
+    const by = (Math.abs(velocity) > 0.5 ? velocity : dx) < 0 ? 1 : -1;
+    haptic("swipe");
+    const width = el.offsetWidth || 1;
+    el.style.transform = `translateX(${by > 0 ? -width : width}px)`;
+    // The element is replaced (key={month}) once `go` navigates, so it's left off-screen
+    // rather than snapped back to 0 first (which would flash for a frame); no need to reset
+    // willChange here, the whole element is gone.
+    el.addEventListener("transitionend", () => go(by), { once: true });
   };
   const selected = date ?? (yearMonthOf(today) === month ? today : undefined);
 
@@ -108,12 +188,11 @@ export function Month({ month, date }: { month: YearMonth; date?: CivilDate }) {
 
         <div
           key={month}
-          onPointerDown={(e) => (swipeX.current = e.clientX)}
-          onPointerUp={(e) => {
-            const dx = swipeX.current === null ? 0 : e.clientX - swipeX.current;
-            swipeX.current = null;
-            if (Math.abs(dx) > 60) go(dx < 0 ? 1 : -1);
-          }}
+          ref={gridRef}
+          onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
+          onPointerUp={onPointerUp}
+          onPointerCancel={onPointerUp}
           aria-busy={!days || !festivalsLoaded}
           className={`mt-4 touch-pan-y ${dir === "next" ? "slide-next" : dir === "prev" ? "slide-prev" : ""}`}
         >
@@ -125,26 +204,30 @@ export function Month({ month, date }: { month: YearMonth; date?: CivilDate }) {
               <span key={w}>{w}</span>
             ))}
           </div>
-          {days ? (
-            <Grid
-              month={month}
-              days={days}
-              festivals={festivals}
-              family={family}
-              today={today}
-              {...(selected ? { selected } : {})}
-              link={(d) =>
-                isWide
-                  ? { to: "/month", search: { m: month, date: d } }
-                  : { to: "/day", search: { date: d } }
-              }
-            />
-          ) : (
-            <div
-              aria-hidden="true"
-              className="h-96 animate-pulse motion-reduce:animate-none card"
-            />
-          )}
+          {/* Fixed to 6 weeks' worth of height: a 4-, 5- or 6-week month never shifts the Legend
+              and "This month" below it. */}
+          <div className="min-h-[calc(6*4.125rem+1.25rem)]">
+            {days ? (
+              <Grid
+                month={month}
+                days={days}
+                festivals={festivals}
+                family={family}
+                today={today}
+                {...(selected ? { selected } : {})}
+                link={(d) =>
+                  isWide
+                    ? { to: "/month", search: { m: month, date: d } }
+                    : { to: "/day", search: { date: d } }
+                }
+              />
+            ) : (
+              <div
+                aria-hidden="true"
+                className="h-96 animate-pulse motion-reduce:animate-none card"
+              />
+            )}
+          </div>
         </div>
         <Legend
           hasFestivals={festivals.some(

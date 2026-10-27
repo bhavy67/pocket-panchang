@@ -29,7 +29,7 @@ export function Onboarding() {
   };
 
   return (
-    <main className="mx-auto flex min-h-dvh max-w-xl flex-col gap-6 bg-bg p-4 text-text">
+    <main className="mx-auto flex min-h-dvh max-w-xl flex-col gap-6 bg-bg px-4 pb-4 pt-[max(1rem,env(safe-area-inset-top))] text-text">
       <div className="flex flex-wrap items-center justify-between gap-2">
         {city ? (
           <button

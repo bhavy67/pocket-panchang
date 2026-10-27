@@ -40,6 +40,8 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- Haptics (Phase 11.7): press/selection/swipe feedback (@capacitor/haptics). -->
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <!-- Exact reminders (Phase 11). Play allows USE_EXACT_ALARM for "a calendar app that shows
          event notifications" (Play Console declaration required); it is granted at install on

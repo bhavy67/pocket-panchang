@@ -11,8 +11,52 @@
     <link rel="icon" href="/icons/icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
     <title>Parivar Panchang</title>
+    <style>
+      /* Boot splash (Phase 11.7): shown until the first Today render (main.tsx removes it),
+       * so cold start never shows a blank/white page. Matches Calm's default bg; the OS dark
+       * preference is the only signal known this early (the saved theme loads from IndexedDB). */
+      #boot-splash {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f6f7fa;
+        transition: opacity 200ms ease;
+      }
+      #boot-splash.hide {
+        opacity: 0;
+        pointer-events: none;
+      }
+      @media (prefers-color-scheme: dark) {
+        #boot-splash {
+          background: #0d0f15;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        #boot-splash {
+          transition: none;
+        }
+      }
+    </style>
   </head>
   <body>
+    <div id="boot-splash" aria-hidden="true">
+      <svg viewBox="0 0 108 108" width="88" height="88">
+        <rect width="108" height="108" rx="22" fill="#494FCC" />
+        <mask id="bs-crescent">
+          <rect width="108" height="108" fill="white" />
+          <circle cx="52" cy="30" r="15" fill="black" />
+        </mask>
+        <circle cx="42" cy="34" r="19" fill="#FBEEC9" mask="url(#bs-crescent)" />
+        <ellipse cx="56" cy="76" rx="26" ry="11" fill="#FBEEC9" />
+        <path
+          d="M 56 74 C 46 74 42 64 50 54 C 52.5 51 54.5 48 56 44 C 57.5 48 59.5 51 62 54 C 70 64 66 74 56 74 Z"
+          fill="#FFB357"
+        />
+      </svg>
+    </div>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
