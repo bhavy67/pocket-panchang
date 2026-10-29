@@ -6,14 +6,13 @@ A beautiful, private, offline Hindu panchang that's Gujarati-first and diaspora-
 
 ## Working Rules (from PROJECT_PLAN.md §0)
 
-1. **Never commit, push, tag, or rebase — except in an unattended cloud session.** Bhavy commits manually by default. Read-only git commands (`git status`, `git diff`, `git log`) are always fine. Never `git tag`, `git rebase`, `git reset --hard`, `git stash drop`, force-push, or push/commit directly to `main`.
-   - **Exception:** if Bhavy explicitly says the session is unattended (e.g. triggered from Claude Cloud via mobile), Claude may `git commit` and `git push` to a feature branch — but only after producing the phase STOP report (rule 3) and using its suggested commit message.
+1. **Git, GitHub, and deployment work is allowed — after strongly confirming with Bhavy first, every single time.** Claude may commit, push, branch, tag, open/manage PRs and issues, and deploy. Before acting, say exactly what's about to happen (command, branch, scope) and wait for an explicit go-ahead — approval for one action doesn't carry over to the next. Read-only commands (`git status`, `git diff`, `git log`, `gh pr view`, etc.) never need confirmation. Force-push, `git reset --hard`, `git stash drop`, rewriting published history, deleting branches/tags, and pushing straight to `main` need that same confirmation plus a plain statement of what's at risk.
 2. **Work one phase at a time.** Do not start the next phase until Bhavy explicitly says so.
 3. **Stop at the end of every phase** and output:
    - A summary of what was done
    - The files created or changed
    - Any open questions or deviations from `PROJECT_PLAN.md`
-   - **A suggested commit message** in Conventional Commits format (see §14)
+   - **A short, human commit message** (see §14)
 4. **Engine ownership mode.** In phases marked `[OWN]`, Bhavy writes the core algorithms. Claude explains concepts, proposes function signatures, writes tests and fixtures, and reviews Bhavy's code. Claude writes core algorithm code only when Bhavy explicitly says "write it".
 5. **No silent decisions.** If a choice isn't covered by `PROJECT_PLAN.md` or an ADR, ask before proceeding, offering a recommended answer.
 6. **No new dependencies without a stated reason.** Every added package gets a one-line justification in the phase summary.

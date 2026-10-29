@@ -9,14 +9,13 @@
 
 These rules apply to every phase and to every AI agent working in this repo.
 
-1. **Never commit, push, tag, or rebase — except in an unattended cloud session.** Bhavy commits manually by default. No `git commit`, `git push`, `git tag`, `git rebase`, `git reset --hard`, or `git stash drop`, ever. Read-only git commands (`git status`, `git diff`, `git log`) are fine.
-   - **Exception:** when Bhavy explicitly states the session is unattended (e.g. triggered from Claude Cloud via mobile, no one at a laptop to review), Claude may `git commit` and `git push` to a feature branch after producing the phase STOP report (rule 3), using the suggested commit message from that report. Still never `git tag`, `git rebase`, `git reset --hard`, `git stash drop`, force-push, or push/commit directly to `main`.
+1. **Git, GitHub, and deployment work is allowed — but only after strongly confirming with Bhavy first, every time.** Claude may run `git commit`, `git push`, create/switch branches, tag, open and manage GitHub PRs/issues, and handle deployment steps. Before any such action, explicitly state what's about to happen (command, branch, scope) and wait for Bhavy's explicit go-ahead — approval for one action doesn't carry over to the next. Read-only git/GitHub commands (`git status`, `git diff`, `git log`, `gh pr view`, etc.) never need confirmation. Force-push, `git reset --hard`, `git stash drop`, rewriting published history, deleting branches/tags, and pushing straight to `main` need that same confirmation plus a plain statement of what would be lost or affected.
 2. **Work one phase at a time.** Do not start the next phase until Bhavy explicitly says so.
 3. **Stop at the end of every phase** and output:
    - A summary of what was done
    - The files created or changed
    - Any open questions or deviations from this plan
-   - **A suggested commit message** in Conventional Commits format (see §14)
+   - **A short, human commit message** (see §14)
 4. **Engine ownership mode.** In phases marked `[OWN]`, Bhavy writes the core algorithms. Claude explains concepts, proposes function signatures, writes tests and fixtures, and reviews Bhavy's code. Claude writes core algorithm code only when Bhavy explicitly says "write it".
 5. **No silent decisions.** If a choice isn't covered by this plan or an ADR, ask before proceeding, offering a recommended answer.
 6. **No new dependencies without a stated reason.** Every added package gets a one-line justification in the phase summary.
@@ -559,17 +558,11 @@ Rules that need a cited classical or reference source before being marked verifi
 
 ## 14. Commit Message Convention
 
-Conventional Commits. Claude **suggests** the message; Bhavy commits.
+Short and human — one line, plain language, like a person wrote it. No boilerplate footer, no forced multi-paragraph body. A `type(scope):` prefix is fine when it's genuinely clarifying, but don't force it.
 
-```
-<type>(<scope>): <summary in imperative, ≤ 72 chars>
+Examples: `fix month nav jumping on next click`, `add varsi reminders to day detail`.
 
-<body: what and why, wrapped at 72>
-
-Phase: <n>
-```
-- Types: `feat`, `fix`, `docs`, `test`, `refactor`, `perf`, `build`, `ci`, `chore`
-- Scopes: `engine`, `calendar`, `i18n`, `app`, `android`, `pwa`, `fixtures`, `ci`, `docs`, `repo`
+Claude drafts the message and commits only after Bhavy's explicit go-ahead (§0 rule 1).
 
 ---
 
