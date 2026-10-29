@@ -192,47 +192,55 @@ export function Month({ month, date }: { month: YearMonth; date?: CivilDate }) {
         </header>
         {days && <AdhikBanner days={days} />}
 
-        <div
-          key={month}
-          ref={gridRef}
-          onPointerDown={onPointerDown}
-          onPointerMove={onPointerMove}
-          onPointerUp={onPointerUp}
-          onPointerCancel={onPointerUp}
-          aria-busy={!days || !festivalsLoaded}
-          className={`mt-4 touch-pan-y ${dir === "next" ? "slide-next" : dir === "prev" ? "slide-prev" : ""}`}
-        >
+        {/* overflow-clip: the slide-next/slide-prev entrance briefly overshoots a few pixels
+            past this box while animating in. Uncontained, that overshoot is enough for a mobile
+            browser to think the page just grew and needs more room, hiding its own address-bar
+            chrome for ~200ms and back — the fixed bottom nav visibly jumps as the viewport
+            resizes under it. Clipping at this static wrapper (not on the animated element
+            itself, which wouldn't help) keeps the overshoot from ever reaching the viewport. */}
+        <div className="overflow-clip">
           <div
-            aria-hidden="true"
-            className="grid grid-cols-7 pb-1 text-center text-[length:min(var(--text-caption),17px)] font-label text-text-muted"
+            key={month}
+            ref={gridRef}
+            onPointerDown={onPointerDown}
+            onPointerMove={onPointerMove}
+            onPointerUp={onPointerUp}
+            onPointerCancel={onPointerUp}
+            aria-busy={!days || !festivalsLoaded}
+            className={`mt-4 touch-pan-y ${dir === "next" ? "slide-next" : dir === "prev" ? "slide-prev" : ""}`}
           >
-            {weekdayInitials().map((w) => (
-              <span key={w}>{w}</span>
-            ))}
-          </div>
-          {/* Fixed to 6 weeks' worth of height: a 4-, 5- or 6-week month never shifts the Legend
-              and "This month" below it. */}
-          <div className="min-h-[calc(6*4.125rem+1.25rem)]">
-            {days ? (
-              <Grid
-                month={month}
-                days={days}
-                festivals={festivals}
-                family={family}
-                today={today}
-                {...(selected ? { selected } : {})}
-                link={(d) =>
-                  isWide
-                    ? { to: "/month", search: { m: month, date: d } }
-                    : { to: "/day", search: { date: d } }
-                }
-              />
-            ) : (
-              <div
-                aria-hidden="true"
-                className="h-96 animate-pulse motion-reduce:animate-none card"
-              />
-            )}
+            <div
+              aria-hidden="true"
+              className="grid grid-cols-7 pb-1 text-center text-[length:min(var(--text-caption),17px)] font-label text-text-muted"
+            >
+              {weekdayInitials().map((w) => (
+                <span key={w}>{w}</span>
+              ))}
+            </div>
+            {/* Fixed to 6 weeks' worth of height: a 4-, 5- or 6-week month never shifts the
+                Legend and "This month" below it. */}
+            <div className="min-h-[calc(6*4.125rem+1.25rem)]">
+              {days ? (
+                <Grid
+                  month={month}
+                  days={days}
+                  festivals={festivals}
+                  family={family}
+                  today={today}
+                  {...(selected ? { selected } : {})}
+                  link={(d) =>
+                    isWide
+                      ? { to: "/month", search: { m: month, date: d } }
+                      : { to: "/day", search: { date: d } }
+                  }
+                />
+              ) : (
+                <div
+                  aria-hidden="true"
+                  className="h-96 animate-pulse motion-reduce:animate-none card"
+                />
+              )}
+            </div>
           </div>
         </div>
         <Legend
