@@ -213,6 +213,23 @@ const FESTIVAL_SHORT: Record<string, [en: string, gu: string]> = {
   "bestu-varas": ["Bestu", "બેસતું વર્ષ"],
   "bhai-bij": ["Bhaibij", "ભાઈ બીજ"],
   uttarayan: ["Utran", "ઉતરાણ"],
+  "ganesh-chaturthi": ["Ganesh", "ગણેશ"],
+  "ram-navami": ["RamNavm", "રામનવમી"],
+  "vasant-panchami": ["Vasant", "વસંત"],
+  "guru-purnima": ["Guru", "ગુરુ"],
+  "akshaya-tritiya": ["Akshaya", "અક્ષય"],
+  "nag-panchami": ["Nag", "નાગ"],
+  "sharad-purnima": ["Sharad", "શરદ"],
+  "dev-uthani-ekadashi": ["Devuthi", "દેવઊઠી"],
+  "tulsi-vivah": ["Tulsi", "તુલસી"],
+  "rath-yatra": ["Rath", "રથ"],
+  "hanuman-jayanti": ["Hanuman", "હનુમાન"],
+  "chaitra-navratri": ["Chaitra", "ચૈત્ર"],
+  "gaura-purnima": ["Gaura", "ગૌર"],
+  "nrisimha-chaturdashi": ["Nrisimh", "નૃસિંહ"],
+  radhashtami: ["Radha", "રાધા"],
+  "jhulan-yatra": ["Jhulan", "ઝૂલન"],
+  "govardhan-puja": ["Govrdhn", "ગોવર્ધન"],
 };
 
 /** Short festival name for a Month grid cell, or undefined for an unknown id. */

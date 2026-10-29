@@ -63,7 +63,7 @@ A beautiful, private, offline Hindu panchang that's Gujarati-first and diaspora-
 - Lunar month, paksha, Vikram Samvat (Kartikadi) and Shaka year; adhik month display.
 - Muhurta: Rahu Kaal, Yamaganda, Gulika, Bhadra, day and night Choghadiya, with a "now" indicator.
 - Month calendar grid showing the tithi per day, including vriddhi/kshaya markers.
-- **13 verified festivals** (ADR 0018): Dhanteras, Kali Chaudas, Diwali, Bestu Varas, Bhai Bij, Navratri (span), Dussehra, Janmashtami (Smarta and Vaishnava shown labelled when they differ), Raksha Bandhan (with "after Bhadra" timing), Holika Dahan, Dhuleti, Maha Shivaratri, Uttarayan (sankranti rule).
+- **13 v1 festivals** (ADR 0018): Dhanteras, Kali Chaudas, Diwali, Bestu Varas, Bhai Bij, Navratri (span), Dussehra, Janmashtami (Smarta and Vaishnava shown labelled when they differ), Raksha Bandhan (with "after Bhadra" timing), Holika Dahan, Dhuleti, Maha Shivaratri, Uttarayan (sankranti rule). **Plus 17 more** (ADR 0027, Phase 13): Ganesh Chaturthi, Ram Navami, Vasant Panchami, Guru Purnima, Akshaya Tritiya, Nag Panchami, Sharad Purnima, Dev Uthani Ekadashi, Tulsi Vivah, Rath Yatra, Hanuman Jayanti, Chaitra Navratri (span), Gaura Purnima, Nrisimha Chaturdashi, Radhashtami, Jhulan Yatra (span), Govardhan Puja. A festival ships to production only once verified per year (§0 rule 7) — see `docs/verification/festivals-ahmedabad.md` for which years.
 - Muhurta includes Bhadra (Vishti karana) windows.
 - Personal tithi events: create, edit, delete; upcoming occurrences list.
 - Reminders: Android local notifications; `.ics` calendar export (web and Android).
@@ -747,6 +747,16 @@ Make the app feel like a polished native Play Store app rather than a responsive
 - Android: closed testing → production once eligible (12 testers × 14 days for new personal accounts) and the formal trademark search is done.
 
 **Exit criteria:** live on `panchang.bhavyladani.in` and on Google Play production.
+
+### Phase 13: Expanded festival list (ADR 0027)
+Bhavy asked to go beyond the 13 v1 festivals: broader Gujarati/pan-Hindu coverage plus the ISKCON/Vaishnav calendar (2026-10-29). Same rigor as Phase 6/the original 13 — provisional rules first, source-verified per year before shipping to production (§0 rule 7).
+- 17 new `FestivalRule` entries (ADR 0027 has the full table and sourcing per rule); no engine or `ObservanceWindow` change needed.
+- Verify each new festival against published sources for 2026–2030 Ahmedabad, same process as `docs/verification/festivals-ahmedabad.md` (Tier 1/Tier 2 from the 2026-10-29 verification pass).
+
+**Exit criteria:** all 17 rules added as provisional; verification pass complete and `verified.years` filled in (or the specific festival-year flagged as unresolved, same as Raksha Bandhan/Navratri/Holika Dahan 2026 in the v1 pass).
+
+> **Status (2026-10-29): rules added, provisional (unverified).** All 17 land in `packages/calendar/src/festivals.ts` as `verified: pending` — hidden in production, visible in dev via `SHOW_UNVERIFIED`. The 2026–2030 published-source verification pass (the actual `verified.years` fill-in) is the next step, not done in this pass.
+
 ---
 
 ## 16. Interview Story Checklist (fill in as you go)

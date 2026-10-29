@@ -12,7 +12,7 @@
 - [ ] **Month-grid markers:** "૨×" (two-day tithi) and "છૂટી" (skipped tithi).
 - [ ] **Event kinds:** વરસી / શ્રાદ્ધ, લગ્નતિથિ, જન્મદિવસ (તિથિ મુજબ).
 
-### UI strings (432)
+### UI strings (428)
 
 | OK | Key | English | ગુજરાતી (draft) |
 |---|---|---|---|
@@ -273,7 +273,6 @@
 | [ ] | `sizeLarge` | Large | મોટું |
 | [ ] | `colours` | Colours | રંગ |
 | [ ] | `paletteCalm` | Calm | શાંત |
-| [ ] | `paletteMandir` | Mandir | મંદિર |
 | [ ] | `paletteRaat` | Raat | રાત |
 | [ ] | `lightOrDark` | Light or dark | આછું કે ઘાટું |
 | [ ] | `modeLight` | Light | આછું |
@@ -439,13 +438,10 @@
 | [ ] | `familyKeeps` | How your family keeps dates | તમારો પરિવાર તારીખો કેવી રીતે પાળે છે |
 | [ ] | `familyKeepsSummary` | Varsi: {varsi}. Birthdays: {birthday}. When a tithi spans two days: {vriddhi}. | વરસી: {varsi}. જન્મદિવસ: {birthday}. તિથિ બે દિવસ હોય ત્યારે: {vriddhi}. |
 | [ ] | `change` | Change | બદલો |
-| [ ] | `paletteKagaz` | Kagaz | કાગળ |
 | [ ] | `paletteUtsav` | Utsav | ઉત્સવ |
 | [ ] | `paletteShunya` | Shunya | શૂન્ય |
 | [ ] | `paletteCalmHint` | Quiet and clear, for everyone | શાંત અને સ્પષ્ટ, સૌ માટે |
 | [ ] | `paletteRaatHint` | True black, for checking at night | ઘેરો કાળો, રાત્રે જોવા માટે |
-| [ ] | `paletteKagazHint` | Like a printed panchang, larger text | છાપેલા પંચાંગ જેવું, મોટા અક્ષર |
-| [ ] | `paletteMandirHint` | Warm saffron and gold, for daily puja | કેસરી અને સોનેરી, રોજની પૂજા માટે |
 | [ ] | `paletteUtsavHint` | Bright and playful, for families | રંગીન અને આનંદી, પરિવાર માટે |
 | [ ] | `paletteShunyaHint` | Minimal, facts first | સાદું, ફક્ત મુદ્દાની વાત |
 
@@ -605,7 +601,7 @@
 | [ ] | `vara.5` | Friday | શુક્રવાર |
 | [ ] | `vara.6` | Saturday | શનિવાર |
 
-### Festivals (14)
+### Festivals (31)
 
 | OK | Key | English | ગુજરાતી (draft) |
 |---|---|---|---|
@@ -623,8 +619,25 @@
 | [ ] | `festival.bestu-varas` | Bestu Varas | બેસતું વર્ષ |
 | [ ] | `festival.bhai-bij` | Bhai Bij | ભાઈ બીજ |
 | [ ] | `festival.uttarayan` | Uttarayan | ઉત્તરાયણ |
+| [ ] | `festival.ganesh-chaturthi` | Ganesh Chaturthi | ગણેશ ચતુર્થી |
+| [ ] | `festival.ram-navami` | Ram Navami | રામ નવમી |
+| [ ] | `festival.vasant-panchami` | Vasant Panchami | વસંત પંચમી |
+| [ ] | `festival.guru-purnima` | Guru Purnima | ગુરુ પૂર્ણિમા |
+| [ ] | `festival.akshaya-tritiya` | Akshaya Tritiya | અક્ષય તૃતીયા |
+| [ ] | `festival.nag-panchami` | Nag Panchami | નાગ પંચમી |
+| [ ] | `festival.sharad-purnima` | Sharad Purnima | શરદ પૂર્ણિમા |
+| [ ] | `festival.dev-uthani-ekadashi` | Dev Uthani Ekadashi | દેવ ઉઠી અગિયારસ |
+| [ ] | `festival.tulsi-vivah` | Tulsi Vivah | તુલસી વિવાહ |
+| [ ] | `festival.rath-yatra` | Rath Yatra | રથયાત્રા |
+| [ ] | `festival.hanuman-jayanti` | Hanuman Jayanti | હનુમાન જયંતી |
+| [ ] | `festival.chaitra-navratri` | Chaitra Navratri | ચૈત્ર નવરાત્રી |
+| [ ] | `festival.gaura-purnima` | Gaura Purnima | ગૌર પૂર્ણિમા |
+| [ ] | `festival.nrisimha-chaturdashi` | Nrisimha Chaturdashi | નૃસિંહ ચતુર્દશી |
+| [ ] | `festival.radhashtami` | Radhashtami | રાધાષ્ટમી |
+| [ ] | `festival.jhulan-yatra` | Jhulan Yatra | ઝૂલન યાત્રા |
+| [ ] | `festival.govardhan-puja` | Govardhan Puja | ગોવર્ધન પૂજા |
 
-### Festival short names (Month grid cells) (14)
+### Festival short names (Month grid cells) (31)
 
 | OK | Key | English | ગુજરાતી (draft) |
 |---|---|---|---|
@@ -642,3 +655,20 @@
 | [ ] | `festivalShort.bestu-varas` | Bestu | બેસતું વર્ષ |
 | [ ] | `festivalShort.bhai-bij` | Bhaibij | ભાઈ બીજ |
 | [ ] | `festivalShort.uttarayan` | Utran | ઉતરાણ |
+| [ ] | `festivalShort.ganesh-chaturthi` | Ganesh | ગણેશ |
+| [ ] | `festivalShort.ram-navami` | RamNavm | રામનવમી |
+| [ ] | `festivalShort.vasant-panchami` | Vasant | વસંત |
+| [ ] | `festivalShort.guru-purnima` | Guru | ગુરુ |
+| [ ] | `festivalShort.akshaya-tritiya` | Akshaya | અક્ષય |
+| [ ] | `festivalShort.nag-panchami` | Nag | નાગ |
+| [ ] | `festivalShort.sharad-purnima` | Sharad | શરદ |
+| [ ] | `festivalShort.dev-uthani-ekadashi` | Devuthi | દેવઊઠી |
+| [ ] | `festivalShort.tulsi-vivah` | Tulsi | તુલસી |
+| [ ] | `festivalShort.rath-yatra` | Rath | રથ |
+| [ ] | `festivalShort.hanuman-jayanti` | Hanuman | હનુમાન |
+| [ ] | `festivalShort.chaitra-navratri` | Chaitra | ચૈત્ર |
+| [ ] | `festivalShort.gaura-purnima` | Gaura | ગૌર |
+| [ ] | `festivalShort.nrisimha-chaturdashi` | Nrisimh | નૃસિંહ |
+| [ ] | `festivalShort.radhashtami` | Radha | રાધા |
+| [ ] | `festivalShort.jhulan-yatra` | Jhulan | ઝૂલન |
+| [ ] | `festivalShort.govardhan-puja` | Govrdhn | ગોવર્ધન |

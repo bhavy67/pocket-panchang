@@ -184,4 +184,127 @@ export const FESTIVALS: readonly FestivalRule[] = [
     afterSunset: "next-day",
     verified: verifiedAllYears,
   },
+
+  // 17 more (ADR 0027, Phase 13): broader Gujarati/pan-Hindu + ISKCON/Vaishnav coverage.
+  // Provisional, same as the 13 above started — `verified` stays `pending` until checked
+  // against published sources for 2026–2030 (docs/verification/festivals-ahmedabad.md).
+  tithi(
+    "ganesh-chaturthi",
+    names("Ganesh Chaturthi", "ગણેશ ચતુર્થી"),
+    "Bhadrapada",
+    "shukla",
+    4,
+    { window: "madhyahna", tieBreak: "max-coverage" },
+  ),
+  tithi("ram-navami", names("Ram Navami", "રામ નવમી"), "Chaitra", "shukla", 9, {
+    window: "madhyahna",
+    tieBreak: "max-coverage",
+  }),
+  tithi(
+    "vasant-panchami",
+    names("Vasant Panchami", "વસંત પંચમી"),
+    "Magha",
+    "shukla",
+    5,
+  ),
+  tithi(
+    "guru-purnima",
+    names("Guru Purnima", "ગુરુ પૂર્ણિમા"),
+    "Ashadha",
+    "shukla",
+    15,
+  ),
+  tithi(
+    "akshaya-tritiya",
+    names("Akshaya Tritiya", "અક્ષય તૃતીયા"),
+    "Vaishakha",
+    "shukla",
+    3,
+    { window: "madhyahna", tieBreak: "max-coverage" },
+  ),
+  tithi("nag-panchami", names("Nag Panchami", "નાગ પંચમી"), "Shravana", "shukla", 5),
+  tithi(
+    "sharad-purnima",
+    names("Sharad Purnima", "શરદ પૂર્ણિમા"),
+    "Ashvin",
+    "shukla",
+    15,
+  ),
+  tithi(
+    // Civil date only: the full Vaishnava Ekadashi-dating convention (Hari-vasara, the
+    // para/smarta split) isn't modelled — same class of simplification as Janmashtami's
+    // variants, flagged in ADR 0027 rather than silently picked.
+    "dev-uthani-ekadashi",
+    names("Dev Uthani Ekadashi", "દેવ ઉઠી અગિયારસ"),
+    "Kartika",
+    "shukla",
+    11,
+  ),
+  tithi("tulsi-vivah", names("Tulsi Vivah", "તુલસી વિવાહ"), "Kartika", "shukla", 12, {
+    window: "pradosh",
+    tieBreak: "max-coverage",
+  }),
+  tithi("rath-yatra", names("Rath Yatra", "રથયાત્રા"), "Ashadha", "shukla", 2),
+  tithi(
+    // North India/Gujarat convention (Chaitra Purnima). Maharashtra, Tamil Nadu/Kerala and
+    // Karnataka/Andhra use different dates entirely — not modelled (ADR 0027).
+    "hanuman-jayanti",
+    names("Hanuman Jayanti", "હનુમાન જયંતી"),
+    "Chaitra",
+    "shukla",
+    15,
+  ),
+  tithi(
+    "chaitra-navratri",
+    names("Chaitra Navratri", "ચૈત્ર નવરાત્રી"),
+    "Chaitra",
+    "shukla",
+    1,
+    { span: { end: { paksha: "shukla", tithi: 9 } } },
+  ),
+  tithi(
+    // Same tithi as Holika Dahan (Phalguna Purnima) but no Bhadra-avoidance: Chaitanya
+    // Mahaprabhu's appearance is dated by moonrise/evening, not Bhadra.
+    "gaura-purnima",
+    names("Gaura Purnima", "ગૌર પૂર્ણિમા"),
+    "Phalguna",
+    "shukla",
+    15,
+    { window: "pradosh", tieBreak: "max-coverage" },
+  ),
+  tithi(
+    "nrisimha-chaturdashi",
+    names("Nrisimha Chaturdashi", "નૃસિંહ ચતુર્દશી"),
+    "Vaishakha",
+    "shukla",
+    14,
+    { window: "pradosh", tieBreak: "max-coverage" },
+  ),
+  tithi(
+    "radhashtami",
+    names("Radhashtami", "રાધાષ્ટમી"),
+    "Bhadrapada",
+    "shukla",
+    8,
+    { window: "madhyahna", tieBreak: "max-coverage" },
+  ),
+  tithi(
+    "jhulan-yatra",
+    names("Jhulan Yatra", "ઝૂલન યાત્રા"),
+    "Shravana",
+    "shukla",
+    11,
+    { span: { end: { paksha: "shukla", tithi: 15 } } },
+  ),
+  tithi(
+    // Same tithi as Bestu Varas (Kartika Shukla 1) but shipped as its own rule, not a
+    // variant or renamed label: a conceptually different festival (Krishna lifting
+    // Govardhan vs. the Gujarati new year) that always happens to share a tithi — the same
+    // pattern already handled for Dhanteras/Kali Chaudas coinciding in some years.
+    "govardhan-puja",
+    names("Govardhan Puja", "ગોવર્ધન પૂજા"),
+    "Kartika",
+    "shukla",
+    1,
+  ),
 ];
