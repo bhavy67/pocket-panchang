@@ -73,7 +73,8 @@ export const api = {
    * docs/verification/festivals-ahmedabad.md).
    */
   festivals(location: Location, year: number): Festival[] {
-    const verifiedForYear = (r: FestivalRule) => r.verified.years.includes(year);
+    const verifiedForYear = (r: FestivalRule) =>
+      r.verified.years.includes(year);
     const rules = SHOW_UNVERIFIED
       ? FESTIVALS
       : FESTIVALS.filter(verifiedForYear);

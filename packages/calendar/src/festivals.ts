@@ -222,7 +222,13 @@ export const FESTIVALS: readonly FestivalRule[] = [
     3,
     { window: "madhyahna", tieBreak: "max-coverage" },
   ),
-  tithi("nag-panchami", names("Nag Panchami", "નાગ પંચમી"), "Shravana", "shukla", 5),
+  tithi(
+    "nag-panchami",
+    names("Nag Panchami", "નાગ પંચમી"),
+    "Shravana",
+    "shukla",
+    5,
+  ),
   tithi(
     "sharad-purnima",
     names("Sharad Purnima", "શરદ પૂર્ણિમા"),
@@ -240,10 +246,17 @@ export const FESTIVALS: readonly FestivalRule[] = [
     "shukla",
     11,
   ),
-  tithi("tulsi-vivah", names("Tulsi Vivah", "તુલસી વિવાહ"), "Kartika", "shukla", 12, {
-    window: "pradosh",
-    tieBreak: "max-coverage",
-  }),
+  tithi(
+    "tulsi-vivah",
+    names("Tulsi Vivah", "તુલસી વિવાહ"),
+    "Kartika",
+    "shukla",
+    12,
+    {
+      window: "pradosh",
+      tieBreak: "max-coverage",
+    },
+  ),
   tithi("rath-yatra", names("Rath Yatra", "રથયાત્રા"), "Ashadha", "shukla", 2),
   tithi(
     // North India/Gujarat convention (Chaitra Purnima). Maharashtra, Tamil Nadu/Kerala and

@@ -656,7 +656,7 @@
 | [ ] | `festivalShort.bhai-bij` | Bhaibij | ભાઈ બીજ |
 | [ ] | `festivalShort.uttarayan` | Utran | ઉતરાણ |
 | [ ] | `festivalShort.ganesh-chaturthi` | Ganesh | ગણેશ |
-| [ ] | `festivalShort.ram-navami` | RamNavm | રામનવમી |
+| [ ] | `festivalShort.ram-navami` | Ram | રામ |
 | [ ] | `festivalShort.vasant-panchami` | Vasant | વસંત |
 | [ ] | `festivalShort.guru-purnima` | Guru | ગુરુ |
 | [ ] | `festivalShort.akshaya-tritiya` | Akshaya | અક્ષય |
@@ -665,7 +665,7 @@
 | [ ] | `festivalShort.dev-uthani-ekadashi` | Devuthi | દેવઊઠી |
 | [ ] | `festivalShort.tulsi-vivah` | Tulsi | તુલસી |
 | [ ] | `festivalShort.rath-yatra` | Rath | રથ |
-| [ ] | `festivalShort.hanuman-jayanti` | Hanuman | હનુમાન |
+| [ ] | `festivalShort.hanuman-jayanti` | Hanu | હનુ |
 | [ ] | `festivalShort.chaitra-navratri` | Chaitra | ચૈત્ર |
 | [ ] | `festivalShort.gaura-purnima` | Gaura | ગૌર |
 | [ ] | `festivalShort.nrisimha-chaturdashi` | Nrisimh | નૃસિંહ |
