@@ -20,7 +20,7 @@ Phases are defined in `PROJECT_PLAN.md` §15. Working rules are in §0. Commit f
 - Stay inside the phase's scope. Note out-of-scope ideas for the STOP report instead of doing them.
 - Every new dependency gets a one-line justification (collect them for the summary).
 - If a decision changes `PROJECT_PLAN.md`, update the relevant section. If an architectural or domain decision changes `PROJECT_PLAN.md`, also record an ADR in `docs/adr/` (next number, using `0000-template.md`). Naming or tooling-alignment changes only need the `PROJECT_PLAN.md` update (§0 rule 8).
-- **Git is read-only.** `git status`, `git diff`, `git log` are fine. Never commit, push, tag, rebase, reset, merge, or drop stashes. These are also denied in `.claude/settings.json`.
+- **Git is read-only by default.** `git status`, `git diff`, `git log` are fine. Never tag, rebase, reset, merge, or drop stashes — these are denied in `.claude/settings.json`. Never commit or push either, *unless* Bhavy has explicitly said this is an unattended cloud session (e.g. triggered from mobile) — then commit and push to a feature branch only, after the STOP report, using its suggested message. Never push/commit to `main` directly.
 - Check exit criteria by actually running them (tests, builds, scripts). Report real output, including failures.
 
 ## Speed-ups (Bhavy, 2026-10-23)
@@ -59,4 +59,4 @@ Phase: <n>
 Commit types: `feat`, `fix`, `docs`, `test`, `refactor`, `perf`, `build`, `ci`, `chore`.
 Scopes: `engine`, `calendar`, `i18n`, `app`, `android`, `pwa`, `fixtures`, `ci`, `docs`, `repo`.
 
-Only suggest the message. Bhavy commits.
+By default, only suggest the message — Bhavy commits. In an explicitly unattended cloud session, commit and push to a feature branch using this message instead.

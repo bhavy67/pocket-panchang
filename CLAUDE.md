@@ -6,7 +6,8 @@ A beautiful, private, offline Hindu panchang that's Gujarati-first and diaspora-
 
 ## Working Rules (from PROJECT_PLAN.md §0)
 
-1. **Never commit, push, tag, or rebase.** Bhavy commits manually. No `git commit`, `git push`, `git tag`, `git rebase`, `git reset --hard`, or `git stash drop`, ever. Read-only git commands (`git status`, `git diff`, `git log`) are fine.
+1. **Never commit, push, tag, or rebase — except in an unattended cloud session.** Bhavy commits manually by default. Read-only git commands (`git status`, `git diff`, `git log`) are always fine. Never `git tag`, `git rebase`, `git reset --hard`, `git stash drop`, force-push, or push/commit directly to `main`.
+   - **Exception:** if Bhavy explicitly says the session is unattended (e.g. triggered from Claude Cloud via mobile), Claude may `git commit` and `git push` to a feature branch — but only after producing the phase STOP report (rule 3) and using its suggested commit message.
 2. **Work one phase at a time.** Do not start the next phase until Bhavy explicitly says so.
 3. **Stop at the end of every phase** and output:
    - A summary of what was done

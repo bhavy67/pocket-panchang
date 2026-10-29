@@ -9,7 +9,8 @@
 
 These rules apply to every phase and to every AI agent working in this repo.
 
-1. **Never commit, push, tag, or rebase.** Bhavy commits manually. No `git commit`, `git push`, `git tag`, `git rebase`, `git reset --hard`, or `git stash drop`, ever. Read-only git commands (`git status`, `git diff`, `git log`) are fine.
+1. **Never commit, push, tag, or rebase — except in an unattended cloud session.** Bhavy commits manually by default. No `git commit`, `git push`, `git tag`, `git rebase`, `git reset --hard`, or `git stash drop`, ever. Read-only git commands (`git status`, `git diff`, `git log`) are fine.
+   - **Exception:** when Bhavy explicitly states the session is unattended (e.g. triggered from Claude Cloud via mobile, no one at a laptop to review), Claude may `git commit` and `git push` to a feature branch after producing the phase STOP report (rule 3), using the suggested commit message from that report. Still never `git tag`, `git rebase`, `git reset --hard`, `git stash drop`, force-push, or push/commit directly to `main`.
 2. **Work one phase at a time.** Do not start the next phase until Bhavy explicitly says so.
 3. **Stop at the end of every phase** and output:
    - A summary of what was done
