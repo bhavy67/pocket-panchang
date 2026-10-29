@@ -8,6 +8,7 @@ import {
   occurrences,
   resolveFestivals,
   type FestivalOccurrence,
+  type FestivalRule,
   type Household,
   type Location,
   type LunarDate,
@@ -65,16 +66,20 @@ export const api = {
   },
 
   /**
-   * Festivals dated in a Gregorian year. A rule ships only once verified (§0 rule 7): production
-   * builds drop unverified rules; dev builds keep them, flagged, so screens can be built.
+   * Festivals dated in a Gregorian year. A festival-year ships only once verified (§0 rule 7):
+   * production builds drop any (rule, year) not in that rule's `verified.years`; dev builds keep
+   * everything, flagged, so screens can be built. Verification is per year, not per rule — a
+   * rule can be solid for 2027 and still unresolved for 2026 (see
+   * docs/verification/festivals-ahmedabad.md).
    */
   festivals(location: Location, year: number): Festival[] {
-    const unverified = new Set(
-      FESTIVALS.filter((r) => r.verified.years.length === 0).map((r) => r.id),
-    );
+    const verifiedForYear = (r: FestivalRule) => r.verified.years.includes(year);
     const rules = SHOW_UNVERIFIED
       ? FESTIVALS
-      : FESTIVALS.filter((r) => !unverified.has(r.id));
+      : FESTIVALS.filter(verifiedForYear);
+    const unverifiedIds = new Set(
+      FESTIVALS.filter((r) => !verifiedForYear(r)).map((r) => r.id),
+    );
     const place = {
       coordinates: { latitude: location.lat, longitude: location.lng },
       clock: clockFor(location.tz),
@@ -86,7 +91,7 @@ export const api = {
         `${year}-12-31` as CivilDate,
         place,
       ),
-    ).map((o) => ({ ...o, unverified: unverified.has(o.id) }));
+    ).map((o) => ({ ...o, unverified: unverifiedIds.has(o.id) }));
   },
   /**
    * Moonrise and moonset in the civil day of `date` (sunrise → next sunrise, as printed

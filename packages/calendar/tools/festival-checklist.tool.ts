@@ -9,7 +9,7 @@ import { FESTIVALS } from "../src/festivals";
 import { resolveFestivals, type FestivalOccurrence } from "../src/resolver";
 import { AHMEDABAD, CITIES, date, place } from "../src/testing";
 
-const YEARS = [2026, 2027];
+const YEARS = [2026, 2027, 2028, 2029, 2030];
 const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const fmt = (d: string) =>
   `${d} (${WEEKDAYS[new Date(`${d}T12:00:00Z`).getUTCDay()]})`;
@@ -67,23 +67,23 @@ it("writes checklists", { timeout: 600_000 }, () => {
   );
 
   const a = [
-    "# Festival verification: Ahmedabad 2026–27",
+    "# Festival verification: Ahmedabad 2026–2030",
     "",
-    "Computed by the engine (Phase 6) with **provisional** rules (ADR 0021). For each row, check the date against your family's printed panchang and Drik Panchang in a browser, tick both boxes, and note any difference. A festival's rule is marked `verified` only after every row for it is ticked.",
+    "Computed by the engine with **provisional** rules (ADR 0021), cross-checked against published sources (§0 rule 7). Tier 1 (2026–2027): verified once 2+ independent published sources agree with the computed date. Tier 2 (2028–2030): verified once the rule is already verified for both 2026 and 2027, and 1+ published source agrees for that year. A row's **Sources** column lists what was checked and the retrieval date; **Status** is `verified`, `unresolved` (source disagreement, rule under investigation), or blank (not yet checked).",
     "",
-    "Regenerate: `pnpm --filter @panchang/calendar festival-checklist` (overwrites this file: copy ticks first).",
+    "Regenerate: `pnpm --filter @panchang/calendar festival-checklist` (overwrites this file: copy any filled-in Sources/Status cells out first).",
     "",
   ];
   for (const y of YEARS) {
     a.push(
       `## ${y}`,
       "",
-      "| Festival | Computed date | Rule | Notes | Family panchang | Drik |",
+      "| Festival | Computed date | Rule | Notes | Sources | Status |",
       "|---|---|---|---|---|---|",
     );
     for (const o of results.get(AHMEDABAD.name)!.get(y)!)
       a.push(
-        `| ${label(o)} | ${fmt(o.date)} | ${rule(o.id)} | ${notes(o)} | [ ] | [ ] |`,
+        `| ${label(o)} | ${fmt(o.date)} | ${rule(o.id)} | ${notes(o)} | | |`,
       );
     a.push("");
   }
