@@ -19,3 +19,13 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# Capacitor plugins are invoked by reflection from the bridge; keep them and their
+# @PluginMethod entry points so R8 doesn't strip what it can't see a call site for.
+-keep class com.getcapacitor.** { *; }
+-keep @com.getcapacitor.annotation.CapacitorPlugin public class * {
+    @com.getcapacitor.PluginMethod public <methods>;
+}
+-keepclassmembers class * extends com.getcapacitor.Plugin {
+    public <methods>;
+}
