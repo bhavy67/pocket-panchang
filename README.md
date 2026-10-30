@@ -4,7 +4,7 @@ A calm, private, offline Hindu panchang that's Gujarati-first and diaspora-aware
 
 **Web:** panchang.bhavyladani.in (goes live at release finalization, after the Phase 11.5 UI revamp) · **Android:** Google Play closed testing · No account, no server, no analytics, no ads.
 
-> Screenshots will be added after the Phase 11.5 UI revamp.
+<img src="docs/design/screens/readme-today.png" alt="Today screen: tithi, Rahu Kaal and other periods on a proportional timeline, sun and moon times" width="300">
 
 ## What it does
 
@@ -12,7 +12,7 @@ A calm, private, offline Hindu panchang that's Gujarati-first and diaspora-aware
 - **Family dates by tithi:** saved as lunar dates (e.g. Kartak Vad 5), recomputed every year with the family's conventions (printed-calendar day or aparahna for shraddh, vriddhi/kshaya tithis, adhik months, Pitru Paksha), for the family's city even when you live abroad. Enter by tithi or from a Gregorian date with a confirm step.
 - **Reminders:** exact Android notifications at your chosen time, never later than that time in the family's city; `.ics` calendar export on the web.
 - **Private and offline:** everything is computed on the device; PWA and Android app; JSON backup/restore.
-- **Gujarati and English** throughout; large text; light/dark in six themes; WCAG 2.2 AA checked in CI.
+- **Gujarati and English** throughout; large text; light/dark in four themes (Calm, Raat, Utsav, Shunya); WCAG 2.2 AA checked in CI.
 
 Festivals are computed but **hidden in production** until each rule is checked against printed calendars ([festival gate](docs/release/festival-gate.md)).
 
