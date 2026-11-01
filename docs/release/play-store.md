@@ -2,7 +2,7 @@
 
 Track for now: **closed testing only**. Production promotion happens at release finalization, after the Phase 11.5 UI revamp.
 
-Limits: title ≤ 30 characters, short description ≤ 80, full description ≤ 4,000. Gujarati text is a **draft** for the native review (`docs/i18n/gu-review.md` covers the in-app strings; review these too). Do not mention festivals until at least one is verified (`festival-gate.md`).
+Limits: title ≤ 30 characters, short description ≤ 80, full description ≤ 4,000. Gujarati text is a **draft** for the native review (`docs/i18n/gu-review.md` covers the in-app strings; review these too). Festivals may be mentioned now that rules are verified (`packages/calendar/src/festivals.ts`); name only rules verified for every year.
 
 ## English (en-IN, default)
 
@@ -24,7 +24,7 @@ Today at a glance
 • Rahu Kaal, Yamaganda, Gulika and Bhadra, clearly marked
 • Sunrise, sunset, moonrise and moonset for your city
 
-A month view shows the tithi on every day, with two-day and skipped tithis marked.
+A month view shows the tithi on every day, with two-day and skipped tithis marked, and festivals such as Janmashtami, Dussehra and Diwali. A festival appears only once its date has been checked against published panchangs.
 
 For families abroad
 Living in New Jersey or London but following Ahmedabad's date? Choose the city whose sunrise decides your family's dates. Reminders arrive in time, wherever you are.
@@ -57,7 +57,7 @@ How it is calculated is explained in plain words in the app, along with how clos
 • રાહુ કાળ, યમઘંટ, ગુલિક અને ભદ્રા, સ્પષ્ટ રીતે
 • તમારા શહેરના સૂર્યોદય, સૂર્યાસ્ત, ચંદ્રોદય અને ચંદ્રાસ્ત
 
-મહિનાના પાનામાં દરેક દિવસની તિથિ, બે દિવસની અને છૂટી તિથિના સંકેત સાથે.
+મહિનાના પાનામાં દરેક દિવસની તિથિ, બે દિવસની અને છૂટી તિથિના સંકેત સાથે, અને જન્માષ્ટમી, દશેરા, દિવાળી જેવા તહેવારો. કોઈ પણ તહેવાર તેની તારીખ છાપેલાં પંચાંગ સાથે ચકાસ્યા પછી જ દેખાય છે.
 
 વિદેશમાં રહેતા પરિવારો માટે
 ન્યૂ જર્સી કે લંડનમાં રહો છો પણ અમદાવાદની તારીખ પાળો છો? જે શહેરનો સૂર્યોદય પરિવારની તારીખો નક્કી કરે તે પસંદ કરો. તમે જ્યાં પણ હો, યાદ સમયસર આવે છે.
@@ -89,6 +89,42 @@ Play Console → App content → **Exact alarm permission** → core functionali
 
 > Parivar Panchang is a Hindu lunar calendar (panchang). Its core feature is reminding users of their own family events that follow the lunar calendar: birthdays by tithi, varsi/shraddh death anniversaries and wedding anniversaries. Each event's date is recalculated every year, and the app shows a notification at the time the user chooses on the day before and on the day itself. These are user-facing calendar event notifications, which must arrive at that time even when the phone is idle; inexact alarms can be deferred by hours in Doze, which would make a day-of reminder arrive too late. The app schedules at most one alarm per event per lead day (a rolling 12-month window, capped at 400) and uses no other background work.
 
-## Screenshots and feature graphic: after the Phase 11.5 UI revamp
+## Store settings (Play Console → Grow users → Store presence → Store settings)
 
-Taken at **release finalization** (PROJECT_PLAN.md §15), from the revamped UI: 8 phone screenshots at 1080 × 1920 (Today, Family dates, Today in Gujarati, hour by hour, Month, adding a family date, dark mode, Settings), the 1024 × 500 feature graphic, and the 512 × 512 icon. Closed testing does not require final screenshots; use the placeholder icon until then.
+| Field | Value |
+|---|---|
+| App or game | App |
+| Category | **Lifestyle** (recommended; matches the PWA manifest's first category. Alternative: Books & Reference) |
+| Tags | Up to 5 from Console's list for the category; pick the closest to: calendar, religion/spirituality, reminders, family |
+| Email address | Required and shown publicly; your support address |
+| Website | https://panchang.bhavyladani.in |
+| Phone | Leave empty |
+| Privacy policy | https://panchang.bhavyladani.in/privacy (App content → Privacy policy) |
+| External marketing | Off (nothing to opt into) |
+
+## Release notes, 1.2.0 (versionCode 3, first closed-testing release)
+
+Paste as-is into the release's notes box (≤ 500 characters per language):
+
+```
+<en-IN>
+First test release of Parivar Panchang.
+• Today's panchang: tithi, nakshatra, yoga, karana, choghadiya, Rahu Kaal
+• Month view with verified festivals
+• Family dates by tithi (birthdays, varsi, anniversaries) with reminders the day before and on the day
+• Gujarati and English, four themes, works offline
+If any date doesn't match your family's panchang, please tell us.
+</en-IN>
+<gu>
+પરિવાર પંચાંગનું પહેલું ટેસ્ટ સંસ્કરણ.
+• આજનું પંચાંગ: તિથિ, નક્ષત્ર, યોગ, કરણ, ચોઘડિયાં, રાહુ કાળ
+• મહિનાનું પાનું, ચકાસેલા તહેવારો સાથે
+• પરિવારની તારીખો તિથિ મુજબ (જન્મદિવસ, વરસી, લગ્નતિથિ), આગલા દિવસે અને તે જ દિવસે યાદ સાથે
+• ગુજરાતી અને અંગ્રેજી, ચાર થીમ, ઇન્ટરનેટ વગર ચાલે છે
+કોઈ તારીખ તમારા પરિવારના પંચાંગ સાથે ન મળે તો જરૂર જણાવજો.
+</gu>
+```
+
+## Screenshots, feature graphic and icon
+
+Done in the Play Store readiness pass: files and their Console fields are in `play/README.md`.

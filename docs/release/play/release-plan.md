@@ -2,6 +2,25 @@
 
 Your Play Console account was created after 2023-11-13, so the 12-tester / 14-day closed-testing rule applies before production access ([Play Console Help](https://support.google.com/googleplay/android-developer/answer/14151465)) — budget about 3 weeks for the first launch: 14 continuous days of testing, then the production-access application, then review.
 
+## 0. Before the first upload: S24 checklist
+
+Run on your Samsung S24 Ultra with the **signed** release AAB installed through the closed-testing track (or `bundletool` from the same AAB), not a debug build. Tick each one; anything that fails blocks the upload.
+
+- [ ] Cold start after install: splash, then onboarding, no white flash; Today shows in about 1 s
+- [ ] Onboarding in Gujarati: pick Ahmedabad, Today's tithi and sunrise match your printed panchang
+- [ ] Add a family date by tithi (e.g. a varsi); next date shows; notification permission is asked **only now**
+- [ ] Settings → Reminders → "Send a test reminder in 1 minute", lock the phone, it arrives on time (**record this for the exact-alarm declaration**)
+- [ ] Reboot survival: add a family date for tomorrow, set the reminder time (Settings) to ~5 minutes from now, restart the phone, unlock: the day-before reminder still arrives (proves `RECEIVE_BOOT_COMPLETED` re-schedules)
+- [ ] Samsung battery settings: app left on "Optimised" (the default); the test reminder still arrives
+- [ ] Aeroplane mode: Today, Month, city change and adding a date all still work
+- [ ] Month: swipe between months follows the finger, verified festivals show (e.g. Diwali), no unverified ones
+- [ ] Themes: Calm, Raat, Utsav, Shunya × light/dark, no flashes; system dark mode follows
+- [ ] Display size and font size at maximum: nothing clipped on Today, Month, Family dates
+- [ ] Back button: goes back through screens, exits from Today, never shows a blank page
+- [ ] Backup: save a backup file, uninstall, reinstall, restore it; family dates come back
+- [ ] Settings → About shows version 1.2.0
+- [ ] Optional: after removing `INTERNET` from the manifest in a test build, the app still loads (decides `declarations.md`'s flagged item)
+
 ## 1. Closed testing track setup
 
 1. Play Console → your app → Testing → Closed testing → create a track (e.g. "Family testing") if not already done (`docs/release/android.md` covers the first upload).

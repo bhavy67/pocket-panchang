@@ -2,6 +2,15 @@
 
 Generated from the real production build (`pnpm --filter @panchang/app build && pnpm --filter @panchang/app preview`) via a scratch Playwright script, plus two on-device captures for the notification shot (emulator, screen locked, reminder actually fired — not mocked). Source screens: Ahmedabad, two realistic family dates ("Ba's varsi" as a Pitru-Paksha shraddh, "Papa" as a tithi birthday), verified festival (Dussehra) visible on the Month screen.
 
+## Text fields
+
+| Field | Source |
+|---|---|
+| App name, short and full description (en-IN and gu) | `../play-store.md` → English / Gujarati |
+| Category, tags, email, website, privacy policy | `../play-store.md` → Store settings |
+| Release notes (en-IN and gu) | `../play-store.md` → Release notes, 1.2.0 |
+| App content answers (data safety, rating, audience, ads, access, exact alarm) | `declarations.md` |
+
 ## Where each file goes in Play Console → Store presence → Main store listing
 
 | Field | File |

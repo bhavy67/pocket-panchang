@@ -2,7 +2,9 @@
 
 Exact answers for the App content section. Listing copy, full data-safety rationale and the original exact-alarm text live in `docs/release/play-store.md` (Phase 12) — this file has the console-field answers plus what changed since then.
 
-## Permissions audit (merged manifest)
+## Permissions audit (merged release manifest)
+
+Checked against `app/build/intermediates/merged_manifests/release/processReleaseManifest/AndroidManifest.xml` after `bundleRelease` (2026-10-31), not just the source manifest.
 
 | Permission | Reason | Keep? |
 |---|---|---|
@@ -11,10 +13,15 @@ Exact answers for the App content section. Listing copy, full data-safety ration
 | `VIBRATE` | Haptics (Phase 11.7) on selections and month-swipe commits. | Keep |
 | `USE_EXACT_ALARM` | Reminders must fire at the chosen minute even in Doze (see below). | Keep |
 | `SCHEDULE_EXACT_ALARM` (maxSdkVersion 32) | Fallback for Android 12, which has no `USE_EXACT_ALARM`. | Keep |
+| `RECEIVE_BOOT_COMPLETED` | Merged from `@capacitor/local-notifications`: re-schedules pending reminders after a reboot. Without it reminders silently stop after a restart. Not a restricted permission. | Keep |
+| `WAKE_LOCK` | Merged from `@capacitor/local-notifications`: holds the CPU briefly while a reminder alarm posts its notification. Normal permission. | Keep |
+| `in.bhavyladani.panchang.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION` | Added by AndroidX core for app-internal broadcast receivers (signature-level, app-only). Not user-facing, not declared in Console. | Keep |
 
 ## Data safety
 
 No data collected or shared. See `play-store.md` for the full rationale (no analytics/ads SDKs, no network calls with user data, backups are user-initiated local files).
+
+Android Auto Backup is on (`android:allowBackup="true"`, so family dates survive a phone change, plan §11). That doesn't change the answer: the backup goes to the user's own Google account under Google's terms, end-to-end encrypted on Android 9+ with a screen lock, and the developer never receives or can read it. Play's Data safety help counts neither on-device processing nor data the user's own cloud storage holds, which the developer never accesses, as collection.
 
 ## Content rating questionnaire
 
