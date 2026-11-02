@@ -143,7 +143,8 @@ export function Sheet({
     lastT: number;
   } | null>(null);
   const onPointerDown = (e: ReactPointerEvent<HTMLDivElement>) => {
-    e.currentTarget.setPointerCapture(e.pointerId);
+    // No pointer capture yet: capturing on press retargets a mouse click away from the
+    // sheet's buttons and link. It starts in onPointerMove, once this is really a drag.
     const now = performance.now();
     drag.current = { y: e.clientY, t: now, lastY: e.clientY, lastT: now };
     if (contentRef.current) contentRef.current.style.transition = "none";
@@ -153,6 +154,8 @@ export function Sheet({
     const el = contentRef.current;
     if (!d || !el) return;
     const dy = Math.max(0, e.clientY - d.y);
+    if (dy > 4 && !e.currentTarget.hasPointerCapture(e.pointerId))
+      e.currentTarget.setPointerCapture(e.pointerId);
     el.style.transform = `translateY(${dy}px)`;
     d.lastY = e.clientY;
     d.lastT = performance.now();

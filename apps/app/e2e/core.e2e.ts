@@ -40,6 +40,28 @@ test("Today: tapping a time opens its sheet; Escape closes it", async ({
   await expect(sheet).toBeHidden();
 });
 
+test.describe("desktop mouse", () => {
+  test.use({
+    viewport: { width: 1280, height: 800 },
+    isMobile: false,
+    hasTouch: false,
+  });
+
+  // Swipe-to-dismiss used to capture the pointer on press, retargeting mouse clicks off the buttons.
+  test("sheet buttons respond to mouse clicks", async ({ page }) => {
+    await onboard(page);
+    await page.getByRole("button", { name: "Help" }).click();
+    const sheet = page.getByRole("dialog", { name: "How this is calculated" });
+    await sheet.getByRole("button", { name: "Close" }).click();
+    await expect(sheet).toBeHidden();
+    await page.getByRole("button", { name: "Help" }).click();
+    await sheet
+      .getByRole("link", { name: "Read the full explanation" })
+      .click();
+    await expect(page).toHaveURL(/\/how$/);
+  });
+});
+
 test("Month: buttons move between months and show Diwali and Navratri", async ({
   page,
 }) => {
