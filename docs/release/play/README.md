@@ -30,8 +30,8 @@ Generated from the real production build (`pnpm --filter @panchang/app build && 
 | 02 | Today (Raat, dark) | Beautiful by day or night | દિવસે કે રાત્રે, એકસરખું સુંદર |
 | 03 | Month, with a verified festival | Festivals, clearly marked | તહેવારો, સ્પષ્ટ રીતે |
 | 04 | Family dates | Never miss Ba's varsi | બાની વરસી ક્યારેય ના ચૂકો |
-| 05 | Reminder notification (real, on-device) | Right on time, every year | દર વર્ષે, બરાબર સમયે |
-| 06 | Settings → themes | Make it yours | તમારી પસંદ મુજબ |
+| 05 | Real reminder arriving over Family dates (emulator, 8:00 AM, recaptured 2026-11-02) | Right on time, every year | દર વર્ષે, બરાબર સમયે |
+| 06 | Settings → Colours and Light/dark (current UI, recaptured 2026-11-02) | Make it yours | તમારી પસંદ મુજબ |
 | 07 | Today (Shunya, minimal) | Simple and clear for everyone | બધા માટે સરળ અને સ્પષ્ટ |
 
 **Deviation from the brief:** the brief asked for a "Kagaz, for elders" screenshot. Kagaz (and Mandir) were removed in the Phase 11.7 follow-up (ADR 0026, 2026-10-27) — the app now ships four palettes (Calm, Raat, Utsav, Shunya), not six. #07 uses **Shunya** instead ("minimal, facts first" in-app), the closest existing match to the elders/simplicity brief.
