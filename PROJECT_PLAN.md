@@ -143,7 +143,7 @@ Part-time at ~10 h/week. The original ~5–6 week target predates the Phase 1 sc
 - The Moon gains ~12°/day on the Sun (varies ~10.8–14.5°/day; measured hourly over 2020–2040 with astronomy-engine: 10.75–14.39°/day).
 - A 1′ longitude error therefore shifts a tithi end time by ~2 minutes.
 - Target: tithi/nakshatra end times within **±2 min** of the reference; sunrise/sunset within **±1 min**.
-- The measured numbers (not just targets) go in the README accuracy report.
+- The measured numbers (not just targets) go in the accuracy report in `docs/DEVELOPMENT.md`; the README carries a plain-language summary (README rewritten for users, 2026-11-02).
 
 ### 4.3 Core algorithm: crossing finder
 All "end times" are roots of an angular function:
@@ -484,7 +484,7 @@ type CachedMonth = {
    - End times strictly increasing within a day
 3. **Cross-check:** compare against grahan in tests; flag disagreements beyond tolerance. Independent sunrise/sunset check for **every day** of both years in all 5 cities against NOAA's published solar equations (test-only helper), with USNO spot checks on disagreement.
 4. **Edge cases:** DST transition days (New York, London), date-line-adjacent zones, high latitudes, adhik-month years, kshaya tithis, leap years.
-5. **CI accuracy report:** printed on every run (max/mean error per element). Published in the README.
+5. **CI accuracy report:** printed on every run (max/mean error per element). Published in `docs/DEVELOPMENT.md`, summarised in the README.
 6. **E2E (Playwright):** onboarding, today view, month navigation, create personal event, `.ics` export.
 
 ---
