@@ -1,5 +1,5 @@
 Privacy policy URL (App content → Privacy policy):  https://panchang.bhavyladani.in/privacy   (checked 2026-11-02: HTTP 200, renders the Parivar Panchang policy)
 Website (Store settings):                          https://panchang.bhavyladani.in
-Contact email (Store settings, shown publicly):    <YOUR-SUPPORT-EMAIL>   (required; fill in)
+Contact email (Store settings, shown publicly):    bhavy.ladani6701@gmail.com
 Phone:                                             leave empty
 Promo video (Main store listing → Video):          optional, skip. If added: a public or unlisted YouTube URL, ads off, not age-restricted.

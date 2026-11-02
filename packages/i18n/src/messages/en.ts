@@ -428,7 +428,7 @@ export const en = {
   howPhoneTitle: "All on your phone",
   howPhoneBody:
     "Every calculation runs on your phone, with the open-source astronomy-engine library. Nothing is sent anywhere. If something differs from your printed calendar, please tell us.",
-  privacyUpdated: "Last updated: 24 October 2026",
+  privacyUpdated: "Last updated: 2 November 2026",
   privacyShortTitle: "In short",
   privacyShort:
     "Parivar Panchang collects no data. There is no account, no analytics, no advertising and no tracking. Everything you enter stays on your device.",
@@ -437,7 +437,7 @@ export const en = {
     "Your city, settings, family dates and notes, and saved calculations are stored only on your device (in the app’s or browser’s own storage). They are never sent to us or anyone else. Uninstalling the app, or clearing the website’s data in your browser, deletes them.",
   privacyFilesTitle: "Backup and calendar files",
   privacyFiles:
-    "A backup or calendar file is created only when you tap to save it, and goes only where you choose to save or share it.",
+    "A backup or calendar file is created only when you tap to save it, and goes only where you choose to save or share it. On Android, the phone’s own backup may also copy the app’s data to your Google account, under Google’s terms; we never receive it.",
   privacyNetworkTitle: "Internet use",
   privacyNetwork:
     "The Android app does not use the internet. The website downloads the app’s files from our host, Vercel, whose servers keep standard technical logs (such as IP address and browser type) to run and protect the service; we do not use them to identify you. “Report a mismatch” opens a pre-filled page on GitHub in your browser, and nothing is sent unless you submit it there.",

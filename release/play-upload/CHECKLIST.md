@@ -4,7 +4,7 @@ Specs from Play Console Help, retrieved 2026-11-02: [preview assets](https://sup
 
 | Play Console field | File | Spec | Measured | Result |
 |---|---|---|---|---|
-| Release → App bundle | `01-app-bundle/` | Signed AAB, versionName 1.2.0, versionCode 3 | **Not built: no upload key yet** | BLOCKED |
+| Release → App bundle | `01-app-bundle/parivar-panchang-1.2.0-vc3.aab` (gitignored) | Signed AAB, versionName 1.2.0, versionCode 3 | `jarsigner -verify`: jar verified; upload cert CN=Bhavy Ladani, C=IN, SHA-256 5F:9F:DD:0D:…:AD:7D:E1, valid to 2054; versionCode 3, versionName 1.2.0; 2.9 MB; no native `.so` | PASS |
 | Main store listing → App icon | `02-app-icon/icon-512.png` | PNG, 512×512, 32-bit with alpha, ≤ 1024 KB | 512×512, 32-bit, alpha channel yes (opaque), 7 KB | PASS (fixed: was 24-bit) |
 | Main store listing → Feature graphic (en-IN) | `03-feature-graphic/feature-graphic-en.png` | JPEG or 24-bit PNG, no alpha, 1024×500 | 1024×500, 24-bit, no alpha, 153 KB | PASS |
 | Main store listing → Feature graphic (gu) | `03-feature-graphic/feature-graphic-gu.png` | JPEG or 24-bit PNG, no alpha, 1024×500 | 1024×500, 24-bit, no alpha, 149 KB | PASS |
@@ -34,14 +34,14 @@ Specs from Play Console Help, retrieved 2026-11-02: [preview assets](https://sup
 | Release → Release notes (gu) | `08-release-notes/gu.txt` | ≤ 500 Unicode characters per language | 341 | PASS |
 | App content → Exact alarm / Permissions declaration | `09-declarations/exact-alarm-declaration.txt` | Text plus a screen recording | Text ready (729 characters); **recording not made yet** | Text PASS, recording TODO |
 | App content → Data safety, rating, audience, ads, app access | `09-declarations/declarations.md` | n/a | Answers ready | PASS |
-| App content → Privacy policy | `10-links.txt` | Public URL, matches the app | HTTP 200; renders the Parivar Panchang policy (no data collected, permissions listed) | PASS (see note) |
-| Store settings → Website, email | `10-links.txt` | Email required | Website set; **email placeholder** | TODO |
-| Tablet 7″ / 10″ screenshots | not included | 4+ per type to be shown on tablets; 9:16, 1080–7680 px | Only 2 per type, 10:16, layout not tablet-optimized | Skipped on purpose |
+| App content → Privacy policy | `10-links.txt` | Public URL, matches the app | HTTP 200; renders the Parivar Panchang policy (no data collected, permissions listed, Auto Backup sentence) | PASS |
+| Store settings → Website, email | `10-links.txt` | Email required | Website set; email bhavy.ladani6701@gmail.com | PASS |
+| Tablet 7″ / 10″ screenshots | not included | 4+ per type to be shown on tablets; 9:16, 1080–7680 px | Only 2 per type, 10:16, layout not tablet-optimized | Left out (Bhavy, 2026-11-02) |
 
 Character counts are Unicode code points (Python `len`), which is how Play counts.
 
 **Notes**
-- Privacy policy: it says data is "never sent to us or anyone else", but Android Auto Backup is on (`allowBackup="true"`), which copies data to the user's own Google account. Play doesn't count this as collection (see `declarations.md`), but one line about it in the policy would make it fully accurate.
+- Privacy policy: now states that Android Auto Backup may copy data to the user's own Google account and that we never receive it (updated 2 November 2026).
 - Live web build is **one commit behind**: panchang.bhavyladani.in still serves `theme-color #0B6E79` (last modified 2026-10-31, i.e. 35d92b6); `main` (bbb0118) has `#F6F7FA`. That meta tag is the only app-code difference. To fix: Vercel → panchang → Deployments → the bbb0118 deployment → Promote to Production.
 
 ## Upload order in Play Console
