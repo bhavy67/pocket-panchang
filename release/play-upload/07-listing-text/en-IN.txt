@@ -1,0 +1,30 @@
+=== App name (16 / 30 characters) ===
+Parivar Panchang
+
+=== Short description (76 / 80 characters) ===
+Gujarati panchang with tithi reminders for family birthdays, varsi and more.
+
+=== Full description (1798 / 4000 characters) ===
+Parivar Panchang is a calm, private Hindu panchang made for Gujarati families, in Gujarati and English.
+
+Remember your family's dates by tithi
+Add a birthday by tithi, a varsi or shraddh, or an anniversary once, as a lunar date such as Kartak Vad 5 or from the English date it happened. The app works out the right day every year and reminds you the day before and on the day. Varsi can also remind you during Pitru Paksha. Your family's conventions are respected: printed-calendar day or afternoon timing for shraddh, two-day and skipped tithis, and extra (adhik) months.
+
+Today at a glance
+• Tithi, nakshatra, yoga, karana and weekday, with the exact times they change
+• Choghadiya, hour by hour, with "Next good time"
+• Rahu Kaal, Yamaganda, Gulika and Bhadra, clearly marked
+• Sunrise, sunset, moonrise and moonset for your city
+
+A month view shows the tithi on every day, with two-day and skipped tithis marked, and festivals such as Janmashtami, Dussehra and Diwali. A festival appears only once its date has been checked against published panchangs.
+
+For families abroad
+Living in New Jersey or London but following Ahmedabad's date? Choose the city whose sunrise decides your family's dates. Reminders arrive in time, wherever you are.
+
+Private by design
+No account. No ads. No tracking. No data collected. Everything is worked out on your phone and works without internet. Save a backup file whenever you like, and add every family date to your phone's calendar.
+
+Made to be easy to read
+Large, clear text that grows with your phone's font size, Gujarati or English throughout, and light and dark themes.
+
+How it is calculated is explained in plain words in the app, along with how closely it matches published panchangs (sunrise within a minute, tithi end times within about two minutes).

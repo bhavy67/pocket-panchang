@@ -77,3 +77,6 @@ fixtures/private/
 
 # Accuracy report (CI artifact)
 accuracy-report.md
+
+# Play upload folder: the signed AAB never goes in git
+release/play-upload/01-app-bundle/

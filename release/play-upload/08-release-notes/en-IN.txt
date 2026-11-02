@@ -1,0 +1,7 @@
+# 370 / 500 characters. Paste only the text below (or use release-notes-console.txt for the tagged form).
+First test release of Parivar Panchang.
+• Today's panchang: tithi, nakshatra, yoga, karana, choghadiya, Rahu Kaal
+• Month view with verified festivals
+• Family dates by tithi (birthdays, varsi, anniversaries) with reminders the day before and on the day
+• Gujarati and English, four themes, works offline
+If any date doesn't match your family's panchang, please tell us.

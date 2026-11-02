@@ -1,0 +1,16 @@
+<en-IN>
+First test release of Parivar Panchang.
+• Today's panchang: tithi, nakshatra, yoga, karana, choghadiya, Rahu Kaal
+• Month view with verified festivals
+• Family dates by tithi (birthdays, varsi, anniversaries) with reminders the day before and on the day
+• Gujarati and English, four themes, works offline
+If any date doesn't match your family's panchang, please tell us.
+</en-IN>
+<gu>
+પરિવાર પંચાંગનું પહેલું ટેસ્ટ સંસ્કરણ.
+• આજનું પંચાંગ: તિથિ, નક્ષત્ર, યોગ, કરણ, ચોઘડિયાં, રાહુ કાળ
+• મહિનાનું પાનું, ચકાસેલા તહેવારો સાથે
+• પરિવારની તારીખો તિથિ મુજબ (જન્મદિવસ, વરસી, લગ્નતિથિ), આગલા દિવસે અને તે જ દિવસે યાદ સાથે
+• ગુજરાતી અને અંગ્રેજી, ચાર થીમ, ઇન્ટરનેટ વગર ચાલે છે
+કોઈ તારીખ તમારા પરિવારના પંચાંગ સાથે ન મળે તો જરૂર જણાવજો.
+</gu>

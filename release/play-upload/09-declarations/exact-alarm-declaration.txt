@@ -1,0 +1,6 @@
+Play Console → App content → Exact alarm permission → core functionality: "Calendar app that shows event notifications"
+Justification (729 characters), paste as-is:
+
+Parivar Panchang is a Hindu lunar calendar (panchang). Its core feature is reminding users of their own family events that follow the lunar calendar: birthdays by tithi, varsi/shraddh death anniversaries and wedding anniversaries. Each event's date is recalculated every year, and the app shows a notification at the time the user chooses on the day before and on the day itself. These are user-facing calendar event notifications, which must arrive at that time even when the phone is idle; inexact alarms can be deferred by hours in Doze, which would make a day-of reminder arrive too late. The app schedules at most one alarm per event per lead day (a rolling 12-month window, capped at 400) and uses no other background work.
+
+Also required by the form: a short screen recording of the reminder firing at the chosen time (see ../../docs/release/play/release-plan.md §0, test-reminder item).
